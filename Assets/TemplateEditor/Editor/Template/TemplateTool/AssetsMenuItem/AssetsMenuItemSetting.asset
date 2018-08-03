@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
+  m_Name: AssetsMenuItemSetting
+  m_EditorClassIdentifier: 
+  Path: '{<CreatePath>}'
+  ScriptName: '{<ScriptName>}.cs'
+  Code: "using UnityEditor;\nusing System.Collections.Generic;\n\nnamespace TemplateEditor\n{\n
+    \   public class {<ScriptName>}\n    {\n        private const string menuItemPrefix
+    = \"Assets/Template/\";\n{<Repeat:\n        [MenuItem(menuItemPrefix + \"Settings/{0}\")]\n
+    \       public static void {0}()\n        {{\n            TemplateUtility.OpenEditorWindow(\"{1}\");\n
+    \       }}\n:Settings>}\n{<Repeat:\n        [MenuItem(menuItemPrefix + \"GroupSettings/{0}\")]\n
+    \       public static void {0}()\n        {{\n            TemplateUtility.OpenEditorWindow(\"{1}\");\n
+    \       }}\n:GroupSettings>}\n    }\n}"
+  Overwrite: 1
+  Chain: []
+  DuplicatePrefab: {fileID: 0}
+  AttachTarget: {fileID: 0}
+  PrefabCreatePath: 
+  AssetsMenuItem: 0
