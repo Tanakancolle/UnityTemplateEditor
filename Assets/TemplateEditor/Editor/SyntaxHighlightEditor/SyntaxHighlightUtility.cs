@@ -49,11 +49,11 @@ namespace SyntaxHighlightEditor
             if (_editor == null)
             {
                 _editor = new TextAreaSyntaxHighlightEditor();
-                _editor.backgroundColor = Color.gray;
-                _editor.textColor = Color.white;
+                _editor.BackgroundColor = Color.gray;
+                _editor.TextColor = Color.white;
 
                 _syntaxHighlightGroupSetting.Initialize();
-                _editor.highlighter = _syntaxHighlightGroupSetting.Highlight;
+                _editor.Highlighter = _syntaxHighlightGroupSetting.Highlight;
             }
 
             return _editor;

@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿/*
+ * The MIT License (MIT)
+ * Copyright (c) 2016 hecomi
+ * https://github.com/hecomi/uRaymarching#license
+ */
+
+using UnityEngine;
 using UnityEditor;
 
 namespace SyntaxHighlightEditor
@@ -6,28 +12,25 @@ namespace SyntaxHighlightEditor
     /// <summary>
     /// Code editor.
     /// </summary>
-    /// <remarks>
-    /// https://github.com/hecomi/uRaymarching
-    /// </remarks>
     public class TextAreaSyntaxHighlightEditor
     {
-        public Color backgroundColor { get; set; }
+        public Color BackgroundColor { get; set; }
 
-        public Color textColor { get; set; }
+        public Color TextColor { get; set; }
 
         // ハイライト用の関数
-        public System.Func<string, string> highlighter { get; set; }
+        public System.Func<string, string> Highlighter { get; set; }
 
         // 表示高速化の為に変更があった時だけコードを更新
-        string cachedHighlightedCode { get; set; }
+        public string CachedHighlightedCode { get; set; }
 
-        private string cachedCode;
+        private string _cachedCode;
 
         public TextAreaSyntaxHighlightEditor()
         {
-            backgroundColor = Color.black;
-            textColor = Color.white;
-            highlighter = code => code;
+            BackgroundColor = Color.black;
+            TextColor = Color.white;
+            Highlighter = code => code;
         }
 
         public string Draw(string code, GUIStyle style, params GUILayoutOption[] options)
@@ -44,16 +47,16 @@ namespace SyntaxHighlightEditor
             backStyle.focused.textColor = Color.clear;
 
             // 背景を色付きにする
-            GUI.backgroundColor = backgroundColor;
+            GUI.backgroundColor = BackgroundColor;
 
             // 編集用のテキストエリアを描画
             var editedCode = EditorGUILayout.TextArea(code, backStyle, options);
 
             // シンタックスハイライトさせたコードを更新
-            if (string.IsNullOrEmpty(cachedHighlightedCode) || (editedCode != cachedCode) || (editedCode != code))
+            if (string.IsNullOrEmpty(CachedHighlightedCode) || (editedCode != _cachedCode) || (editedCode != code))
             {
-                cachedHighlightedCode = highlighter(editedCode);
-                cachedCode = editedCode;
+                CachedHighlightedCode = Highlighter(editedCode);
+                _cachedCode = editedCode;
             }
 
             // 背景を透明にする
@@ -61,16 +64,16 @@ namespace SyntaxHighlightEditor
 
             // 文字（シンタックスハイライトされない部分）を指定色にする
             var foreStyle = new GUIStyle(style);
-            foreStyle.normal.textColor = textColor;
-            foreStyle.hover.textColor = textColor;
-            foreStyle.active.textColor = textColor;
-            foreStyle.focused.textColor = textColor;
+            foreStyle.normal.textColor = TextColor;
+            foreStyle.hover.textColor = TextColor;
+            foreStyle.active.textColor = TextColor;
+            foreStyle.focused.textColor = TextColor;
 
             // リッチテキストを ON にする
             foreStyle.richText = true;
 
             // シンタックスハイライト用のテキストエリアを表示
-            EditorGUI.TextArea(GUILayoutUtility.GetLastRect(), cachedHighlightedCode, foreStyle);
+            EditorGUI.TextArea(GUILayoutUtility.GetLastRect(), CachedHighlightedCode, foreStyle);
 
             // 色を元に戻す
             GUI.backgroundColor = preBackgroundColor;

@@ -70,7 +70,7 @@ public class PrefabTreeView : TreeView
         }
 
         SetParentExpanded(target.transform.parent);
-        this.SetSelection(new int[] {FindIndex(target.transform)});
+        SetSelection(new int[] {FindIndex(target.transform)});
     }
 
     private void SetParentExpanded(Transform transform)
@@ -80,7 +80,7 @@ public class PrefabTreeView : TreeView
             return;
         }
 
-        this.SetExpanded(FindIndex(transform), true);
+        SetExpanded(FindIndex(transform), true);
         SetParentExpanded(transform.parent);
     }
 

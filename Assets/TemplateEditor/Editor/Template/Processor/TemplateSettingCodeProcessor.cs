@@ -21,12 +21,22 @@ namespace TemplateEditor
             return RepalceWords;
         }
 
+        public string GetDescription()
+        {
+            return "一つ前のテンプレート設定のコード部分を渡します";
+        }
+
+        public ProcessFileType GetFileType()
+        {
+            return ProcessFileType.Class;
+        }
+
         #endregion
 
         protected string ReplaceCode(Dictionary<string, object> result)
         {
             object obj;
-            result.TryGetValue(TemplateSetting.ResultKey, out obj);
+            result.TryGetValue(this.GetLastConvertReplaceWord(TemplateSetting.ResultKey, result), out obj);
             var setting = obj as TemplateSetting;
             if (setting == null)
             {
@@ -45,11 +55,6 @@ namespace TemplateEditor
             var replaces = TemplateSettingEditor.CreateReplaceList(new List<ReplaceInfo>(0), words.ToArray());
             foreach (var replace in replaces)
             {
-                if (result.ContainsKey(replace.Key))
-                {
-                    continue;
-                }
-
                 result.Add(replace.Key, replace.ReplaceWord);
             }
 

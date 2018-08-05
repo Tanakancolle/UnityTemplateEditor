@@ -124,7 +124,7 @@ namespace TemplateEditor
 
             if (cache != _groupSetting.IsAssetsMenuItem)
             {
-                AssetsMenuItemCreator.Create();
+                AssetsMenuItemProcessor.Create();
             }
         }
 

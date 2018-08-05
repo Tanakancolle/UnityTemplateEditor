@@ -19,7 +19,7 @@ namespace TemplateEditor
                 return;
             }
 
-            result[RepalceWords[0]] = code.Split('\n');
+            result.Add(this.ConvertReplaceWord(RepalceWords[0], result), code.Split('\n'));
         }
 
         public override string[] GetReplaceWords()

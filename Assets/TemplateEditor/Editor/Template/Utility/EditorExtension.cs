@@ -26,7 +26,7 @@ namespace TemplateEditor
         /// <summary>
         /// ドラッグ＆ドロップ エリアを表示
         /// </summary>
-        public static string[] DrawDragAndDropArea(string dropName = "Drag & Drop", float height = DefaultDDAreaHeight)
+        public static string[] DrawDragAndDropArea(string dropName = "Drag & Drop a folder or file", float height = DefaultDDAreaHeight)
         {
             var dropRect = GUILayoutUtility.GetRect(0.0f, height, GUILayout.ExpandWidth(true));
 
@@ -78,6 +78,14 @@ namespace TemplateEditor
 
                 foldout.DrawAction();
             }
+        }
+
+        /// <summary>
+        /// スコープのスタイル取得
+        /// </summary>
+        public static GUIStyle GetScopeStyle()
+        {
+            return EditorStyles.helpBox;
         }
     }
 }

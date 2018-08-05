@@ -14,14 +14,15 @@ MonoBehaviour:
   Path: '{<CreatePath>}'
   ScriptName: '{<ScriptName>}.cs'
   Code: "using UnityEditor;\nusing System.Collections.Generic;\n\nnamespace TemplateEditor\n{\n
-    \   public class {<ScriptName>}\n    {\n        private const string menuItemPrefix
-    = \"Assets/Template/\";\n{<Repeat:\n        [MenuItem(menuItemPrefix + \"Settings/{0}\")]\n
-    \       public static void {0}()\n        {{\n            TemplateUtility.OpenEditorWindow(\"{1}\");\n
-    \       }}\n:Settings>}\n{<Repeat:\n        [MenuItem(menuItemPrefix + \"GroupSettings/{0}\")]\n
-    \       public static void {0}()\n        {{\n            TemplateUtility.OpenEditorWindow(\"{1}\");\n
+    \   public class {<ScriptName>}\n    {\n        private const string MenuItemPrefix
+    = \"Assets/Create/Template/\";\n{<Repeat:\n        [MenuItem(MenuItemPrefix +
+    \"Settings/{0}\", false, 0)]\n        public static void {0}()\n        {{\n            TemplateUtility.OpenEditorWindow(\"{1}\");\n
+    \       }}\n:Settings>}\n{<Repeat:\n        [MenuItem(MenuItemPrefix + \"GroupSettings/{0}\",
+    false, 0)]\n        public static void {0}()\n        {{\n            TemplateUtility.OpenEditorWindow(\"{1}\");\n
     \       }}\n:GroupSettings>}\n    }\n}"
   Overwrite: 1
-  Chain: []
+  Chain:
+  - {fileID: 11500000, guid: d5ff4f963aaf6468baa7eaee66e3e384, type: 3}
   DuplicatePrefab: {fileID: 0}
   AttachTarget: {fileID: 0}
   PrefabCreatePath: 

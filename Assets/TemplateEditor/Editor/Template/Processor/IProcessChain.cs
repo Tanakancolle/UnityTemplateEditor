@@ -6,6 +6,15 @@ namespace TemplateEditor
     {
         void Process(ProcessMetadata metadata, Dictionary<string, object> result);
         string[] GetReplaceWords();
+        string GetDescription();
+        ProcessFileType GetFileType();
+    }
+
+    public enum ProcessFileType
+    {
+        Class,
+        ScriptableObject,
+        ClassAndScriptableObject,
     }
 
     /// <summary>
@@ -18,10 +27,32 @@ namespace TemplateEditor
         public static string ConvertReplaceWord(this IProcessChain chain, string word, Dictionary<string, object> result)
         {
             string convertWord = word;
-            int counter = 1;
+            int counter = 2;
             while (result.ContainsKey(convertWord))
             {
                 convertWord = string.Format(ConvertWordPattern, convertWord, counter);
+                counter++;
+            }
+
+            return convertWord;
+        }
+
+        public static string GetLastConvertReplaceWord(this IProcessChain chain, string word, Dictionary<string, object> result)
+        {
+            string convertWord = word;
+            int counter = 2;
+            while (true)
+            {
+                var nextWord = string.Format(ConvertWordPattern, convertWord, counter);
+                if (result.ContainsKey(nextWord))
+                {
+                    convertWord = nextWord;
+                }
+                else
+                {
+                    break;
+                }
+
                 counter++;
             }
 

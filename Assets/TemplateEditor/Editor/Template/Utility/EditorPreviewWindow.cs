@@ -2,6 +2,9 @@
 
 namespace TemplateEditor
 {
+    /// <summary>
+    /// エディタプレビュー用ウィンドウ
+    /// </summary>
     public class EditorPreviewWindow : EditorWindow
     {
         public static void Open(Editor editor)

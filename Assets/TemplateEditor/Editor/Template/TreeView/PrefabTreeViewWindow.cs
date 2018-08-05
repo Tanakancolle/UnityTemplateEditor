@@ -25,22 +25,24 @@ public class PrefabTreeViewWindow : EditorWindow
         _treeView.Reload();
         _treeView.SelectObject(target);
 
-        this._changeAction = changeAction;
+        _changeAction = changeAction;
     }
 
     void OnGUI()
     {
         EditorGUILayout.BeginHorizontal();
         {
-            if (GUILayout.Button("変更"))
+            if (GUILayout.Button("Change"))
             {
                 _changeAction.Invoke(_treeView.GetSelectObject());
                 _window.Close();
+                return;
             }
 
-            if (GUILayout.Button("戻る"))
+            if (GUILayout.Button("Quit"))
             {
                 _window.Close();
+                return;
             }
         }
 

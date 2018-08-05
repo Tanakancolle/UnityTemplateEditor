@@ -24,6 +24,16 @@ namespace TemplateEditor
             return ReplaceWords;
         }
 
+        public string GetDescription()
+        {
+            return "自身のインスタンスを渡します";
+        }
+
+        public ProcessFileType GetFileType()
+        {
+            return ProcessFileType.ScriptableObject;
+        }
+
         [SerializeField]
         public string Path;
 
@@ -56,5 +66,8 @@ namespace TemplateEditor
         public bool IsAssetsMenuItem { get { return AssetsMenuItem; } set { AssetsMenuItem = value; } }
 
         #endregion
+
+        [SerializeField]
+        public string Description;
     }
 }

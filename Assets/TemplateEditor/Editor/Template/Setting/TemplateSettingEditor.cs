@@ -8,6 +8,7 @@ using System.Collections;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SyntaxHighlightEditor;
+using UnityEditorInternal;
 
 namespace TemplateEditor
 {
@@ -32,10 +33,12 @@ namespace TemplateEditor
 
         public readonly SerializedObject TargetSerializedObject;
         public readonly TemplateSetting TargetTemplateSetting;
-        public Vector2 ScrollPos = Vector2.zero;
-        public bool IsUpdateText = false;
+        public Vector2 ScrollPos;
+        public bool IsUpdateText;
+        public ReorderableList ChainReorderablesList;
 
         private readonly SerializedProperty[] _properties;
+
 
         public TemplateSettingStatus(SerializedObject targetSerializedObject)
         {
@@ -48,6 +51,21 @@ namespace TemplateEditor
             {
                 _properties[i] = targetSerializedObject.FindProperty(names[i]);
             }
+
+            ChainReorderablesList = new ReorderableList(targetSerializedObject, GetProperty(Property.Chain))
+            {
+                drawElementCallback = DrawChainListElement,
+                drawHeaderCallback = (rect) => { EditorGUI.LabelField(rect, "List"); },
+            };
+        }
+
+        private void DrawChainListElement(Rect rect, int index, bool isActive, bool isFocuse)
+        {
+            var element = GetProperty(Property.Chain).GetArrayElementAtIndex (index);
+            rect.height -= 4f;
+            rect.y += 2f;
+            rect.xMin += 20f;
+            EditorGUI.PropertyField(rect, element, GUIContent.none);
         }
 
         public SerializedProperty GetProperty(Property type)
@@ -79,6 +97,7 @@ namespace TemplateEditor
             {
                 new FoldoutInfo("Code", () => DrawCode(SettingStatus)),
                 new FoldoutInfo("Replace Texts", () => DrawReplace(_replaceList, _instanceId)),
+                new FoldoutInfo("Pre Process", () => DrawChain(SettingStatus)),
             };
 
             UpdateReplaceList(true);
@@ -90,7 +109,6 @@ namespace TemplateEditor
             {
                 DrawHeader(SettingStatus);
                 EditorGUIHelper.DrawFoldouts(_foldouts);
-                DrawChain(SettingStatus);
                 DrawOverwrite(SettingStatus);
                 DrawIsAssetsMenuItem();
                 DrawPrefab(SettingStatus);
@@ -106,6 +124,7 @@ namespace TemplateEditor
             EditorGUI.BeginChangeCheck();
             {
                 // setting create path
+                EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
                 {
                     var property = status.GetProperty(TemplateSettingStatus.Property.Path);
                     EditorGUILayout.PropertyField(property, new GUIContent("Create Path"));
@@ -113,15 +132,40 @@ namespace TemplateEditor
                     var paths = EditorGUIHelper.DrawDragAndDropArea();
                     if (paths != null && paths.Length > 0)
                     {
+                        // Index 0 のパスを使用する
                         property.stringValue = TemplateUtility.GetDirectoryPath(paths[0]);
                     }
-                }
 
-                EditorGUILayout.PropertyField(status.GetProperty(TemplateSettingStatus.Property.ScriptName),
-                    new GUIContent("Script Name"));
+                    var createPath = status.TargetTemplateSetting.Path;
+                    if (string.IsNullOrEmpty(createPath))
+                    {
+                        EditorGUILayout.HelpBox("If empty, the script will be created in active folder", MessageType.Info);
+
+                    }
+                    EditorGUILayout.HelpBox("Example: Assets/TestFolder", MessageType.Info);
+                }
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
+                {
+                    EditorGUILayout.PropertyField(status.GetProperty(TemplateSettingStatus.Property.ScriptName), new GUIContent("Script Name"));
+                    var scriptName = status.TargetTemplateSetting.ScriptName;
+                    if (string.IsNullOrEmpty(scriptName))
+                    {
+                        EditorGUILayout.HelpBox("Example: TestScript.cs", MessageType.Info);
+                    }
+                    else
+                    {
+                        if (Regex.IsMatch(scriptName, @"\..+$", RegexOptions.Compiled) == false)
+                        {
+                            EditorGUILayout.HelpBox("Extension required", MessageType.Warning);
+                        }
+                    }
+                }
+                EditorGUILayout.EndVertical();
             }
 
-            if (EditorGUI.EndChangeCheck() == true)
+            if (EditorGUI.EndChangeCheck())
             {
                 status.IsUpdateText = true;
                 Undo.IncrementCurrentGroup();
@@ -138,18 +182,51 @@ namespace TemplateEditor
 
         public static void DrawChain(TemplateSettingStatus status)
         {
-            var property = status.GetProperty(TemplateSettingStatus.Property.Chain);
-            EditorGUILayout.PropertyField(property, new GUIContent("Pre Process"), true);
+            EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
+            {
+                status.ChainReorderablesList.DoLayoutList();
+
+                var builder = new StringBuilder();
+                var selectIndex = status.ChainReorderablesList.index;
+                if (selectIndex >= 0)
+                {
+                    var select = status.ChainReorderablesList.serializedProperty.GetArrayElementAtIndex(selectIndex);
+                    var chain = TemplateUtility.ConvertProcessChianInstanceFromObject(select.objectReferenceValue);
+                    if (chain != null)
+                    {
+                        builder.AppendLine("Used Variables :");
+                        foreach (var word in chain.GetReplaceWords())
+                        {
+                            builder.Append(word + ", ");
+                        }
+                        builder.AppendLine();
+                        builder.AppendLine();
+                        builder.AppendLine("Description :");
+                        builder.Append(chain.GetDescription());
+                    }
+                }
+                else
+                {
+                    EditorGUILayout.HelpBox("When you select item will be description displayed", MessageType.Info, true);
+                }
+
+                var style = new GUIStyle(GUI.skin.label) {wordWrap = true};
+                EditorGUILayout.LabelField(builder.ToString(), style);
+            }
+            EditorGUILayout.EndVertical();
         }
 
         public static void DrawOverwrite(TemplateSettingStatus status)
         {
-            var property = status.GetProperty(TemplateSettingStatus.Property.Overwrite);
-            EditorGUILayout.PropertyField(property, new GUIContent("Overwrite Type"));
+            EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
+            {
+                var property = status.GetProperty(TemplateSettingStatus.Property.Overwrite);
+                EditorGUILayout.PropertyField(property, new GUIContent("Overwrite Type"));
+            }
+            EditorGUILayout.EndVertical();
         }
 
-        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces,
-            Dictionary<string, object> result = null)
+        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces, Dictionary<string, object> result = null)
         {
             if (result == null)
             {
@@ -188,18 +265,15 @@ namespace TemplateEditor
             TemplateUtility.CreateScript(
                 path,
                 Replace(code, result),
-                (TemplateUtility.OverwriteType) status.GetProperty(TemplateSettingStatus.Property.Overwrite)
-                    .enumValueIndex
+                (TemplateUtility.OverwriteType) status.GetProperty(TemplateSettingStatus.Property.Overwrite).enumValueIndex
             );
 
             AssetDatabase.ImportAsset(path);
             TemplateUtility.RefreshEditor();
 
             // プレハブ生成登録
-            var prefabObject =
-                status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab).objectReferenceValue as GameObject;
-            var targetObject =
-                status.GetProperty(TemplateSettingStatus.Property.AttachTarget).objectReferenceValue as GameObject;
+            var prefabObject = status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab).objectReferenceValue as GameObject;
+            var targetObject = status.GetProperty(TemplateSettingStatus.Property.AttachTarget).objectReferenceValue as GameObject;
             if (prefabObject != null && targetObject != null)
             {
                 TemplatePrefabCreator.AddTempCreatePrefabSetting(status.TargetTemplateSetting, path);
@@ -220,100 +294,127 @@ namespace TemplateEditor
             var property = status.GetProperty(TemplateSettingStatus.Property.Chain);
             for (int i = 0; i < property.arraySize; ++i)
             {
-                TemplateUtility.ExecuteProcessChain(property.GetArrayElementAtIndex(i).objectReferenceValue, metadata,
-                    result);
+                TemplateUtility.ExecuteProcessChain(property.GetArrayElementAtIndex(i).objectReferenceValue, metadata, result);
             }
         }
 
         public static void DrawReplace(List<ReplaceInfo> replaces, string savePrefix)
         {
-            for (int i = 0; i < replaces.Count; ++i)
+            EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
+            if (replaces.Count == 0)
             {
-                var str = EditorGUILayout.TextField(ReplaceProcessor.GetReplaceText(replaces[i].Key), replaces[i].ReplaceWord);
-                if (str == replaces[i].ReplaceWord)
-                {
-                    continue;
-                }
-
-                // 置き換え文字をUnityへキャッシュ
-                replaces[i].ReplaceWord = str;
-                TemplateUtility.SetConfigValue(savePrefix + replaces[i].Key, replaces[i].ReplaceWord);
+                EditorGUILayout.HelpBox("{<Foo>} in 'Create Path' and 'Script Name' and 'Code' will be replace\nNote: Variables used in 'Pre Process' are not listed here.", MessageType.Info);
             }
+            else
+            {
+                foreach (var replace in replaces)
+                {
+                    var str = EditorGUILayout.TextField(ReplaceProcessor.GetReplaceText(replace.Key), replace.ReplaceWord);
+                    if (str == replace.ReplaceWord)
+                    {
+                        continue;
+                    }
+
+                    // 置き換え文字をUnityへキャッシュ
+                    replace.ReplaceWord = str;
+                    TemplateUtility.SetConfigValue(savePrefix + replace.Key, replace.ReplaceWord);
+                }
+            }
+            EditorGUILayout.EndVertical();
         }
 
         public static void DrawCode(TemplateSettingStatus status)
         {
-            var code = status.GetProperty(TemplateSettingStatus.Property.Code).stringValue;
-            var editedCode = SyntaxHighlightUtility.DrawCSharpCode(ref status.ScrollPos, code);
-            if (editedCode != code)
+            EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                status.GetProperty(TemplateSettingStatus.Property.Code).stringValue = editedCode;
-                status.IsUpdateText = true;
-                Undo.IncrementCurrentGroup();
+                var code = status.GetProperty(TemplateSettingStatus.Property.Code).stringValue;
+                var editedCode = SyntaxHighlightUtility.DrawCSharpCode(ref status.ScrollPos, code);
+                if (editedCode != code)
+                {
+                    status.GetProperty(TemplateSettingStatus.Property.Code).stringValue = editedCode;
+                    status.IsUpdateText = true;
+                    Undo.IncrementCurrentGroup();
+                }
             }
+            EditorGUILayout.EndVertical();
         }
 
         public static void DrawPrefab(TemplateSettingStatus status)
         {
-            var prefabProperty = status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab);
-            var targetProperty = status.GetProperty(TemplateSettingStatus.Property.AttachTarget);
-
-            var oldObj = prefabProperty.objectReferenceValue as GameObject;
-            EditorGUILayout.PropertyField(prefabProperty, new GUIContent("Attach Prefab"), true);
-
-            var obj = prefabProperty.objectReferenceValue as GameObject;
-            if (obj == null || PrefabUtility.GetPrefabType(obj) != PrefabType.Prefab)
+            EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                targetProperty.objectReferenceValue = null;
-                return;
-            }
+                var prefabProperty = status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab);
+                var targetProperty = status.GetProperty(TemplateSettingStatus.Property.AttachTarget);
 
-            if (oldObj != obj)
-            {
-                prefabProperty.objectReferenceValue = PrefabUtility.FindRootGameObjectWithSameParentPrefab(obj);
-                targetProperty.objectReferenceValue = null;
-            }
+                var oldObj = prefabProperty.objectReferenceValue as GameObject;
+                EditorGUILayout.PropertyField(prefabProperty, new GUIContent("Attach Prefab"), true);
 
-            EditorGUILayout.BeginHorizontal();
-            {
-                if (GUILayout.Button("Change Attach Target"))
+                var obj = prefabProperty.objectReferenceValue as GameObject;
+                if (obj == null || PrefabUtility.GetPrefabType(obj) != PrefabType.Prefab)
                 {
-                    PrefabTreeViewWindow.Open(obj, targetProperty.objectReferenceValue as GameObject, (targetObj) =>
-                    {
-                        status.TargetSerializedObject.Update();
-                        status.GetProperty(TemplateSettingStatus.Property.AttachTarget).objectReferenceValue =
-                            targetObj;
-                        status.TargetSerializedObject.ApplyModifiedProperties();
-                    });
+                    targetProperty.objectReferenceValue = null;
+
+                    EditorGUILayout.EndVertical();
+                    return;
                 }
 
-                EditorGUILayout.LabelField(targetProperty.objectReferenceValue == null ? string.Empty : targetProperty.objectReferenceValue.name);
-            }
-            EditorGUILayout.EndHorizontal();
+                if (oldObj != obj)
+                {
+                    targetProperty.objectReferenceValue = prefabProperty.objectReferenceValue = PrefabUtility.FindRootGameObjectWithSameParentPrefab(obj);
+                }
 
-            var pathProperty = status.GetProperty(TemplateSettingStatus.Property.PrefabCreatePath);
-            EditorGUILayout.PropertyField(pathProperty, new GUIContent("Create Prafab Path"), true);
+                EditorGUILayout.BeginHorizontal(EditorGUIHelper.GetScopeStyle());
+                {
+                    if (GUILayout.Button("Change Attach Target"))
+                    {
+                        PrefabTreeViewWindow.Open(obj, targetProperty.objectReferenceValue as GameObject, (targetObj) =>
+                        {
+                            status.TargetSerializedObject.Update();
+                            status.GetProperty(TemplateSettingStatus.Property.AttachTarget).objectReferenceValue = targetObj;
+                            status.TargetSerializedObject.ApplyModifiedProperties();
+                        });
+                    }
 
-            var paths = EditorGUIHelper.DrawDragAndDropArea();
-            if (paths != null && paths.Length > 0)
-            {
-                pathProperty.stringValue = paths[0];
+                    EditorGUILayout.LabelField(targetProperty.objectReferenceValue == null ? string.Empty : targetProperty.objectReferenceValue.name);
+                }
+                EditorGUILayout.EndHorizontal();
+
+                var pathProperty = status.GetProperty(TemplateSettingStatus.Property.PrefabCreatePath);
+                EditorGUILayout.PropertyField(pathProperty, new GUIContent("Create Prafab Path"), true);
+
+                var paths = EditorGUIHelper.DrawDragAndDropArea();
+                if (paths != null && paths.Length > 0)
+                {
+                    pathProperty.stringValue = paths[0];
+                }
+
+                if (string.IsNullOrEmpty(pathProperty.stringValue))
+                {
+                    EditorGUILayout.HelpBox("If empty, the prefab will be created in its original path", MessageType.Info);
+                }
             }
+            EditorGUILayout.EndVertical();
         }
 
         private void DrawIsAssetsMenuItem()
         {
-            var cache = SettingStatus.TargetTemplateSetting.IsAssetsMenuItem;
-            var isAssetMenuProperty = SettingStatus.GetProperty(TemplateSettingStatus.Property.AssetsMenuItem);
-            EditorGUILayout.PropertyField(isAssetMenuProperty, new GUIContent("Add Asset Menu"));
-
-            // 生成時に設定反映が間に合わないため
-            SettingStatus.TargetTemplateSetting.IsAssetsMenuItem = isAssetMenuProperty.boolValue;
-
-            if (cache != SettingStatus.TargetTemplateSetting.IsAssetsMenuItem)
+            EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                AssetsMenuItemCreator.Create();
+                var cache = SettingStatus.TargetTemplateSetting.IsAssetsMenuItem;
+                var isAssetMenuProperty = SettingStatus.GetProperty(TemplateSettingStatus.Property.AssetsMenuItem);
+                EditorGUILayout.PropertyField(isAssetMenuProperty, new GUIContent("Add Asset Menu"));
+
+                // 生成時に設定反映が間に合わないため
+                SettingStatus.TargetTemplateSetting.IsAssetsMenuItem = isAssetMenuProperty.boolValue;
+
+                if (cache != SettingStatus.TargetTemplateSetting.IsAssetsMenuItem)
+                {
+                    AssetsMenuItemProcessor.Create();
+                }
+
+                EditorGUILayout.HelpBox("Add a menu item to \"Assets/Create/Template/~\"", MessageType.Info);
             }
+            EditorGUILayout.EndVertical();
         }
 
         private void DrawCreate()
@@ -389,10 +490,11 @@ namespace TemplateEditor
             var replaces = new List<ReplaceInfo>();
             foreach (var word in words)
             {
-                var replace = oldReplaces.FirstOrDefault(info => info.Key == word) ?? new ReplaceInfo()
-                {
-                    Key = word
-                };
+                var replace = oldReplaces.FirstOrDefault(info => info.Key == word) ??
+                              new ReplaceInfo()
+                              {
+                                  Key = word
+                              };
 
                 replaces.Add(replace);
             }

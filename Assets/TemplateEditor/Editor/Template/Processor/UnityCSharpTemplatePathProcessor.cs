@@ -29,5 +29,15 @@ namespace TemplateEditor
         {
             return ReplaceWords;
         }
+
+        public string GetDescription()
+        {
+            return "UnityのC#テンプレートパスを渡します";
+        }
+
+        public ProcessFileType GetFileType()
+        {
+            return ProcessFileType.Class;
+        }
     }
 }
