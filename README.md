@@ -23,7 +23,7 @@ Unityのエディタ拡張で作られた、テンプレートからファイル
 
 ![1-4](https://user-images.githubusercontent.com/18282136/44031369-be457b90-9f3e-11e8-879e-35d07e5a2333.png)
 
-## ・右クリックメニューに追加
+## ・右クリックメニューに追加
 #### Step.1
 先ほどのテンプレート設定ファイルの **Add Asset Menu** にチェックを入れます
 
@@ -68,7 +68,7 @@ Unityのエディタ拡張で作られた、テンプレートからファイル
 ![4-2](https://user-images.githubusercontent.com/18282136/44035836-6139ddb2-9f4b-11e8-850a-79310165f6bd.png)
 
 #### Step.3
-もう一つテンプレート設定ファイルを作成し **Pre Process** に先ほど作成した **UsingTemplateSetting** を設定します
+もう一つテンプレート設定ファイルを作成し **Pre Process** に先ほど作成した **UsingTemplateSetting** を設定します
 
 ![4-3](https://user-images.githubusercontent.com/18282136/44035435-786d4704-9f4a-11e8-86bc-bdbd5c89a829.png)
 
