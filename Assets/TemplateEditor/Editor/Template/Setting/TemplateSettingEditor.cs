@@ -186,7 +186,6 @@ namespace TemplateEditor
             {
                 status.ChainReorderablesList.DoLayoutList();
 
-                var builder = new StringBuilder();
                 var selectIndex = status.ChainReorderablesList.index;
                 if (selectIndex >= 0)
                 {
@@ -194,24 +193,28 @@ namespace TemplateEditor
                     var chain = TemplateUtility.ConvertProcessChianInstanceFromObject(select.objectReferenceValue);
                     if (chain != null)
                     {
-                        builder.AppendLine("Used Variables :");
+                        var builder = new StringBuilder();
+                        builder.AppendLine("[Used Variables]");
                         foreach (var word in chain.GetReplaceWords())
                         {
-                            builder.Append(word + ", ");
+                            builder.AppendLine(word);
                         }
-                        builder.AppendLine();
-                        builder.AppendLine();
-                        builder.AppendLine("Description :");
-                        builder.Append(chain.GetDescription());
+
+                        var style = new GUIStyle(GUI.skin.label)
+                        {
+                            wordWrap = true,
+                        };
+                        var label = builder.ToString();
+                        var content = new GUIContent(label);
+                        var rect = GUILayoutUtility.GetRect(content, style);
+                        EditorGUI.SelectableLabel(rect, label, style);
+                        EditorGUILayout.LabelField("[Description]\n" + chain.GetDescription(), style);
                     }
                 }
                 else
                 {
                     EditorGUILayout.HelpBox("When you select item will be description displayed", MessageType.Info, true);
                 }
-
-                var style = new GUIStyle(GUI.skin.label) {wordWrap = true};
-                EditorGUILayout.LabelField(builder.ToString(), style);
             }
             EditorGUILayout.EndVertical();
         }
