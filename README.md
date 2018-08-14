@@ -1,4 +1,7 @@
 # テンプレートエディタ
+
+README(Google Translate) [English](https://translate.google.com/translate?hl=&sl=ja&tl=en&u=https://github.com/Tanakancolle/UnityTemplateEditor)
+
 Unityのエディタ拡張で作られた、テンプレートからファイルを生成できるツールです。
 
 ## 導入
