@@ -3,6 +3,12 @@
 README(Google Translate) [English](https://translate.google.com/translate?hl=&sl=ja&tl=en&u=https://github.com/Tanakancolle/UnityTemplateEditor)
 
 Unityのエディタ拡張で作られた、テンプレートからファイルを生成できるツールです。
+主に次のようなときに役立ちます。
+
+- ほぼ同じ構造のスクリプトを作っているとき
+- エディタ拡張等でファイルの生成を行なっているとき
+
+詳しくは[チュートリアル](#チュートリアル)をご覧ください。テンプレートエディタがどういったツールなのかが掴めると思います。
 
 ## 導入
 
@@ -65,6 +71,8 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 
 ![3-3](https://user-images.githubusercontent.com/18282136/44034487-2891dd78-9f48-11e8-9fb4-43cb34387b1d.png)
 
+**ここの詳細な説明はPreProcess.mdで行います**
+
 ### ・特殊な置き換え
 #### Step.1
 新しいテンプレート設定ファイルを作成し、ファイル名を **UsingTemplateSetting** に変更します
@@ -100,3 +108,4 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 ![4-7](https://user-images.githubusercontent.com/18282136/44036259-508be158-9f4c-11e8-80ff-fcd9e9b4238d.png)
 
 **ここの詳細な説明はReplace.mdで行います**
+
