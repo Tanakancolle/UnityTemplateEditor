@@ -130,14 +130,29 @@ namespace TemplateEditor
 
         private void DrawCreate()
         {
-            if (GUILayout.Button("生成") == false)
+            EditorGUILayout.BeginHorizontal(EditorGUIHelper.GetScopeStyle());
             {
-                return;
-            }
+                if (GUILayout.Button("Create"))
+                {
+                    CreateScript(true);
+                    return;
+                }
 
+                if (GUILayout.Button("No Refresh Create"))
+                {
+
+                    CreateScript(false);
+                    return;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void CreateScript(bool isRefresh)
+        {
             foreach (var status in _statusList)
             {
-                TemplateSettingEditor.CreateScript(status, _replaceList);
+                TemplateSettingEditor.CreateScript(status, _replaceList, null, isRefresh);
             }
         }
 

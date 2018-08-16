@@ -229,7 +229,7 @@ namespace TemplateEditor
             EditorGUILayout.EndVertical();
         }
 
-        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces, Dictionary<string, object> result = null)
+        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces, Dictionary<string, object> result = null, bool isRefrash = true)
         {
             if (result == null)
             {
@@ -271,8 +271,11 @@ namespace TemplateEditor
                 (TemplateUtility.OverwriteType) status.GetProperty(TemplateSettingStatus.Property.Overwrite).enumValueIndex
             );
 
-            AssetDatabase.ImportAsset(path);
-            TemplateUtility.RefreshEditor();
+            if (isRefrash)
+            {
+                AssetDatabase.ImportAsset(path);
+                TemplateUtility.RefreshEditor();
+            }
 
             // プレハブ生成登録
             var prefabObject = status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab).objectReferenceValue as GameObject;
@@ -422,17 +425,27 @@ namespace TemplateEditor
 
         private void DrawCreate()
         {
-            if (GUILayout.Button("Create") == false)
+            EditorGUILayout.BeginHorizontal(EditorGUIHelper.GetScopeStyle());
             {
-                return;
-            }
+                if (GUILayout.Button("Create"))
+                {
+                    Create(null, true);
+                    return;
+                }
 
-            Create();
+                if (GUILayout.Button("No Refresh Create"))
+                {
+
+                    Create(null, false);
+                    return;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
-        public void Create(Dictionary<string, object> result = null)
+        public void Create(Dictionary<string, object> result = null, bool isRefresh = true)
         {
-            CreateScript(SettingStatus, _replaceList, result);
+            CreateScript(SettingStatus, _replaceList, result, isRefresh);
         }
 
         private void UpdateReplaceList(bool isForce = false)
