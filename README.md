@@ -38,8 +38,8 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 
 ![1-4](https://user-images.githubusercontent.com/18282136/44031369-be457b90-9f3e-11e8-879e-35d07e5a2333.png)
 
-#### 解説
-
+#### 補足
+**{<>}**で囲まれた部分は**置き換え文字**になります。置き換え文字は**Replace Texts**で指定した文字列に置き替わります
 
 ## ・右クリックメニューに追加
 テンプレート設定ファイルの項目にある **Add Asset Menu** の機能を使用します
@@ -59,8 +59,11 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 
 ![2-3](https://user-images.githubusercontent.com/18282136/44031814-2a8ad06a-9f40-11e8-97be-dcd9c1b32863.png)
 
+#### 補足
+**Add Asset Menu**を使用することで、素早く必要なファイルが生成できるようになります。よく使うテンプレートはAdd Asset Menuにチェックをつける事をおすすめします
+
 ### ・「Pre Process」の活用
-テンプレート設定ファイルの項目にある **Pre Process** の機能を使用します
+テンプレート設定ファイルの項目にある **Pre Process** の機能を使用します
 
 #### Step.1
 先ほどのテンプレート設定ファイルの **Pre Process** へ **UnityCSharpTemplatePathProcessor** を追加します
@@ -73,7 +76,7 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 ![3-2](https://user-images.githubusercontent.com/18282136/44032731-f740d3d2-9f42-11e8-9540-8206bb66f500.gif)
 
 #### Step.3
-**Overwrite Type** を **Replace** にします
+**Overwrite Type** を **Replace** にします
 
 ![3-3](https://user-images.githubusercontent.com/18282136/44034487-2891dd78-9f48-11e8-9fb4-43cb34387b1d.png)
 
@@ -82,10 +85,10 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 
 **※変更すると元に戻せないので、注意してください**
 
-**ここの詳細な説明はPreProcess.mdで行います**
+**ここの詳細な説明はPreProcess.mdで行います**
 
 ### ・特殊な置き換え
-**{<>}** で囲んだ箇所は置き換えが行えますが、
+**{<>}** で囲んだ箇所は置き換えが行えますが、ただ単に置き換えるのではなく、一定のルールで置き換えることができます
 
 #### Step.1
 新しいテンプレート設定ファイルを作成し、ファイル名を **UsingTemplateSetting** に変更します
