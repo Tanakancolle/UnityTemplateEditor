@@ -164,7 +164,5 @@ namespace TemplateEditor
         [Header("除外ファイルパスの正規表現 Assetsから始まる")]
         [SerializeField]
         private string[] _ignorePathPatterns;
-
-        private IProcessChain _processChainImplementation;
     }
 }
