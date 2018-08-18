@@ -39,10 +39,10 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 ![1-4](https://user-images.githubusercontent.com/18282136/44031369-be457b90-9f3e-11e8-879e-35d07e5a2333.png)
 
 #### 補足
-**{<>}**で囲まれた部分は**置き換え文字**になります。置き換え文字は**Replace Texts**で指定した文字列に置き替わります
+**{<>}** で囲まれた部分は **置き換え文字** になります。置き換え文字は **Replace Texts** で指定した文字列に置き替わります
 
 ## ・右クリックメニューに追加
-テンプレート設定ファイルの項目にある **Add Asset Menu** の機能を使用します
+テンプレート設定ファイルの項目にある **Add Asset Menu** の機能の紹介を行います
 
 #### Step.1
 先ほどのテンプレート設定ファイルの **Add Asset Menu** にチェックを入れます
@@ -63,7 +63,7 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 **Add Asset Menu**を使用することで、素早く必要なファイルが生成できるようになります。よく使うテンプレートはAdd Asset Menuにチェックをつける事をおすすめします
 
 ### ・「Pre Process」の活用
-テンプレート設定ファイルの項目にある **Pre Process** の機能を使用します
+テンプレート設定ファイルの項目にある **Pre Process** の機能の紹介を行います
 
 #### Step.1
 先ほどのテンプレート設定ファイルの **Pre Process** へ **UnityCSharpTemplatePathProcessor** を追加します
@@ -71,7 +71,7 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 ![3-1](https://user-images.githubusercontent.com/18282136/44032040-ed823536-9f40-11e8-9765-c55683ef197c.png)
 
 #### Step.2
-**Create Path** と **Script Name** へ **UnityTemplatePath** と **UnityTemplateName** を設定します
+**Create Path** と **Script Name** へ **{<UnityTemplatePath>}** と **{<UnityTemplateName>}** を設定します
 
 ![3-2](https://user-images.githubusercontent.com/18282136/44032731-f740d3d2-9f42-11e8-9540-8206bb66f500.gif)
 
@@ -80,12 +80,15 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 
 ![3-3](https://user-images.githubusercontent.com/18282136/44034487-2891dd78-9f48-11e8-9fb4-43cb34387b1d.png)
 
-#### Step.3
-**Create** をクリックすると、右クリックメニューにある「Create/C# Script」で生成されるスクリプトが変更されます
+#### Step.4
+**Create** をクリックすると、右クリックメニューにある「Create/C# Script」で生成されるスクリプトが変更されます
 
 **※変更すると元に戻せないので、注意してください**
 
-**ここの詳細な説明はPreProcess.mdで行います**
+#### 補足
+Pre Processではファイルを生成する前に行う処理を指定できます。
+今回はUnityの標準のC#スクリプトへのパスとファイル名を取得できる処理をしています。
+Pre Processの詳細な解説は **PreProcess.md** で行います
 
 ### ・特殊な置き換え
 **{<>}** で囲んだ箇所は置き換えが行えますが、ただ単に置き換えるのではなく、一定のルールで置き換えることができます
@@ -123,5 +126,7 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 
 ![4-7](https://user-images.githubusercontent.com/18282136/44036259-508be158-9f4c-11e8-80ff-fcd9e9b4238d.png)
 
-**ここの詳細な説明はReplace.mdで行います**
+#### 補足
+
+**特殊な置き換えの詳細な説明はReplace.mdで行います**
 
