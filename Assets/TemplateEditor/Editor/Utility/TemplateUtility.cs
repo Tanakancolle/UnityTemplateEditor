@@ -10,8 +10,6 @@ namespace TemplateEditor
 
     public static class TemplateUtility
     {
-        public static readonly string Version = "1.1.0";
-
         public enum OverwriteType
         {
             Not,

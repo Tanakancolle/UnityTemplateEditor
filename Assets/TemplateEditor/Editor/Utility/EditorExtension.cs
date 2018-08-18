@@ -70,14 +70,23 @@ namespace TemplateEditor
         {
             foreach (var foldout in foldouts)
             {
-                foldout.IsFoldout = EditorGUILayout.Foldout(foldout.IsFoldout, foldout.DrawName);
-                if (foldout.IsFoldout == false)
-                {
-                    continue;
-                }
+                DrawFoldout(foldout);
 
-                foldout.DrawAction();
             }
+        }
+
+        /// <summary>
+        /// 折りたたみ表示
+        /// </summary>
+        public static void DrawFoldout(FoldoutInfo foldout)
+        {
+            foldout.IsFoldout = EditorGUILayout.Foldout(foldout.IsFoldout, foldout.DrawName);
+            if (foldout.IsFoldout == false)
+            {
+                return;
+            }
+
+            foldout.DrawAction();
         }
 
         /// <summary>

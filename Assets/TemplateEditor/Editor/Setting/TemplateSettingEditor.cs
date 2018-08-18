@@ -29,6 +29,7 @@ namespace TemplateEditor
             AttachTarget,
             PrefabCreatePath,
             AssetsMenuItem,
+            Description,
         }
 
         public readonly SerializedObject TargetSerializedObject;
@@ -85,6 +86,7 @@ namespace TemplateEditor
     {
         public TemplateSettingStatus SettingStatus;
         private FoldoutInfo[] _foldouts;
+        private FoldoutInfo _descriptionFoldout;
         private List<ReplaceInfo> _replaceList = new List<ReplaceInfo>();
         private string _instanceId;
 
@@ -100,6 +102,8 @@ namespace TemplateEditor
                 new FoldoutInfo("Pre Process", () => DrawChain(SettingStatus)),
             };
 
+            _descriptionFoldout = new FoldoutInfo("Description", DrawDescription);
+
             UpdateReplaceList(true);
         }
 
@@ -113,6 +117,7 @@ namespace TemplateEditor
                 DrawIsAssetsMenuItem();
                 DrawPrefab(SettingStatus);
                 DrawCreate();
+                EditorGUIHelper.DrawFoldout(_descriptionFoldout);
 
                 UpdateReplaceList();
             }
@@ -197,7 +202,7 @@ namespace TemplateEditor
                         builder.AppendLine("[Used Variables]");
                         foreach (var word in chain.GetReplaceWords())
                         {
-                            builder.AppendLine(word);
+                            builder.AppendLine(ReplaceProcessor.GetReplaceText(word));
                         }
 
                         var style = new GUIStyle(GUI.skin.label)
@@ -446,6 +451,16 @@ namespace TemplateEditor
         public void Create(Dictionary<string, object> result = null, bool isRefresh = true)
         {
             CreateScript(SettingStatus, _replaceList, result, isRefresh);
+        }
+
+        private void DrawDescription()
+        {
+            EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
+            {
+                var property = SettingStatus.GetProperty(TemplateSettingStatus.Property.Description);
+                property.stringValue = EditorGUILayout.TextArea(property.stringValue);
+            }
+            EditorGUILayout.EndVertical();
         }
 
         private void UpdateReplaceList(bool isForce = false)
