@@ -129,9 +129,14 @@ Pre Processの詳細な解説は **PreProcess.md** で行います
 #### 補足
 ここでは **Repeat** という特殊な置き換えを使用しています。詳細な説明は **Replace.md** で行います
 
-## TemplateSettinの項目説明
-テンプレート設定ファイルの簡単な説明を行います
+## TemplateSettingの説明
+**「Tools/Template Editor/Setting Object/Create Setting」**
+で生成できるテンプレート設定ファイルの簡単な説明を行います
 
+### 概要
+このファイルを適切に設定することによってファイル生成が行えます
+
+### 項目説明
 |項目名|説明|
 |-----------|:-----------|
 |Create Path|ファイルを生成するフォルダを指定できます。空白の場合はアクティブなフォルダに生成されます。**{<>}** で囲むことで、置き換え文字にできます|
@@ -141,7 +146,23 @@ Pre Processの詳細な解説は **PreProcess.md** で行います
 |Pre Process|IProcessChainを継承した、クラスかScriptableObjectファイルを指定できます。Pre Processで使用する置き換え文字は **Replace Texts** にフォームが表示されません。詳細は **PreProcess.md** で解説します|
 |Overwrite Type|生成するファイルが既に存在する場合の動作を指定できます。Not : 上書きしない、Replace : 上書きする、Add Start : ファイルの最初に追加する、Add End : ファイルの最後に追加する|
 |Add Asset Menu|チェックを入れると「Assets/Create/Template/~」にこのテンプレートの実行を行える項目を追加できます。項目名はテンプレートのファイル名になります|
-|Attach Prefab|生成したスクリプトファイルをアタッチするプレハブを指定できます。詳細は **AttachPrefab.md** で解説します|C
+|Attach Prefab|生成したスクリプトファイルをアタッチするプレハブを指定できます。詳細は **AttachPrefab.md** で解説します|
+|Add Asset Menu|チェックを入れると「Assets/Create/Template/~」にこのテンプレートの実行を行える項目を追加できます。項目名はテンプレートのファイル名になります
+|Create|ファイル生成を実行するボタンです|
+|No Refresh Create|ファイル生成を実行するボタンです。インポート等を行わない実行ボタンです|
+|Description|作成したテンプレート設定ファイルの説明を入力できます|
+
+## TemplateGroupSettingの説明
+**「Tools/Template Editor/Setting Object/Create Group Setting」**
+で生成できるテンプレート設定ファイルの簡単な説明を行います。
+
+### 概要
+TemplateSettingファイルを複数同時に実行するための設定ファイルです
+
+### 項目説明
+|項目名|説明|
+|-----------|:-----------|
+|Template Settings|同時に実行したい**TemplateSetting**を指定します|
 |Create|ファイル生成を実行するボタンです|
 |No Refresh Create|ファイル生成を実行するボタンです。インポート等を行わない実行ボタンです|
 |Description|作成したテンプレート設定ファイルの説明を入力できます|
