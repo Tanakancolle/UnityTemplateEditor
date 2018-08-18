@@ -71,7 +71,7 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 ![3-1](https://user-images.githubusercontent.com/18282136/44032040-ed823536-9f40-11e8-9765-c55683ef197c.png)
 
 #### Step.2
-**Create Path** と **Script Name** へ **{<UnityTemplatePath>}** と **{<UnityTemplateName>}** を設定します
+**Create Path** と **Script Name** へ {\<UnityTemplatePath\>} と {\<UnityTemplateName\>} を設定します
 
 ![3-2](https://user-images.githubusercontent.com/18282136/44298211-fe414380-a319-11e8-8b5b-9bc1c873d33a.png)
 
@@ -112,7 +112,7 @@ Pre Processの詳細な解説は **PreProcess.md** で行います
 ![4-4](https://user-images.githubusercontent.com/18282136/44035613-d9881cd0-9f4a-11e8-8cd3-25cb90220033.png)
 
 #### Step.5
-**Code** へ **{<Repeat:{0}:TemplateSettingCodeArray>}** を入力します
+**Code** へ {\<Repeat:{0}:TemplateSettingCodeArray\>} を入力します
 
 ![4-5](https://user-images.githubusercontent.com/18282136/44035972-a96560e8-9f4b-11e8-8e3b-07ef8358957e.png)
 
