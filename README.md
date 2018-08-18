@@ -26,7 +26,7 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 #### Step.2
 次の画像を参考にテンプレート設定ファイルへ内容を記述します。変更している箇所は **Script Name**、**Code**、**Replace Texts** の3箇所です
 
-![1-2](https://user-images.githubusercontent.com/18282136/44250040-c361e180-a22d-11e8-8f3f-9ea08f8e2d80.png)
+![1-2](https://user-images.githubusercontent.com/18282136/44299737-c399d400-a336-11e8-9319-25a0462781ce.png)
 
 #### Step.3
 下部にある **Create** をクリックします
