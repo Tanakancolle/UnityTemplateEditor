@@ -73,7 +73,7 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 #### Step.2
 **Create Path** と **Script Name** へ **{<UnityTemplatePath>}** と **{<UnityTemplateName>}** を設定します
 
-![3-2](https://user-images.githubusercontent.com/18282136/44032731-f740d3d2-9f42-11e8-9540-8206bb66f500.gif)
+![3-2](https://user-images.githubusercontent.com/18282136/44298211-fe414380-a319-11e8-8b5b-9bc1c873d33a.png)
 
 #### Step.3
 **Overwrite Type** を **Replace** にします
@@ -87,7 +87,7 @@ releaseページから **TemplateEditor.unitypackage** をダウンロードし�
 
 #### 補足
 Pre Processではファイルを生成する前に行う処理を指定できます。
-今回はUnityの標準のC#スクリプトへのパスとファイル名を取得できる処理をしています。
+今回はUnityの標準のC#スクリプトへのパスとファイル名を取得できる処理を指定しています。
 Pre Processの詳細な解説は **PreProcess.md** で行います
 
 ### ・特殊な置き換え
@@ -127,6 +127,5 @@ Pre Processの詳細な解説は **PreProcess.md** で行います
 ![4-7](https://user-images.githubusercontent.com/18282136/44036259-508be158-9f4c-11e8-80ff-fcd9e9b4238d.png)
 
 #### 補足
-
-**特殊な置き換えの詳細な説明はReplace.mdで行います**
+ここでは **Repeat** という特殊な置き換えを使用しています。詳細な説明は **Replace.md** で行います
 
