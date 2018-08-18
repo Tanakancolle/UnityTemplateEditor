@@ -18,6 +18,9 @@ namespace TemplateEditor
 
         #endregion
 
+        [SerializeField]
+        private string Description;
+
         [NonSerialized]
         public Action OnChangedSettings;
     }
