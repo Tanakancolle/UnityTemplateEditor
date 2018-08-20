@@ -224,7 +224,7 @@ namespace TemplateEditor
                 }
                 else
                 {
-                    EditorGUILayout.HelpBox("When you select item will be description displayed", MessageType.Info, true);
+                    EditorGUILayout.HelpBox("When you select item, description will be displayed", MessageType.Info, true);
                 }
             }
             EditorGUILayout.EndVertical();
