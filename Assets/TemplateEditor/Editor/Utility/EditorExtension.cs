@@ -71,7 +71,6 @@ namespace TemplateEditor
             foreach (var foldout in foldouts)
             {
                 DrawFoldout(foldout);
-
             }
         }
 
@@ -80,7 +79,9 @@ namespace TemplateEditor
         /// </summary>
         public static void DrawFoldout(FoldoutInfo foldout)
         {
+            EditorGUI.indentLevel++;
             foldout.IsFoldout = EditorGUILayout.Foldout(foldout.IsFoldout, foldout.DrawName);
+            EditorGUI.indentLevel--;
             if (foldout.IsFoldout == false)
             {
                 return;

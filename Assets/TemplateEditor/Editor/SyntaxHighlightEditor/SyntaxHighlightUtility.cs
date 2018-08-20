@@ -6,7 +6,7 @@ namespace SyntaxHighlightEditor
     public class SyntaxHighlightUtility
     {
         private const int DefaultFontSize = 12;
-        private static readonly int MinHeight = 10;
+        private static readonly int MinHeight = 100;
         private static readonly int MaxHeight = Screen.height;
         private static readonly string CSharpGroupSettingGuid = "d81e71d8a3f0b48438a3f3a25bfe3248";
 

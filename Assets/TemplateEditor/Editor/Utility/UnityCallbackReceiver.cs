@@ -8,7 +8,7 @@ namespace TemplateEditor
         [InitializeOnLoadMethod]
         private static void LoadMethod()
         {
-            if (EditorApplication.isPlaying)
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 return;
             }

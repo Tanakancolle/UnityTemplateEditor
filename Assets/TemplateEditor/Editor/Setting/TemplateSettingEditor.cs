@@ -89,6 +89,7 @@ namespace TemplateEditor
         private FoldoutInfo _descriptionFoldout;
         private List<ReplaceInfo> _replaceList = new List<ReplaceInfo>();
         private string _instanceId;
+        private Vector2 _scrollPos;
 
         private void OnEnable()
         {
@@ -111,13 +112,18 @@ namespace TemplateEditor
         {
             SettingStatus.TargetSerializedObject.Update();
             {
-                DrawHeader(SettingStatus);
-                EditorGUIHelper.DrawFoldouts(_foldouts);
-                DrawOverwrite(SettingStatus);
-                DrawIsAssetsMenuItem();
-                DrawPrefab(SettingStatus);
+                _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
+                {
+                    DrawHeader(SettingStatus);
+                    EditorGUIHelper.DrawFoldouts(_foldouts);
+                    DrawOverwrite(SettingStatus);
+                    DrawIsAssetsMenuItem();
+                    DrawPrefab(SettingStatus);
+                    EditorGUIHelper.DrawFoldout(_descriptionFoldout);
+                }
+                EditorGUILayout.EndScrollView();
+
                 DrawCreate();
-                EditorGUIHelper.DrawFoldout(_descriptionFoldout);
 
                 UpdateReplaceList();
             }
