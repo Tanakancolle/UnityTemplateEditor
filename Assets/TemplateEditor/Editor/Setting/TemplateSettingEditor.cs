@@ -211,6 +211,7 @@ namespace TemplateEditor
                             builder.AppendLine(ReplaceProcessor.GetReplaceText(word));
                         }
 
+                        // TODO : Cache
                         var style = new GUIStyle(GUI.skin.label)
                         {
                             wordWrap = true,
@@ -464,7 +465,12 @@ namespace TemplateEditor
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
                 var property = SettingStatus.GetProperty(TemplateSettingStatus.Property.Description);
-                property.stringValue = EditorGUILayout.TextArea(property.stringValue);
+                // TODO : Cache
+                var style = new GUIStyle(GUI.skin.textArea)
+                {
+                    wordWrap = true,
+                };
+                property.stringValue = EditorGUILayout.TextArea(property.stringValue, style);
             }
             EditorGUILayout.EndVertical();
         }
