@@ -153,7 +153,7 @@ namespace TemplateEditor
                         EditorGUILayout.HelpBox("If empty, the script will be created in active folder", MessageType.Info);
 
                     }
-                    EditorGUILayout.HelpBox("Example: Assets/TestFolder", MessageType.Info);
+                    EditorGUILayout.HelpBox("Example: Assets/Folder", MessageType.Info);
                 }
                 EditorGUILayout.EndVertical();
 
@@ -163,7 +163,7 @@ namespace TemplateEditor
                     var scriptName = status.TargetTemplateSetting.ScriptName;
                     if (string.IsNullOrEmpty(scriptName))
                     {
-                        EditorGUILayout.HelpBox("Example: TestScript.cs", MessageType.Info);
+                        EditorGUILayout.HelpBox("Example: Example.cs", MessageType.Info);
                     }
                     else
                     {
@@ -408,8 +408,10 @@ namespace TemplateEditor
 
                 if (string.IsNullOrEmpty(pathProperty.stringValue))
                 {
-                    EditorGUILayout.HelpBox("If empty, the prefab will be created in its original path", MessageType.Info);
+                    EditorGUILayout.HelpBox("If empty, the script will be created in active folder", MessageType.Info);
                 }
+
+                EditorGUILayout.HelpBox("Example: Assets/Folder/Example.prefab", MessageType.Info);
             }
             EditorGUILayout.EndVertical();
         }

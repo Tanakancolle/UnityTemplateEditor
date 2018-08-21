@@ -117,7 +117,8 @@ namespace TemplateEditor
             var createPath = settings[0].PrefabCreatePath;
             if (string.IsNullOrEmpty(createPath))
             {
-                createPath = prefabPath;
+                // 空白の場合はアクティブなパスへ生成
+                createPath = Path.Combine(TemplateUtility.GetActiveFolder(), Path.GetFileName(prefabPath));
             }
 
             createPath += Path.GetExtension(createPath) == string.Empty ? ".prefab" : string.Empty;
