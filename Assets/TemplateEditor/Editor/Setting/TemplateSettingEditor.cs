@@ -241,7 +241,7 @@ namespace TemplateEditor
             EditorGUILayout.EndVertical();
         }
 
-        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces, Dictionary<string, object> result = null, bool isRefrash = true)
+        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces, Dictionary<string, object> result = null, bool isRefresh = true)
         {
             if (result == null)
             {
@@ -283,7 +283,7 @@ namespace TemplateEditor
                 (TemplateUtility.OverwriteType) status.GetProperty(TemplateSettingStatus.Property.Overwrite).enumValueIndex
             );
 
-            if (isRefrash)
+            if (isRefresh)
             {
                 AssetDatabase.ImportAsset(path);
                 TemplateUtility.RefreshEditor();
