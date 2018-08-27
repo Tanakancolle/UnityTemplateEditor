@@ -5,21 +5,34 @@ using System.IO;
 
 namespace ReleaseExecutor
 {
-    public class ReleaseExecutorMenuItem
+    public class UnityMenuItem
     {
         private enum Priority
         {
-            CreateSetting,
-            ExportWindow = 20,
+            ReleaseSetting,
+            ReleaseWindow,
+            ExportSetting = 20,
+            ExportWindow,
             ExportAllPackage,
         }
 
         private const string MenuItemPrefix = "Tools/Release Executor/";
-        private const int OriginalPriorityNumber = 1000;
+        private const int OriginalPriorityNumber = 3000;
 
+        [MenuItem(MenuItemPrefix + "Create Release Setting", false, OriginalPriorityNumber + (int)Priority.ReleaseSetting)]
+        public static void CreateReleaseSetting()
+        {
+            CreateScriptableObject<ReleaseExecutorSetting>();
+        }
 
-        [MenuItem(MenuItemPrefix + "Create Setting", false, OriginalPriorityNumber + (int)Priority.CreateSetting)]
-        public static void CreateSetting()
+        [MenuItem(MenuItemPrefix + "Release Window", false, OriginalPriorityNumber + (int)Priority.ReleaseWindow)]
+        public static void OpenReleaseWindow()
+        {
+            ReleaseExecutorWindow.Open();
+        }
+
+        [MenuItem(MenuItemPrefix + "Create Export Setting", false, OriginalPriorityNumber + (int)Priority.ExportSetting)]
+        public static void CreateExportSetting()
         {
             CreateScriptableObject<PackageExporterSetting>();
         }
