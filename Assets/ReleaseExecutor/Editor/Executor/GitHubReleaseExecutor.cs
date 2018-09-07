@@ -31,20 +31,16 @@ namespace ReleaseExecutor
         private ReleaseExecutorWindow.ReleaseParameter _parameter;
         private string _releaseId;
         private int _uploadIndex;
-        private Action _onComplate;
+        private Action _onComplete;
 
-        public void Execute(ReleaseExecutorWindow.ReleaseParameter parameter, Action onComplate)
+        public void Execute(ReleaseExecutorWindow.ReleaseParameter parameter, Action onComplete)
         {
             _parameter = parameter;
-            _onComplate = onComplate;
+            _onComplete = onComplete;
 
             var url = string.Format(ReleaseUrlFormat, _parameter.RepositoryPath);
             byte[] postData = Encoding.UTF8.GetBytes (CreateReleaseJson());
-            _request = new UnityWebRequest(url, "POST");
-            _request.uploadHandler = new UploadHandlerRaw(postData);
-            _request.downloadHandler = new DownloadHandlerBuffer();
-            _request.SetRequestHeader("Content-Type", "application/json");
-            _request.SetRequestHeader("Authorization", "token " + _parameter.TokenValue);
+            _request = SetupWebRequest(url, postData);
             _request.SendWebRequest();
             EditorApplication.update += WaitRelease;
         }
@@ -90,12 +86,8 @@ namespace ReleaseExecutor
 
             var url = string.Format(UploadUrlFormat, _parameter.RepositoryPath, _releaseId);
             var filePath = _parameter.UploadFilePaths[_uploadIndex];
-            _request = new UnityWebRequest(url + Path.GetFileName(filePath), "POST");
             var postData = ReadFile(filePath);
-            _request.uploadHandler = new UploadHandlerRaw(postData);
-            _request.downloadHandler = new DownloadHandlerBuffer();
-            _request.SetRequestHeader("Content-Type", "application/octet-stream");
-            _request.SetRequestHeader("Authorization", "token " + _parameter.TokenValue);
+            _request = SetupWebRequest(url + Path.GetFileName(filePath), postData, "application/octet-stream");
             _request.SendWebRequest();
             EditorApplication.update += WaitUpload;
         }
@@ -123,7 +115,17 @@ namespace ReleaseExecutor
 
         private void OnUploaded()
         {
-            _onComplate?.Invoke();
+            _onComplete?.Invoke();
+        }
+
+        private UnityWebRequest SetupWebRequest(string url, byte[] postData, string contentType = "application/json")
+        {
+            var request = new UnityWebRequest(url, "POST");
+            request.uploadHandler = new UploadHandlerRaw(postData);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", contentType);
+            request.SetRequestHeader("Authorization", "token " + _parameter.TokenValue);
+            return request;
         }
 
         private string CreateReleaseJson()

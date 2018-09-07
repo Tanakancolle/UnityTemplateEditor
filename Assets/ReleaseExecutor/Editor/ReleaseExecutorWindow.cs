@@ -47,6 +47,7 @@ namespace ReleaseExecutor
         private ReleaseParameter _releaseParameter = new ReleaseParameter();
         private Editor _releaseSettingEditor;
         private ReleaseExecutorSetting _releaseSetting;
+        private Vector2 _scrollPos;
 
         void Awake()
         {
@@ -61,11 +62,13 @@ namespace ReleaseExecutor
 
         private void OnGUI()
         {
+            _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.Label("ブランチ名");
                 _releaseParameter.BranchName = EditorGUILayout.TextArea(_releaseParameter.BranchName);
             }
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.Label("タグ名");
@@ -91,14 +94,16 @@ namespace ReleaseExecutor
                 if (setting != _releaseSetting)
                 {
                     _releaseSetting = setting;
-                    _releaseSettingEditor = Editor.CreateEditor(_releaseSetting);
                 }
             }
 
-            if (_releaseSettingEditor != null)
+            _releaseSettingEditor = Editor.CreateEditor(_releaseSetting);
+            if (_releaseSettingEditor)
             {
-                //releaseSettingEditor.OnInspectorGUI();
+                _releaseSettingEditor.OnInspectorGUI();
             }
+
+            EditorGUILayout.EndScrollView();
 
             if (GUILayout.Button("リリース"))
             {
@@ -161,7 +166,7 @@ namespace ReleaseExecutor
                 if (endIndex < 0)
                 {
                     // マッチしない場合
-                    endIndex = changeLog.Length - searchIndex;
+                    endIndex = changeLog.Length - startMatch.Index;
                 }
                 else
                 {
@@ -180,7 +185,7 @@ namespace ReleaseExecutor
             _releaseParameter.RepositoryPath = _releaseSetting.RepositoryPath;
 
             var executor = new GitHubReleaseExecutor();
-            executor.Execute(_releaseParameter, null);
+            executor.Execute(_releaseParameter, () => Debug.Log("Release Complete"));
         }
 
         private string GetSaveKey(SaveKeyType type)
