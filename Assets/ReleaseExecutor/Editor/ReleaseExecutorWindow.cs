@@ -9,6 +9,11 @@ namespace ReleaseExecutor
 {
     public class ReleaseExecutorWindow : EditorWindow
     {
+        public static void Open()
+        {
+            GetWindow<ReleaseExecutorWindow>(true);
+        }
+
         public class ReleaseParameter
         {
             public string BranchName = string.Empty;
@@ -21,9 +26,9 @@ namespace ReleaseExecutor
             public List<string> UploadFilePaths = new List<string>();
         }
 
-        public static void Open()
+        private enum ExecutorType
         {
-            GetWindow<ReleaseExecutorWindow>(true);
+            GitHub,
         }
 
         private enum SaveKeyType
@@ -45,8 +50,9 @@ namespace ReleaseExecutor
         };
 
         private ReleaseParameter _releaseParameter = new ReleaseParameter();
-        private Editor _releaseSettingEditor;
         private ReleaseExecutorSetting _releaseSetting;
+        private Editor _releaseSettingEditor;
+        private ExecutorType _executorType;
         private Vector2 _scrollPos;
 
         void Awake()
@@ -63,6 +69,13 @@ namespace ReleaseExecutor
         private void OnGUI()
         {
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.Label("リリースタイプ");
+                _executorType = (ExecutorType)EditorGUILayout.EnumPopup(_executorType);
+            }
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.Label("ブランチ名");
@@ -184,13 +197,23 @@ namespace ReleaseExecutor
             _releaseParameter.ReleaseName = _releaseParameter.TagName;
             _releaseParameter.RepositoryPath = _releaseSetting.RepositoryPath;
 
-            var executor = new GitHubReleaseExecutor();
+            var executor = CreateExecutor(_executorType);
             executor.Execute(_releaseParameter, () => Debug.Log("Release Complete"));
         }
 
         private string GetSaveKey(SaveKeyType type)
         {
             return string.Format(SaveKeyFormat, SaveKeys[(int) type]);
+        }
+
+        private IReleaseExecutor CreateExecutor(ExecutorType type)
+        {
+            switch (type)
+            {
+                case ExecutorType.GitHub: return new GitHubReleaseExecutor();
+            }
+
+            return null;
         }
     }
 }
