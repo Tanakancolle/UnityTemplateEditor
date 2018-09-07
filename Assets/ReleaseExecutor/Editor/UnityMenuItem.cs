@@ -9,11 +9,11 @@ namespace ReleaseExecutor
     {
         private enum Priority
         {
-            ReleaseSetting,
             ReleaseWindow,
-            ExportSetting = 20,
-            ExportWindow,
+            ReleaseSetting,
+            ExportWindow = 20,
             ExportAllPackage,
+            ExportSetting,
         }
 
         private const string MenuItemPrefix = "Tools/Release Executor/";

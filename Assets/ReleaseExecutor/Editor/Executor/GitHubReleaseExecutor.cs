@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 using UnityEditor;
-using UnityEditorInternal;
-using UnityEditorInternal.VR;
 using UnityEngine;
 using UnityEngine.Networking;
 
