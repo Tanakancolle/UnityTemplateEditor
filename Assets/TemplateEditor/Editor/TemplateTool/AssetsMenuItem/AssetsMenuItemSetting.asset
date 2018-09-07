@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
+  m_Name: AssetsMenuItemSetting
+  m_EditorClassIdentifier: 
+  Path: '{<CreatePath>}'
+  ScriptName: '{<ScriptName>}.cs'
+  Code: "using UnityEditor;\nusing System.Collections.Generic;\n\nnamespace TemplateEditor\n{\n
+    \   public class {<ScriptName>}\n    {\n        private const string MenuItemPrefix
+    = \"Assets/Create/Template/\";\n\n        [MenuItem(MenuItemPrefix, false, 0)]\n
+    \       public static void Dummy()\n        {\n        }\n{<Repeat:\n        [MenuItem(MenuItemPrefix
+    + \"{0}\", false, 0)]\n        public static void {0}()\n        {{\n            TemplateUtility.OpenEditorWindow(\"{1}\");\n
+    \       }}\n:Settings>}\n{<Repeat:\n        [MenuItem(MenuItemPrefix + \"{0}\",
+    false, 1000)]\n        public static void {0}()\n        {{\n            TemplateUtility.OpenEditorWindow(\"{1}\");\n
+    \       }}\n:GroupSettings>}\n    }\n}"
+  Overwrite: 1
+  Chain:
+  - {fileID: 11500000, guid: d5ff4f963aaf6468baa7eaee66e3e384, type: 3}
+  DuplicatePrefab: {fileID: 0}
+  AttachTarget: {fileID: 0}
+  PrefabCreatePath: 
+  AssetsMenuItem: 0
+  Description: "\u30C6\u30F3\u30D7\u30EC\u30FC\u30C8\u3092\u30E1\u30CB\u30E5\u30FC\u3078\u8FFD\u52A0\u3059\u308B\u305F\u3081\u306E\u8A2D\u5B9A\u30D5\u30A1\u30A4\u30EB\u3067\u3059\u3002\u30C6\u30F3\u30D7\u30EC\u30FC\u30C8\u30A8\u30C7\u30A3\u30BF\u81EA\u8EAB\u304C\u4F7F\u7528\u3057\u3066\u3044\u307E\u3059\u3002\u57FA\u672C\u7684\u306B\u5909\u66F4\u3057\u306A\u3044\u3067\u304F\u3060\u3055\u3044\u3002"
