@@ -78,13 +78,9 @@ namespace ReleaseExecutor
 
         private static bool CheckFilesExist(string[] files)
         {
-            var root = Application.dataPath;
-
             foreach (var file in files)
             {
-                var path = Path.Combine(root, file);
-
-                if (!File.Exists(path) && !Directory.Exists(path))
+                if (!File.Exists(file) && !Directory.Exists(file))
                 {
                     Debug.LogErrorFormat("'{0}' doesn't exist!", file);
                     return false;
