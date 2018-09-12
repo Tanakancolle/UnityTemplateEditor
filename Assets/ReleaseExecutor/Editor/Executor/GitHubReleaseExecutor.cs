@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEditor;
@@ -27,10 +28,8 @@ namespace ReleaseExecutor
             public bool prerelease = false;
         }
 
-        private UnityWebRequest _request;
         private ReleaseExecutorWindow.ReleaseParameter _parameter;
         private string _releaseId;
-        private int _uploadIndex;
         private Action _onComplete;
 
         public void Execute(ReleaseExecutorWindow.ReleaseParameter parameter, Action onComplete)
@@ -38,83 +37,47 @@ namespace ReleaseExecutor
             _parameter = parameter;
             _onComplete = onComplete;
 
+            StartRelease();
+        }
+
+        private async void StartRelease()
+        {
             var url = string.Format(ReleaseUrlFormat, _parameter.RepositoryPath);
             byte[] postData = Encoding.UTF8.GetBytes (CreateReleaseJson());
-            _request = SetupWebRequest(url, postData);
-            _request.SendWebRequest();
-            EditorApplication.update += WaitRelease;
-        }
-
-        private void WaitRelease()
-        {
-            if (_request == null || _request.isDone == false)
+            using (var request = SetupWebRequest(url, postData))
             {
-                return;
-            }
-            EditorApplication.update -= WaitRelease;
-            OnReleased();
-        }
+                await request.SendWebRequest();
 
-        private void OnReleased()
-        {
-            if (_request.isHttpError)
-            {
-                Debug.LogError("Release Error : " + _request.error);
-                _request.Dispose();
-                _request = null;
-                return;
+                if (CheckError(request, "Release Error : "))
+                {
+                    return;
+                }
+
+                _releaseId = GetId(request.downloadHandler.text);
             }
 
-            _releaseId = GetId(_request.downloadHandler.text);
-
-            _request.Dispose();
-            _request = null;
-
-            _uploadIndex = -1;
+            // アップロード開始
             StartUpload();
         }
 
-        private void StartUpload()
+        private async void StartUpload()
         {
-            ++_uploadIndex;
-            if (_parameter.UploadFilePaths.Count <= _uploadIndex)
-            {
-                // 終了
-                OnUploaded();
-                return;
-            }
-
             var url = string.Format(UploadUrlFormat, _parameter.RepositoryPath, _releaseId);
-            var filePath = _parameter.UploadFilePaths[_uploadIndex];
-            var postData = ReadFile(filePath);
-            _request = SetupWebRequest(url + Path.GetFileName(filePath), postData, "application/octet-stream");
-            _request.SendWebRequest();
-            EditorApplication.update += WaitUpload;
-        }
 
-        private void WaitUpload()
-        {
-            if (_request == null || _request.isDone == false)
+            foreach (var filePath in _parameter.UploadFilePaths)
             {
-                return;
+                var postData = ReadFile(filePath);
+                using (var request = SetupWebRequest(url + Path.GetFileName(filePath), postData, "application/octet-stream"))
+                {
+                    await request.SendWebRequest();
+                    if (CheckError(request, "Release Upload Error : "))
+                    {
+                        return;
+                    }
+                }
             }
-            EditorApplication.update -= WaitUpload;
 
-            if (_request.isHttpError)
-            {
-                Debug.LogErrorFormat("Upload Error : Index {0}, {1}", _uploadIndex, _request.error);
-                _request.Dispose();
-                _request = null;
-                return;
-            }
-            _request.Dispose();
-            _request = null;
-
-            StartUpload();
-        }
-
-        private void OnUploaded()
-        {
+            // リリース完了
             _onComplete?.Invoke();
         }
 
@@ -126,6 +89,17 @@ namespace ReleaseExecutor
             request.SetRequestHeader("Content-Type", contentType);
             request.SetRequestHeader("Authorization", "token " + _parameter.TokenValue);
             return request;
+        }
+
+        private bool CheckError(UnityWebRequest request, string prefix)
+        {
+            if (string.IsNullOrEmpty(request.error))
+            {
+                return false;
+            }
+            
+            Debug.LogError(prefix + request.error);
+            return true;
         }
 
         private string CreateReleaseJson()
