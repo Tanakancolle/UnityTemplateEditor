@@ -14,12 +14,12 @@ public class PrefabTreeView : TreeView
 
     protected override TreeViewItem BuildRoot()
     {
+        _transforms.Clear();
         int count = -1;
         int depth = -1;
         var root = new TreeViewItem(count, depth, "root");
         var parent = new TreeViewItem(++count, ++depth, _target.name);
         root.children = new List<TreeViewItem> {parent};
-        _transforms.Clear();
         parent.children = BuildTree(_target.transform, depth, ref count);
 
         return root;
@@ -34,7 +34,7 @@ public class PrefabTreeView : TreeView
             return null;
         }
 
-        depth++;
+        ++depth;
         var items = new List<TreeViewItem>();
         foreach (Transform child in parent)
         {
