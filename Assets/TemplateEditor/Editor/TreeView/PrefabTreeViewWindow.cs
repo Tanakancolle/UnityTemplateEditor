@@ -1,7 +1,6 @@
 ﻿using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 
 public class PrefabTreeViewWindow : EditorWindow
