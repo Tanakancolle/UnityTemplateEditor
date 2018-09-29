@@ -67,7 +67,8 @@ namespace TemplateEditor
                 filePathsList.Add(new string[] {parameter.TypeName, string.Join(", ", paths.Select(path => "\"" + path + "\"").ToArray())});
 
                 // ファイルパスからファイル名を取得
-                var fileNames = paths.Select(Path.GetFileNameWithoutExtension);
+                // TODO : StringBuilderExtension.ConvertEnumName
+                var fileNames = paths.Select(Path.GetFileNameWithoutExtension).Select(StringBuilderExtension.ConvertEnumName);
                 fileNamesList.Add(new string[] {parameter.TypeName, string.Join(", ", fileNames.ToArray())});
 
                 var intValue = (int) parameter.EditLoadType;
