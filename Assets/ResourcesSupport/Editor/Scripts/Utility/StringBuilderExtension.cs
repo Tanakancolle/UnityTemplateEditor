@@ -94,7 +94,7 @@ namespace TemplateEditor
             return new string(IndentChar, indent * IndentLength);
         }
 
-        private static string ConvertEnumName(string name)
+        public static string ConvertEnumName(string name)
         {
             if (string.IsNullOrEmpty(name))
             {

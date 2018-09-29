@@ -13,10 +13,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: Assets
   ScriptName: ResourcesLoader.cs
-  Code: "{<Repeat:using {0};:Usings>}\n\npublic class ResourcesLoader\n{\n{<Repeat:\n\tpublic
-    enum {0}Name\n\t{{\n\t\t{1},\n\t}}\n:Enums>}\n{<Repeat:\n\tpublic static readonly
-    string[] {0}Paths = new string[]\n\t{{\n\t\t{1},\n\t}};\n:Paths>}\n{<Repeat:\n\tpublic
-    static {0} {1}({2}Name type)\n\t{{\n\t\treturn Resources.{1}<{2}>({2}Paths[(int)type]);\n\t}}\n:Methods>}\n}"
+  Code: "{<Repeat:using {0};:Usings>}\n\npublic class ResourcesLoader\n{\n{<Repeat:\n
+    \   public enum {0}Name\n    {{\n        {1},\n    }}\n:Enums>}\n{<Repeat:\n    public
+    static readonly string[] {0}Paths = new string[]\n    {{\n        {1},\n    }};\n:Paths>}\n{<Repeat:\n
+    \   public static {0} {1}({2}Name type)\n    {{\n        return Resources.{1}<{2}>({2}Paths[(int)type]);\n
+    \   }}\n:Methods>}\n}"
   Overwrite: 1
   Chain:
   - {fileID: 11400000, guid: 2c9e7c9a1b39a426c8897063ec0a255c, type: 2}
