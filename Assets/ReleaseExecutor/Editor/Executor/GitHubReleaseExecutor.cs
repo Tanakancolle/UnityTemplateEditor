@@ -66,7 +66,7 @@ namespace ReleaseExecutor
 
             foreach (var filePath in _parameter.UploadFilePaths)
             {
-                var postData = ReadFile(filePath);
+                var postData = File.ReadAllBytes(filePath);
                 using (var request = SetupWebRequest(url + Path.GetFileName(filePath), postData, "application/octet-stream"))
                 {
                     await request.SendWebRequest();
@@ -97,7 +97,7 @@ namespace ReleaseExecutor
             {
                 return false;
             }
-            
+
             Debug.LogError(prefix + request.error);
             return true;
         }
@@ -113,16 +113,6 @@ namespace ReleaseExecutor
             };
 
             return JsonUtility.ToJson(parameter);
-        }
-
-        private byte[] ReadFile(string filePath)
-        {
-            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-                var buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
-                return buffer;
-            }
         }
 
         private string GetId(string text)

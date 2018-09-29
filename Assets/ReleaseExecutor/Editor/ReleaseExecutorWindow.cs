@@ -55,15 +55,35 @@ namespace ReleaseExecutor
         private ExecutorType _executorType;
         private Vector2 _scrollPos;
 
-        void Awake()
+        private void OnEnable()
         {
-            _releaseParameter.BranchName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.Branch));
-            _releaseParameter.TagName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.TagName));
-            _releaseParameter.UserName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.UserName));
-            _releaseParameter.TokenValue = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.Token));
-            _releaseSetting = Utility.FindAssetFromType<ReleaseExecutorSetting>();
+            if (string.IsNullOrEmpty(_releaseParameter.BranchName))
+            {
+                _releaseParameter.BranchName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.Branch));
+            }
 
-            _releaseSettingEditor = Editor.CreateEditor(_releaseSetting, typeof(ReleaseExecutorSetting));
+            if (string.IsNullOrEmpty(_releaseParameter.TagName))
+            {
+                _releaseParameter.TagName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.TagName));
+            }
+
+            if (string.IsNullOrEmpty(_releaseParameter.UserName))
+            {
+                _releaseParameter.UserName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.UserName));
+            }
+
+
+            if (string.IsNullOrEmpty(_releaseParameter.TokenValue))
+            {
+                _releaseParameter.TokenValue = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.Token));
+            }
+
+
+            if (_releaseSetting == null)
+            {
+                _releaseSetting = Utility.FindAssetFromType<ReleaseExecutorSetting>();
+                _releaseSettingEditor = Editor.CreateEditor(_releaseSetting, typeof(ReleaseExecutorSetting));
+            }
         }
 
         private void OnGUI()
