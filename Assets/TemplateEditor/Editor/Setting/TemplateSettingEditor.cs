@@ -160,13 +160,11 @@ namespace TemplateEditor
                 EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
                 {
                     EditorGUILayout.PropertyField(status.GetProperty(TemplateSettingStatus.Property.ScriptName), new GUIContent("Script Name"));
-                    var scriptName = string.Empty;
-                    scriptName = EditorGUILayout.TextField("Script Name", scriptName);
-                    if (string.IsNullOrEmpty(scriptName))
+                    if (string.IsNullOrEmpty(status.TargetTemplateSetting.ScriptName))
                     {
                         EditorGUILayout.HelpBox("Example: Example.cs", MessageType.Info);
                     }
-                    else if (Regex.IsMatch(scriptName, @"\..+$", RegexOptions.Compiled) == false)
+                    else if (Regex.IsMatch(status.TargetTemplateSetting.ScriptName, @"\..+$", RegexOptions.Compiled) == false)
                     {
                         EditorGUILayout.HelpBox("Extension required", MessageType.Warning);
                     }
