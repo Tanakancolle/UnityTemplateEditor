@@ -4,27 +4,41 @@ using UnityEngine;
 
 public class PrefabTreeView : TreeView
 {
+    /// <summary>
+    /// 対象GameObject
+    /// </summary>
+    private GameObject _target;
+
+    /// <summary>
+    /// 対象GameObject内のTransformリスト
+    /// </summary>
+    private List<Transform> _transforms = new List<Transform>();
+
     public PrefabTreeView(TreeViewState state, GameObject obj) : base(state)
     {
         _target = obj;
     }
 
-    private GameObject _target;
-    private List<Transform> _transforms = new List<Transform>();
-
+    /// <summary>
+    /// ツリービュー初期化時に呼ばれるツリー構築を行うコールバック
+    /// </summary>
     protected override TreeViewItem BuildRoot()
     {
-        int count = -1;
-        int depth = -1;
+        _transforms.Clear();
+
+        int count = -1, depth = -1;
         var root = new TreeViewItem(count, depth, "root");
         var parent = new TreeViewItem(++count, ++depth, _target.name);
         root.children = new List<TreeViewItem> {parent};
-        _transforms.Clear();
         parent.children = BuildTree(_target.transform, depth, ref count);
 
         return root;
     }
 
+
+    /// <summary>
+    /// ツリービューを構築
+    /// </summary>
     private List<TreeViewItem> BuildTree(Transform parent, int depth, ref int count)
     {
         _transforms.Add(parent);
@@ -34,7 +48,7 @@ public class PrefabTreeView : TreeView
             return null;
         }
 
-        depth++;
+        ++depth;
         var items = new List<TreeViewItem>();
         foreach (Transform child in parent)
         {
@@ -73,6 +87,9 @@ public class PrefabTreeView : TreeView
         SetSelection(new int[] {FindIndex(target.transform)});
     }
 
+    /// <summary>
+    /// 指定したオブジェクトまでツリービューを開く
+    /// </summary>
     private void SetParentExpanded(Transform transform)
     {
         if (transform == null)

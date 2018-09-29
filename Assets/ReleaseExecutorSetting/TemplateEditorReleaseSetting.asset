@@ -17,3 +17,4 @@ MonoBehaviour:
   LogEndPattern: '###'
   UploadPackage:
   - {fileID: 11400000, guid: 6922d49a8eb714eb0abb0f858d98a94e, type: 2}
+  - {fileID: 11400000, guid: 2cd53baca7e994be7ac80d0c38826025, type: 2}

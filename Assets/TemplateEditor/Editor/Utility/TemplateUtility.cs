@@ -138,7 +138,7 @@ namespace TemplateEditor
 
         public static string GetDirectoryPath(string path)
         {
-            return Directory.Exists(path) == true ? path : Path.GetDirectoryName(path);
+            return Directory.Exists(path) ? path : Path.GetDirectoryName(path);
         }
 
         #region Config Value
@@ -175,20 +175,14 @@ namespace TemplateEditor
             switch (overwrite)
             {
                 case OverwriteType.Not:
-                {
                     return false;
-                }
 
                 case OverwriteType.AddStart:
-                {
                     text = text + File.ReadAllText(path, Encoding.UTF8);
-                }
                     break;
 
                 case OverwriteType.AddEnd:
-                {
                     text = File.ReadAllText(path, Encoding.UTF8) + text;
-                }
                     break;
             }
 

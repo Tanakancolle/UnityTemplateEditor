@@ -4,6 +4,6 @@ namespace ReleaseExecutor
 {
     public interface IReleaseExecutor
     {
-        void Execute(ReleaseExecutorWindow.ReleaseParameter parameter, Action onComplate);
+        void Execute(ReleaseExecutorWindow.ReleaseParameter parameter, Action onComplete);
     }
 }

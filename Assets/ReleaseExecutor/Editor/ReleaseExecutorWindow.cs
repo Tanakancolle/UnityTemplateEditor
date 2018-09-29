@@ -9,6 +9,11 @@ namespace ReleaseExecutor
 {
     public class ReleaseExecutorWindow : EditorWindow
     {
+        public static void Open()
+        {
+            GetWindow<ReleaseExecutorWindow>(true);
+        }
+
         public class ReleaseParameter
         {
             public string BranchName = string.Empty;
@@ -21,9 +26,9 @@ namespace ReleaseExecutor
             public List<string> UploadFilePaths = new List<string>();
         }
 
-        public static void Open()
+        private enum ExecutorType
         {
-            GetWindow<ReleaseExecutorWindow>(true);
+            GitHub,
         }
 
         private enum SaveKeyType
@@ -45,27 +50,58 @@ namespace ReleaseExecutor
         };
 
         private ReleaseParameter _releaseParameter = new ReleaseParameter();
-        private Editor _releaseSettingEditor;
         private ReleaseExecutorSetting _releaseSetting;
+        private Editor _releaseSettingEditor;
+        private ExecutorType _executorType;
+        private Vector2 _scrollPos;
 
-        void Awake()
+        private void OnEnable()
         {
-            _releaseParameter.BranchName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.Branch));
-            _releaseParameter.TagName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.TagName));
-            _releaseParameter.UserName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.UserName));
-            _releaseParameter.TokenValue = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.Token));
-            _releaseSetting = Utility.FindAssetFromType<ReleaseExecutorSetting>();
+            if (string.IsNullOrEmpty(_releaseParameter.BranchName))
+            {
+                _releaseParameter.BranchName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.Branch));
+            }
 
-            _releaseSettingEditor = Editor.CreateEditor(_releaseSetting, typeof(ReleaseExecutorSetting));
+            if (string.IsNullOrEmpty(_releaseParameter.TagName))
+            {
+                _releaseParameter.TagName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.TagName));
+            }
+
+            if (string.IsNullOrEmpty(_releaseParameter.UserName))
+            {
+                _releaseParameter.UserName = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.UserName));
+            }
+
+
+            if (string.IsNullOrEmpty(_releaseParameter.TokenValue))
+            {
+                _releaseParameter.TokenValue = EditorUserSettings.GetConfigValue(GetSaveKey(SaveKeyType.Token));
+            }
+
+
+            if (_releaseSetting == null)
+            {
+                _releaseSetting = Utility.FindAssetFromType<ReleaseExecutorSetting>();
+                _releaseSettingEditor = Editor.CreateEditor(_releaseSetting, typeof(ReleaseExecutorSetting));
+            }
         }
 
         private void OnGUI()
         {
+            _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.Label("リリースタイプ");
+                _executorType = (ExecutorType)EditorGUILayout.EnumPopup(_executorType);
+            }
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.Label("ブランチ名");
                 _releaseParameter.BranchName = EditorGUILayout.TextArea(_releaseParameter.BranchName);
             }
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.Label("タグ名");
@@ -91,14 +127,16 @@ namespace ReleaseExecutor
                 if (setting != _releaseSetting)
                 {
                     _releaseSetting = setting;
-                    _releaseSettingEditor = Editor.CreateEditor(_releaseSetting);
                 }
             }
 
-            if (_releaseSettingEditor != null)
+            _releaseSettingEditor = Editor.CreateEditor(_releaseSetting);
+            if (_releaseSettingEditor)
             {
-                //releaseSettingEditor.OnInspectorGUI();
+                _releaseSettingEditor.OnInspectorGUI();
             }
+
+            EditorGUILayout.EndScrollView();
 
             if (GUILayout.Button("リリース"))
             {
@@ -161,7 +199,7 @@ namespace ReleaseExecutor
                 if (endIndex < 0)
                 {
                     // マッチしない場合
-                    endIndex = changeLog.Length - searchIndex;
+                    endIndex = changeLog.Length - startMatch.Index;
                 }
                 else
                 {
@@ -179,13 +217,23 @@ namespace ReleaseExecutor
             _releaseParameter.ReleaseName = _releaseParameter.TagName;
             _releaseParameter.RepositoryPath = _releaseSetting.RepositoryPath;
 
-            var executor = new GitHubReleaseExecutor();
-            executor.Execute(_releaseParameter, null);
+            var executor = CreateExecutor(_executorType);
+            executor.Execute(_releaseParameter, () => Debug.Log("Release Complete"));
         }
 
         private string GetSaveKey(SaveKeyType type)
         {
             return string.Format(SaveKeyFormat, SaveKeys[(int) type]);
+        }
+
+        private IReleaseExecutor CreateExecutor(ExecutorType type)
+        {
+            switch (type)
+            {
+                case ExecutorType.GitHub: return new GitHubReleaseExecutor();
+            }
+
+            return null;
         }
     }
 }

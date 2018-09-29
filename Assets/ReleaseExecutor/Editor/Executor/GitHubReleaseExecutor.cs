@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEditor;
@@ -27,103 +28,78 @@ namespace ReleaseExecutor
             public bool prerelease = false;
         }
 
-        private UnityWebRequest _request;
         private ReleaseExecutorWindow.ReleaseParameter _parameter;
         private string _releaseId;
-        private int _uploadIndex;
-        private Action _onComplate;
+        private Action _onComplete;
 
-        public void Execute(ReleaseExecutorWindow.ReleaseParameter parameter, Action onComplate)
+        public void Execute(ReleaseExecutorWindow.ReleaseParameter parameter, Action onComplete)
         {
             _parameter = parameter;
-            _onComplate = onComplate;
+            _onComplete = onComplete;
 
+            StartRelease();
+        }
+
+        private async void StartRelease()
+        {
             var url = string.Format(ReleaseUrlFormat, _parameter.RepositoryPath);
             byte[] postData = Encoding.UTF8.GetBytes (CreateReleaseJson());
-            _request = new UnityWebRequest(url, "POST");
-            _request.uploadHandler = new UploadHandlerRaw(postData);
-            _request.downloadHandler = new DownloadHandlerBuffer();
-            _request.SetRequestHeader("Content-Type", "application/json");
-            _request.SetRequestHeader("Authorization", "token " + _parameter.TokenValue);
-            _request.SendWebRequest();
-            EditorApplication.update += WaitRelease;
-        }
-
-        private void WaitRelease()
-        {
-            if (_request == null || _request.isDone == false)
+            using (var request = SetupWebRequest(url, postData))
             {
-                return;
-            }
-            EditorApplication.update -= WaitRelease;
-            OnReleased();
-        }
+                await request.SendWebRequest();
 
-        private void OnReleased()
-        {
-            if (_request.isHttpError)
-            {
-                Debug.LogError("Release Error : " + _request.error);
-                _request.Dispose();
-                _request = null;
-                return;
+                if (CheckError(request, "Release Error : "))
+                {
+                    return;
+                }
+
+                _releaseId = GetId(request.downloadHandler.text);
             }
 
-            _releaseId = GetId(_request.downloadHandler.text);
-
-            _request.Dispose();
-            _request = null;
-
-            _uploadIndex = -1;
+            // アップロード開始
             StartUpload();
         }
 
-        private void StartUpload()
+        private async void StartUpload()
         {
-            ++_uploadIndex;
-            if (_parameter.UploadFilePaths.Count <= _uploadIndex)
-            {
-                // 終了
-                OnUploaded();
-                return;
-            }
-
             var url = string.Format(UploadUrlFormat, _parameter.RepositoryPath, _releaseId);
-            var filePath = _parameter.UploadFilePaths[_uploadIndex];
-            _request = new UnityWebRequest(url + Path.GetFileName(filePath), "POST");
-            var postData = ReadFile(filePath);
-            _request.uploadHandler = new UploadHandlerRaw(postData);
-            _request.downloadHandler = new DownloadHandlerBuffer();
-            _request.SetRequestHeader("Content-Type", "application/octet-stream");
-            _request.SetRequestHeader("Authorization", "token " + _parameter.TokenValue);
-            _request.SendWebRequest();
-            EditorApplication.update += WaitUpload;
+
+            foreach (var filePath in _parameter.UploadFilePaths)
+            {
+                var postData = File.ReadAllBytes(filePath);
+                using (var request = SetupWebRequest(url + Path.GetFileName(filePath), postData, "application/octet-stream"))
+                {
+                    await request.SendWebRequest();
+                    if (CheckError(request, "Release Upload Error : "))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            // リリース完了
+            _onComplete?.Invoke();
         }
 
-        private void WaitUpload()
+        private UnityWebRequest SetupWebRequest(string url, byte[] postData, string contentType = "application/json")
         {
-            if (_request == null || _request.isDone == false)
-            {
-                return;
-            }
-            EditorApplication.update -= WaitUpload;
-
-            if (_request.isHttpError)
-            {
-                Debug.LogErrorFormat("Upload Error : Index {0}, {1}", _uploadIndex, _request.error);
-                _request.Dispose();
-                _request = null;
-                return;
-            }
-            _request.Dispose();
-            _request = null;
-
-            StartUpload();
+            var request = new UnityWebRequest(url, "POST");
+            request.uploadHandler = new UploadHandlerRaw(postData);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", contentType);
+            request.SetRequestHeader("Authorization", "token " + _parameter.TokenValue);
+            return request;
         }
 
-        private void OnUploaded()
+        private bool CheckError(UnityWebRequest request, string prefix)
         {
-            _onComplate?.Invoke();
+            if (string.IsNullOrEmpty(request.error))
+            {
+                return false;
+            }
+
+            Debug.LogError(prefix + request.error);
+            return true;
         }
 
         private string CreateReleaseJson()
@@ -137,16 +113,6 @@ namespace ReleaseExecutor
             };
 
             return JsonUtility.ToJson(parameter);
-        }
-
-        private byte[] ReadFile(string filePath)
-        {
-            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-                var buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, buffer.Length);
-                return buffer;
-            }
         }
 
         private string GetId(string text)
