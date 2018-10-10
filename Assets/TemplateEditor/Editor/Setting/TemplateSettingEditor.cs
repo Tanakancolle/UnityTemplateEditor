@@ -27,7 +27,8 @@ namespace TemplateEditor
             Chain,
             DuplicatePrefab,
             AttachTarget,
-            PrefabCreatePath,
+            PrefabPath,
+            PrefabName,
             AssetsMenuItem,
             Description,
         }
@@ -393,21 +394,37 @@ namespace TemplateEditor
                 }
                 EditorGUILayout.EndHorizontal();
 
-                var pathProperty = status.GetProperty(TemplateSettingStatus.Property.PrefabCreatePath);
-                EditorGUILayout.PropertyField(pathProperty, new GUIContent("Create Prafab Path"), true);
-
-                var paths = EditorGUIHelper.DrawDragAndDropArea();
-                if (paths != null && paths.Length > 0)
+                EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
                 {
-                    pathProperty.stringValue = paths[0];
-                }
+                    var pathProperty = status.GetProperty(TemplateSettingStatus.Property.PrefabPath);
+                    EditorGUILayout.PropertyField(pathProperty, new GUIContent("Create Prefab Path"), true);
 
-                if (string.IsNullOrEmpty(pathProperty.stringValue))
+                    var paths = EditorGUIHelper.DrawDragAndDropArea();
+                    if (paths != null && paths.Length > 0)
+                    {
+                        pathProperty.stringValue = paths[0];
+                    }
+
+                    if (string.IsNullOrEmpty(pathProperty.stringValue))
+                    {
+                        EditorGUILayout.HelpBox("If empty, the script will be created in active folder", MessageType.Info);
+                    }
+
+                    EditorGUILayout.HelpBox("Example: Assets/Folder", MessageType.Info);
+                }
+                EditorGUILayout.EndVertical();
+
+                EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
                 {
-                    EditorGUILayout.HelpBox("If empty, the script will be created in active folder", MessageType.Info);
-                }
+                    var nameProperty = status.GetProperty(TemplateSettingStatus.Property.PrefabName);
+                    EditorGUILayout.PropertyField(nameProperty, new GUIContent("Prefab Name"), true);
 
-                EditorGUILayout.HelpBox("Example: Assets/Folder/Example.prefab", MessageType.Info);
+                    if (string.IsNullOrEmpty(nameProperty.stringValue))
+                    {
+                        EditorGUILayout.HelpBox("Example: ExamplePrefab", MessageType.Info);
+                    }
+                }
+                EditorGUILayout.EndVertical();
             }
             EditorGUILayout.EndVertical();
         }

@@ -56,7 +56,10 @@ namespace TemplateEditor
         public GameObject AttachTarget;
 
         [SerializeField]
-        public string PrefabCreatePath;
+        public string PrefabPath;
+
+        [SerializeField]
+        public string PrefabName;
 
         [SerializeField]
         private bool AssetsMenuItem;

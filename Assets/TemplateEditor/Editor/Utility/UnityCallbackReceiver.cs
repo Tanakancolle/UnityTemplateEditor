@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace TemplateEditor
 {
-    public class UnityCallbackReceiver
+    public static class UnityCallbackReceiver
     {
         [InitializeOnLoadMethod]
         private static void LoadMethod()

@@ -53,7 +53,7 @@ namespace TemplateEditor
                 }
 
                 // 同じプレハブ生成パス & 同じプレハブなら一緒にする
-                var key = setting.PrefabCreatePath + setting.DuplicatePrefab.GetInstanceID();
+                var key = setting.PrefabPath + "/" + setting.PrefabName + setting.DuplicatePrefab.GetInstanceID();
                 if (settingDic.ContainsKey(key))
                 {
                     settingDic[key].Add(setting);
@@ -114,16 +114,23 @@ namespace TemplateEditor
 
             // コピーパスは同じなはずのため、最初のを使用する
             var prefabPath = AssetDatabase.GetAssetPath(settings[0].DuplicatePrefab);
-            var createPath = settings[0].PrefabCreatePath;
+            var createPath = settings[0].PrefabPath;
+            var prefabName = settings[0].PrefabName;
             if (string.IsNullOrEmpty(createPath))
             {
                 // 空白の場合はアクティブなパスへ生成
-                createPath = Path.Combine(TemplateUtility.GetActiveFolder(), Path.GetFileName(prefabPath));
+                createPath = TemplateUtility.GetActiveFolder();
             }
 
-            createPath += Path.GetExtension(createPath) == string.Empty ? ".prefab" : string.Empty;
-            createPath = AssetDatabase.GenerateUniqueAssetPath(createPath);
-            AssetDatabase.CopyAsset(prefabPath, createPath);
+            if (string.IsNullOrEmpty(prefabName))
+            {
+                // 空白の場合はコピー元のプレハブ名
+                prefabName = Path.GetFileName(prefabPath);
+            }
+
+            prefabName += Path.GetExtension(prefabName) == string.Empty ? ".prefab" : string.Empty;
+            var createFullPath = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(createPath, prefabName));
+            AssetDatabase.CopyAsset(prefabPath, createFullPath);
 
             foreach (var component in components)
             {
