@@ -6,8 +6,6 @@ namespace SyntaxHighlightEditor
     public class SyntaxHighlightUtility
     {
         private const int DefaultFontSize = 12;
-        private static readonly int MinHeight = 100;
-        private static readonly int MaxHeight = Screen.height;
         private static readonly string CSharpGroupSettingGuid = "d81e71d8a3f0b48438a3f3a25bfe3248";
 
         private static SyntaxHighlightGroupSetting _syntaxHighlightGroupSetting;
@@ -16,18 +14,20 @@ namespace SyntaxHighlightEditor
         /// <summary>
         /// C#のコードエリアを表示
         /// </summary>
-        public static string DrawCSharpCode(ref Vector2 scrollPos, string code, int flontSize = DefaultFontSize)
+        public static string DrawCSharpCode(ref Vector2 scrollPos, string code, int fontSize = DefaultFontSize, float minHeight = 100f, float maxHeight = -1f)
         {
             string editedCode;
 
             // TODO : Cache ?
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.MinHeight(MinHeight), GUILayout.MaxHeight(MaxHeight));
+
+            maxHeight = maxHeight <= 0f ? Screen.height : maxHeight;
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.MinHeight(minHeight), GUILayout.MaxHeight(maxHeight));
             {
                 // TODO : Cache ?
                 var style = new GUIStyle(GUI.skin.textArea);
                 {
                     style.padding = new RectOffset(6, 6, 6, 6);
-                    style.fontSize = flontSize;
+                    style.fontSize = fontSize;
                     style.wordWrap = false;
                 }
 
