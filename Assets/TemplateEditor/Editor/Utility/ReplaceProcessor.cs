@@ -110,7 +110,20 @@ namespace TemplateEditor
                 return string.Empty;
             }
 
+            // 最初と最後のSplitChar以外を一つに
             var builder = new StringBuilder();
+            for (var i = 1; i < orders.Length - 1; ++i)
+            {
+                if (builder.Length != 0)
+                {
+                    builder.Append(SplitChar);
+                }
+
+                builder.Append(orders[i]);
+            }
+
+            var writeText = builder.ToString();
+            builder.Clear();
             foreach (var obj in objects)
             {
                 if (builder.Length != 0)
@@ -120,11 +133,11 @@ namespace TemplateEditor
 
                 if (obj is ICollection<object>)
                 {
-                    builder.Append(string.Format(orders[1], ((ICollection<object>) obj).ToArray()));
+                    builder.Append(string.Format(writeText, ((ICollection<object>) obj).ToArray()));
                 }
                 else
                 {
-                    builder.Append(string.Format(orders[1], obj));
+                    builder.Append(string.Format(writeText, obj));
                 }
             }
 
