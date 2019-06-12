@@ -16,7 +16,6 @@ namespace TemplateEditor
 
         private static readonly Dictionary<string, Func<string[], object, string>> ProcessDic = new Dictionary<string, Func<string[], object, string>>()
         {
-            {"Join", JoinToProcess},
             {"Repeat", RepeatToProcess},
         };
 
@@ -82,24 +81,6 @@ namespace TemplateEditor
         }
 
         #region Process
-
-        private static string JoinToProcess(string[] orders, object replace)
-        {
-            if (orders.Length != 4)
-            {
-                Debug.LogError("Join parameter is different format");
-                return string.Empty;
-            }
-
-            var strings = replace as ICollection<string>;
-            if (strings == null)
-            {
-                Debug.LogError("Join object is not string collection");
-                return string.Empty;
-            }
-
-            return string.Join(Regex.Unescape(orders[2]), strings.Select(str => orders[1] + str).ToArray());
-        }
 
         private static string RepeatToProcess(string[] orders, object replace)
         {
