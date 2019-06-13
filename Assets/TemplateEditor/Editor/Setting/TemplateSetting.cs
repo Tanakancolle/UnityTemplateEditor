@@ -44,6 +44,9 @@ namespace TemplateEditor
         public string Code;
 
         [SerializeField]
+        public float CodeAreaMinHeight;
+
+        [SerializeField]
         public TemplateUtility.OverwriteType Overwrite;
 
         [SerializeField]
@@ -72,5 +75,8 @@ namespace TemplateEditor
 
         [SerializeField]
         public string Description;
+
+        [SerializeField]
+        public List<bool> IsFoldouts;
     }
 }

@@ -23,6 +23,7 @@ namespace TemplateEditor
             Path,
             ScriptName,
             Code,
+            CodeAreaMinHeight,
             Overwrite,
             Chain,
             DuplicatePrefab,
@@ -31,6 +32,7 @@ namespace TemplateEditor
             PrefabName,
             AssetsMenuItem,
             Description,
+            IsFoldouts,
         }
 
         public readonly SerializedObject TargetSerializedObject;
@@ -104,6 +106,17 @@ namespace TemplateEditor
                 new FoldoutInfo("Pre Process", () => DrawChain(SettingStatus)),
             };
 
+            var property = SettingStatus.GetProperty(TemplateSettingStatus.Property.IsFoldouts);
+            for (int i = 0; i < _foldouts.Length; ++i)
+            {
+                if (property.arraySize <= i)
+                {
+                    break;
+                }
+
+                _foldouts[i].IsFoldout = property.GetArrayElementAtIndex(i).boolValue;
+            }
+
             _descriptionFoldout = new FoldoutInfo("Description", DrawDescription);
 
             UpdateReplaceList(true);
@@ -125,7 +138,7 @@ namespace TemplateEditor
                 EditorGUILayout.EndScrollView();
 
                 DrawCreate();
-
+                UpdateFoldout();
                 UpdateReplaceList();
             }
             SettingStatus.TargetSerializedObject.ApplyModifiedProperties();
@@ -340,10 +353,12 @@ namespace TemplateEditor
 
         public static void DrawCode(TemplateSettingStatus status)
         {
+            var height = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMinHeight);
+            EditorGUILayout.PropertyField(height, new GUIContent("Area Min Height"));
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
                 var code = status.GetProperty(TemplateSettingStatus.Property.Code).stringValue;
-                var editedCode = SyntaxHighlightUtility.DrawCSharpCode(ref status.ScrollPos, code);
+                var editedCode = SyntaxHighlightUtility.DrawCSharpCode(ref status.ScrollPos, code, 12, height.floatValue);
                 if (editedCode != code)
                 {
                     status.GetProperty(TemplateSettingStatus.Property.Code).stringValue = editedCode;
@@ -488,6 +503,21 @@ namespace TemplateEditor
                 property.stringValue = EditorGUILayout.TextArea(property.stringValue, style);
             }
             EditorGUILayout.EndVertical();
+        }
+
+        private void UpdateFoldout()
+        {
+            var property = SettingStatus.GetProperty(TemplateSettingStatus.Property.IsFoldouts);
+            for (int i = 0; i < _foldouts.Length; ++i)
+            {
+                if (property.arraySize <= i)
+                {
+                    property.InsertArrayElementAtIndex(i);
+                }
+
+                var isFoldoutProperty = property.GetArrayElementAtIndex(i);
+                isFoldoutProperty.boolValue = _foldouts[i].IsFoldout;
+            }
         }
 
         private void UpdateReplaceList(bool isForce = false)

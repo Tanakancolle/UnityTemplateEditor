@@ -18,10 +18,8 @@ namespace SyntaxHighlightEditor
 
         public Color TextColor { get; set; }
 
-        // ハイライト用の関数
         public System.Func<string, string> Highlighter { get; set; }
 
-        // 表示高速化の為に変更があった時だけコードを更新
         public string CachedHighlightedCode { get; set; }
 
         private string _cachedCode;
