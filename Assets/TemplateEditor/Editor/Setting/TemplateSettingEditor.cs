@@ -84,6 +84,7 @@ namespace TemplateEditor
         public string ReplaceWord;
     }
 
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(TemplateSetting))]
     public class TemplateSettingEditor : Editor
     {

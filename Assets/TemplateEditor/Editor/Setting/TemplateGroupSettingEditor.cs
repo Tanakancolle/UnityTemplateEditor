@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace TemplateEditor
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(TemplateGroupSetting))]
     public class TemplateGroupSettingEditor : Editor
     {
