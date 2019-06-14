@@ -78,5 +78,8 @@ namespace TemplateEditor
 
         [SerializeField]
         public List<bool> IsFoldouts;
+
+        [SerializeField]
+        public Vector2 ScrollPos;
     }
 }

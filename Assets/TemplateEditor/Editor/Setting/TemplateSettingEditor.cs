@@ -33,11 +33,11 @@ namespace TemplateEditor
             AssetsMenuItem,
             Description,
             IsFoldouts,
+            ScrollPos,
         }
 
         public readonly SerializedObject TargetSerializedObject;
         public readonly TemplateSetting TargetTemplateSetting;
-        public Vector2 ScrollPos;
         public bool IsUpdateText;
         public ReorderableList ChainReorderablesList;
 
@@ -358,7 +358,10 @@ namespace TemplateEditor
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
                 var code = status.GetProperty(TemplateSettingStatus.Property.Code).stringValue;
-                var editedCode = SyntaxHighlightUtility.DrawCSharpCode(ref status.ScrollPos, code, 12, height.floatValue);
+                var scrollPos = status.GetProperty(TemplateSettingStatus.Property.ScrollPos);
+                var scroll = scrollPos.vector2Value;
+                var editedCode = SyntaxHighlightUtility.DrawCSharpCode(ref scroll, code, 12, height.floatValue);
+                scrollPos.vector2Value = scroll;
                 if (editedCode != code)
                 {
                     status.GetProperty(TemplateSettingStatus.Property.Code).stringValue = editedCode;
