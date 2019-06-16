@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -14,6 +15,7 @@ MonoBehaviour:
   Path: 
   ScriptName: 
   Code: '{<foo>}'
+  CodeAreaMinHeight: 0
   Overwrite: 0
   Chain:
   - {fileID: 11400000, guid: a71af28e376254732b34364d8dd2bc12, type: 2}
@@ -24,3 +26,5 @@ MonoBehaviour:
   PrefabName: 
   AssetsMenuItem: 1
   Description: 
+  IsFoldouts: 010101
+  ScrollPos: {x: 0, y: 0}

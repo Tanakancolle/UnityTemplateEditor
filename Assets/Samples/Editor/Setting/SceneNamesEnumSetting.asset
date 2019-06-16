@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -14,11 +15,16 @@ MonoBehaviour:
   Path: 
   ScriptName: Scenes.cs
   Code: "public enum SceneNames\n{\n{<Join:\t:,\\n:Scenes>},\n}"
+  CodeAreaMinHeight: 0
   Overwrite: 1
   Chain:
   - {fileID: 11500000, guid: 280a0e327a86743f389750222ff5bef5, type: 3}
   DuplicatePrefab: {fileID: 1207177795992696, guid: c6f8efa6c2f484565ac96fce0f92eddd,
     type: 2}
   AttachTarget: {fileID: 0}
-  PrefabCreatePath: 
+  PrefabPath: 
+  PrefabName: 
   AssetsMenuItem: 0
+  Description: 
+  IsFoldouts: 010101
+  ScrollPos: {x: 0, y: 0}
