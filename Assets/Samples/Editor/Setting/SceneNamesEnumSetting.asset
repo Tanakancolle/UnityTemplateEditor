@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
+  m_Name: SceneNamesEnumSetting
+  m_EditorClassIdentifier: 
+  Path: 
+  ScriptName: Scenes.cs
+  Code: "public enum SceneNames\n{\n{<Join:\t:,\\n:Scenes>},\n}"
+  Overwrite: 1
+  Chain:
+  - {fileID: 11500000, guid: 280a0e327a86743f389750222ff5bef5, type: 3}
+  DuplicatePrefab: {fileID: 1207177795992696, guid: c6f8efa6c2f484565ac96fce0f92eddd,
+    type: 2}
+  AttachTarget: {fileID: 0}
+  PrefabCreatePath: 
+  AssetsMenuItem: 0

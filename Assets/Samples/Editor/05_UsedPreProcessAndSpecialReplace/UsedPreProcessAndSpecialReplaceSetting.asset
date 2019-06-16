@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
+  m_Name: UsedPreProcessAndSpecialReplaceSetting
+  m_EditorClassIdentifier: 
+  Path: Assets/TemplateEditorSamples
+  ScriptName: '{<ScriptName>}.cs'
+  Code: 'public static class {<ScriptName>}
+
+    {
+
+    {<Repeat:    public const string {0} = "{0}";:Tags>}
+
+    }'
+  CodeAreaMinHeight: 0
+  Overwrite: 1
+  Chain:
+  - {fileID: 11500000, guid: 8e8a660e836d1470892a2fdafa033442, type: 3}
+  DuplicatePrefab: {fileID: 0}
+  AttachTarget: {fileID: 0}
+  PrefabPath: 
+  PrefabName: 
+  AssetsMenuItem: 0
+  Description: 
+  IsFoldouts: 010101
+  ScrollPos: {x: 0, y: 0}
