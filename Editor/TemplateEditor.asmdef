@@ -1,0 +1,17 @@
+{
+    "name": "TemplateEditor",
+    "references": [
+        "GUID:268efdd77ab3247b9bb7eb53e04a3cd2"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
