@@ -47,6 +47,9 @@ namespace TemplateEditor
         public float CodeAreaMinHeight;
 
         [SerializeField]
+        public float CodeAreaMaxHeight;
+
+        [SerializeField]
         public TemplateUtility.OverwriteType Overwrite;
 
         [SerializeField]
@@ -67,12 +70,6 @@ namespace TemplateEditor
         [SerializeField]
         private bool AssetsMenuItem;
 
-        #region IAssetMenuItem implementation
-
-        public bool IsAssetsMenuItem { get { return AssetsMenuItem; } set { AssetsMenuItem = value; } }
-
-        #endregion
-
         [SerializeField]
         public string Description;
 
@@ -81,5 +78,11 @@ namespace TemplateEditor
 
         [SerializeField]
         public Vector2 ScrollPos;
+
+        #region IAssetMenuItem implementation
+
+        public bool IsAssetsMenuItem { get { return AssetsMenuItem; } set { AssetsMenuItem = value; } }
+
+        #endregion
     }
 }
