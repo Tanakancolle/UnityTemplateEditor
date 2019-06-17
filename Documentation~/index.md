@@ -1,0 +1,1 @@
+dependencies : https://github.com/Tanakancolle/SyntaxHighlightEditor/releases

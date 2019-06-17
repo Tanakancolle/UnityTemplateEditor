@@ -1,3 +1,7 @@
+### v0.4.0
+
+- PackageManager対応
+
 ### v0.3.0
 
 - Prefabのパス指定を変更（breaking change）
