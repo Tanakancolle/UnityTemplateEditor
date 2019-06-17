@@ -5,6 +5,5 @@
   "unity": "2019.1",
   "description": "Template Editor",
   "dependencies": {
-    "syntax-hilight-editor": "https://github.com/Tanakancolle/SyntaxHighlightEditor.git#master"
   }
 }
