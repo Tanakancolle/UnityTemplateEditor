@@ -1,3 +1,11 @@
+### v0.4.0
+
+- PackageManager対応
+- Join置き換え削除（breaking change）
+- Codeエリアの最小、最大を指定できるように
+- Codeエリアのスクロール位置を保持するように
+- Foldout状態を保持するように
+
 ### v0.3.0
 
 - Prefabのパス指定を変更（breaking change）
