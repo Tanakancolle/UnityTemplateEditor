@@ -358,22 +358,21 @@ namespace TemplateEditor
 
         public static void DrawCode(TemplateSettingStatus status)
         {
+            var minHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMinHeight);
+            var maxHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMaxHeight);
+            if (maxHeight.floatValue > 0f && maxHeight.floatValue < minHeight.floatValue)
+            {
+                maxHeight.floatValue = minHeight.floatValue;
+            }
+
+            EditorGUILayout.BeginHorizontal(EditorGUIHelper.GetScopeStyle());
+            {
+                EditorGUILayout.PropertyField(minHeight, new GUIContent("Min Height"));
+                EditorGUILayout.PropertyField(maxHeight, new GUIContent("Max Height"));
+            }
+            EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                var minHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMinHeight);
-                var maxHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMaxHeight);
-                if (maxHeight.floatValue > 0f && maxHeight.floatValue < minHeight.floatValue)
-                {
-                    maxHeight.floatValue = minHeight.floatValue;
-                }
-
-                EditorGUILayout.BeginHorizontal();
-                {
-                    EditorGUILayout.PropertyField(minHeight, new GUIContent("Min Height"));
-                    EditorGUILayout.PropertyField(maxHeight, new GUIContent("Max Height"));
-                }
-                EditorGUILayout.EndHorizontal();
-
                 var code = status.GetProperty(TemplateSettingStatus.Property.Code).stringValue;
                 var scrollPos = status.GetProperty(TemplateSettingStatus.Property.ScrollPos);
                 var scroll = scrollPos.vector2Value;
