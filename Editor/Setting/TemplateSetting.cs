@@ -38,10 +38,10 @@ namespace TemplateEditor
         public string Code;
 
         [SerializeField]
-        public float CodeAreaMinHeight;
+        public float CodeAreaMinHeight = 100f;
 
         [SerializeField]
-        public float CodeAreaMaxHeight;
+        public float CodeAreaMaxHeight = 100f;
 
         [SerializeField]
         public TemplateUtility.OverwriteType Overwrite;
