@@ -11,7 +11,7 @@ namespace TemplateEditor
             base.Add(ConvertReplaceWord(key), value);
         }
 
-        private string ConvertReplaceWord(string word)
+        public string ConvertReplaceWord(string word)
         {
             var convertWord = word;
             var counter = 2;

@@ -371,6 +371,7 @@ namespace TemplateEditor
                 EditorGUILayout.PropertyField(maxHeight, new GUIContent("Max Height"));
             }
             EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
                 var code = status.GetProperty(TemplateSettingStatus.Property.Code).stringValue;
