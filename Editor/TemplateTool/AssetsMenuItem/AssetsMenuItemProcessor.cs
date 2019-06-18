@@ -31,7 +31,7 @@ namespace TemplateEditor
         /// </summary>
         public static void Create()
         {
-            TemplateUtility.ExecuteSetting(AssetsMenuItemSettingGuid, new Dictionary<string, object>());
+            TemplateUtility.ExecuteSetting(AssetsMenuItemSettingGuid);
         }
 
         private List<string[]> BuildMenuItemList<T>() where T : UnityEngine.Object
@@ -56,15 +56,15 @@ namespace TemplateEditor
             return list;
         }
 
-        public void Process(ProcessMetadata metadata, Dictionary<string, object> result)
+        public void Process(ProcessMetadata metadata, ProcessDictionary result)
         {
             var files = Directory.GetFiles("Assets", AssetsMenuItemScriptName + ".cs", SearchOption.AllDirectories);
             var createPath = files.Length > 0 ? Path.GetDirectoryName(files[0]) : "Assets/TemplateEditorTool/Editor";
 
-            result.Add(this.ConvertReplaceWord(ReplaceWords[(int)ReplaceWordType.Settings], result), BuildMenuItemList<TemplateSetting>());
-            result.Add(this.ConvertReplaceWord(ReplaceWords[(int)ReplaceWordType.GroupSettings], result), BuildMenuItemList<TemplateGroupSetting>());
-            result.Add(this.ConvertReplaceWord(ReplaceWords[(int)ReplaceWordType.CreatePath], result), createPath);
-            result.Add(this.ConvertReplaceWord(ReplaceWords[(int)ReplaceWordType.ScriptName], result), AssetsMenuItemScriptName);
+            result.Add(ReplaceWords[(int) ReplaceWordType.Settings], BuildMenuItemList<TemplateSetting>());
+            result.Add(ReplaceWords[(int) ReplaceWordType.GroupSettings], BuildMenuItemList<TemplateGroupSetting>());
+            result.Add(ReplaceWords[(int) ReplaceWordType.CreatePath], createPath);
+            result.Add(ReplaceWords[(int) ReplaceWordType.ScriptName], AssetsMenuItemScriptName);
         }
 
         public string[] GetReplaceWords()

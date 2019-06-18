@@ -95,7 +95,7 @@ namespace TemplateEditor
             return processChain;
         }
 
-        public static void ExecuteProcessChain(object obj, ProcessMetadata metadata, Dictionary<string, object> result)
+        public static void ExecuteProcessChain(object obj, ProcessMetadata metadata, ProcessDictionary result)
         {
             var processChain = ConvertProcessChianInstanceFromObject(obj);
             if (processChain != null)
@@ -128,7 +128,7 @@ namespace TemplateEditor
             EditorPreviewWindow.Open(editor);
         }
 
-        public static void ExecuteSetting(string guid, Dictionary<string, object> result = null)
+        public static void ExecuteSetting(string guid, ProcessDictionary result = null)
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var asset = AssetDatabase.LoadAssetAtPath<TemplateSetting>(path);

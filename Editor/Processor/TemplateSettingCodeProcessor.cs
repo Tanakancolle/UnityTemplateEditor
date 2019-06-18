@@ -11,9 +11,9 @@ namespace TemplateEditor
 
         #region IProcessChain implementation
 
-        public virtual void Process(ProcessMetadata metadata, Dictionary<string, object> result)
+        public virtual void Process(ProcessMetadata metadata, ProcessDictionary result)
         {
-            result.Add(this.ConvertReplaceWord(RepalceWords[0], result), ReplaceCode(result));
+            result.Add(RepalceWords[0], ReplaceCode(result));
         }
 
         public virtual string[] GetReplaceWords()
@@ -28,10 +28,10 @@ namespace TemplateEditor
 
         #endregion
 
-        protected string ReplaceCode(Dictionary<string, object> result)
+        protected string ReplaceCode(ProcessDictionary result)
         {
             object obj;
-            result.TryGetValue(this.GetLastConvertReplaceWord(TemplateSetting.ResultKey, result), out obj);
+            result.TryGetValue(result.GetLastConvertReplaceWord(TemplateSetting.ResultKey), out obj);
             var setting = obj as TemplateSetting;
             if (setting == null)
             {

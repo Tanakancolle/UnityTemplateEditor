@@ -11,7 +11,7 @@ namespace TemplateEditor
 
         #region IProcessChain implementation
 
-        public override void Process(ProcessMetadata metadata, Dictionary<string, object> result)
+        public override void Process(ProcessMetadata metadata, ProcessDictionary result)
         {
             var code = ReplaceCode(result);
             if (string.IsNullOrEmpty(code))
@@ -19,7 +19,7 @@ namespace TemplateEditor
                 return;
             }
 
-            result.Add(this.ConvertReplaceWord(RepalceWords[0], result), code.Split('\n'));
+            result.Add(RepalceWords[0], code.Split('\n'));
         }
 
         public override string[] GetReplaceWords()

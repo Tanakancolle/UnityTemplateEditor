@@ -256,11 +256,11 @@ namespace TemplateEditor
             EditorGUILayout.EndVertical();
         }
 
-        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces, Dictionary<string, object> result = null, bool isRefresh = true)
+        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces, ProcessDictionary result = null, bool isRefresh = true)
         {
             if (result == null)
             {
-                result = new Dictionary<string, object>();
+                result = new ProcessDictionary();
             }
 
             foreach (var replace in replaces)
@@ -321,7 +321,7 @@ namespace TemplateEditor
             );
         }
 
-        public static void ExecuteChain(TemplateSettingStatus status, Dictionary<string, object> result)
+        public static void ExecuteChain(TemplateSettingStatus status, ProcessDictionary result)
         {
             var metadata = new ProcessMetadata(status.TargetTemplateSetting);
             var property = status.GetProperty(TemplateSettingStatus.Property.Chain);
@@ -505,7 +505,7 @@ namespace TemplateEditor
             EditorGUILayout.EndHorizontal();
         }
 
-        public void Create(Dictionary<string, object> result = null, bool isRefresh = true)
+        public void Create(ProcessDictionary result = null, bool isRefresh = true)
         {
             CreateScript(SettingStatus, _replaceList, result, isRefresh);
         }
@@ -584,7 +584,7 @@ namespace TemplateEditor
                     words.Remove(word);
 
                     // ToArray = 遅延実行だとエラーになるため
-                    var regex = new Regex(string.Format(ProcessChainExtension.ConvertWordPattern, word, @"\d+"), RegexOptions.IgnoreCase);
+                    var regex = new Regex(string.Format(ProcessDictionary.ConvertWordPattern, word, @"\d+"), RegexOptions.IgnoreCase);
                     foreach (var matchWord in words.Where(w => regex.IsMatch(w)).ToArray())
                     {
                         words.Remove(matchWord);

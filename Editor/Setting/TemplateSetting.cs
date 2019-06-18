@@ -10,10 +10,10 @@ namespace TemplateEditor
         public static readonly string ResultKey = "TemplateSetting";
         private static readonly string[] ReplaceWords = {ResultKey};
 
-        public void Process(ProcessMetadata metadata, Dictionary<string, object> result)
+        public void Process(ProcessMetadata metadata, ProcessDictionary result)
         {
             result.Add(
-                this.ConvertReplaceWord(ReplaceWords[0], result),
+                ReplaceWords[0],
                 this
             );
         }
