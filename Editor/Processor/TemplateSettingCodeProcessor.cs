@@ -26,11 +26,6 @@ namespace TemplateEditor
             return "一つ前のテンプレート設定のコード部分を渡します";
         }
 
-        public ProcessFileType GetFileType()
-        {
-            return ProcessFileType.Class;
-        }
-
         #endregion
 
         protected string ReplaceCode(Dictionary<string, object> result)

@@ -29,11 +29,6 @@ namespace TemplateEditor
             return "自身のインスタンスを渡します";
         }
 
-        public ProcessFileType GetFileType()
-        {
-            return ProcessFileType.ScriptableObject;
-        }
-
         [SerializeField]
         public string Path;
 

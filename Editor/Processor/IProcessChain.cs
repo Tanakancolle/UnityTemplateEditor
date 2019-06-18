@@ -7,14 +7,6 @@ namespace TemplateEditor
         void Process(ProcessMetadata metadata, Dictionary<string, object> result);
         string[] GetReplaceWords();
         string GetDescription();
-        ProcessFileType GetFileType();
-    }
-
-    public enum ProcessFileType
-    {
-        Class,
-        ScriptableObject,
-        ClassAndScriptableObject,
     }
 
     /// <summary>

@@ -76,10 +76,5 @@ namespace TemplateEditor
         {
             return "TemplateをAssetメニューへ追加するための情報を提供します";
         }
-
-        public ProcessFileType GetFileType()
-        {
-            return ProcessFileType.ScriptableObject;
-        }
     }
 }

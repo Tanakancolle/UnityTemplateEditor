@@ -34,10 +34,5 @@ namespace TemplateEditor
         {
             return "UnityのC#テンプレートパスを渡します";
         }
-
-        public ProcessFileType GetFileType()
-        {
-            return ProcessFileType.Class;
-        }
     }
 }
