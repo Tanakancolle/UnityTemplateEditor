@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#pragma warning disable CS0618
+
+using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System;
@@ -40,7 +42,7 @@ namespace TemplateEditor
         public readonly SerializedObject TargetSerializedObject;
         public readonly TemplateSetting TargetTemplateSetting;
         public bool IsUpdateText;
-        public ReorderableList ChainReorderablesList;
+        public ReorderableList ChainReorderableList;
 
         private readonly SerializedProperty[] _properties;
 
@@ -57,7 +59,7 @@ namespace TemplateEditor
                 _properties[i] = targetSerializedObject.FindProperty(names[i]);
             }
 
-            ChainReorderablesList = new ReorderableList(targetSerializedObject, GetProperty(Property.Chain))
+            ChainReorderableList = new ReorderableList(targetSerializedObject, GetProperty(Property.Chain))
             {
                 drawElementCallback = DrawChainListElement,
                 drawHeaderCallback = (rect) => { EditorGUI.LabelField(rect, "List"); },
@@ -120,6 +122,7 @@ namespace TemplateEditor
             }
 
             _descriptionFoldout = new FoldoutInfo("Description", DrawDescription);
+            _descriptionFoldout.IsFoldout = string.IsNullOrEmpty(SettingStatus.GetProperty(TemplateSettingStatus.Property.Description).stringValue) == false;
 
             UpdateReplaceList(true);
         }
@@ -207,12 +210,12 @@ namespace TemplateEditor
         {
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                status.ChainReorderablesList.DoLayoutList();
+                status.ChainReorderableList.DoLayoutList();
 
-                var selectIndex = status.ChainReorderablesList.index;
+                var selectIndex = status.ChainReorderableList.index;
                 if (selectIndex >= 0)
                 {
-                    var select = status.ChainReorderablesList.serializedProperty.GetArrayElementAtIndex(selectIndex);
+                    var select = status.ChainReorderableList.serializedProperty.GetArrayElementAtIndex(selectIndex);
                     var chain = TemplateUtility.ConvertProcessChianInstanceFromObject(select.objectReferenceValue);
                     if (chain != null)
                     {
@@ -253,11 +256,11 @@ namespace TemplateEditor
             EditorGUILayout.EndVertical();
         }
 
-        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces, Dictionary<string, object> result = null, bool isRefresh = true)
+        public static void CreateScript(TemplateSettingStatus status, List<ReplaceInfo> replaces, ProcessDictionary result = null, bool isRefresh = true)
         {
             if (result == null)
             {
-                result = new Dictionary<string, object>();
+                result = new ProcessDictionary();
             }
 
             foreach (var replace in replaces)
@@ -318,7 +321,7 @@ namespace TemplateEditor
             );
         }
 
-        public static void ExecuteChain(TemplateSettingStatus status, Dictionary<string, object> result)
+        public static void ExecuteChain(TemplateSettingStatus status, ProcessDictionary result)
         {
             var metadata = new ProcessMetadata(status.TargetTemplateSetting);
             var property = status.GetProperty(TemplateSettingStatus.Property.Chain);
@@ -355,22 +358,22 @@ namespace TemplateEditor
 
         public static void DrawCode(TemplateSettingStatus status)
         {
+            var minHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMinHeight);
+            var maxHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMaxHeight);
+            if (maxHeight.floatValue > 0f && maxHeight.floatValue < minHeight.floatValue)
+            {
+                maxHeight.floatValue = minHeight.floatValue;
+            }
+
+            EditorGUILayout.BeginHorizontal(EditorGUIHelper.GetScopeStyle());
+            {
+                EditorGUILayout.PropertyField(minHeight, new GUIContent("Min Height"));
+                EditorGUILayout.PropertyField(maxHeight, new GUIContent("Max Height"));
+            }
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                var minHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMinHeight);
-                var maxHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMaxHeight);
-                if (maxHeight.floatValue > 0f && maxHeight.floatValue < minHeight.floatValue)
-                {
-                    maxHeight.floatValue = minHeight.floatValue;
-                }
-
-                EditorGUILayout.BeginHorizontal();
-                {
-                    EditorGUILayout.PropertyField(minHeight, new GUIContent("Area Min Height"));
-                    EditorGUILayout.PropertyField(maxHeight, new GUIContent("Area Max Height"));
-                }
-                EditorGUILayout.EndHorizontal();
-
                 var code = status.GetProperty(TemplateSettingStatus.Property.Code).stringValue;
                 var scrollPos = status.GetProperty(TemplateSettingStatus.Property.ScrollPos);
                 var scroll = scrollPos.vector2Value;
@@ -502,7 +505,7 @@ namespace TemplateEditor
             EditorGUILayout.EndHorizontal();
         }
 
-        public void Create(Dictionary<string, object> result = null, bool isRefresh = true)
+        public void Create(ProcessDictionary result = null, bool isRefresh = true)
         {
             CreateScript(SettingStatus, _replaceList, result, isRefresh);
         }
@@ -581,7 +584,7 @@ namespace TemplateEditor
                     words.Remove(word);
 
                     // ToArray = 遅延実行だとエラーになるため
-                    var regex = new Regex(string.Format(ProcessChainExtension.ConvertWordPattern, word, @"\d+"), RegexOptions.IgnoreCase);
+                    var regex = new Regex(string.Format(ProcessDictionary.ConvertWordPattern, word, @"\d+"), RegexOptions.IgnoreCase);
                     foreach (var matchWord in words.Where(w => regex.IsMatch(w)).ToArray())
                     {
                         words.Remove(matchWord);

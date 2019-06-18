@@ -61,22 +61,10 @@ namespace TemplateEditor
 
         private bool DrawSettingList()
         {
-            bool isChange = false;
-
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(_settingsProperty, new GUIContent("Template Settings"), true);
-            isChange = EditorGUI.EndChangeCheck();
 
-            var paths = EditorGUIHelper.DrawDragAndDropArea("Drag & Drop (重複なし追加)");
-            if (paths != null)
-            {
-                if (TemplateUtility.AddNonDuplicationProperty<TemplateSetting>(_settingsProperty, paths) == true)
-                {
-                    isChange = true;
-                }
-            }
-
-            return isChange;
+            return EditorGUI.EndChangeCheck();
         }
 
         private void BuildSettingList()

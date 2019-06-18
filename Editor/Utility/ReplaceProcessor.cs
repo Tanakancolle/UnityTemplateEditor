@@ -11,10 +11,13 @@ namespace TemplateEditor
     {
         private const string ReplacePrefix = "{<";
         private const string ReplaceSuffix = ">}";
+        private const string ReplaceInReplacePrefix = "{\\\\<";
+        private const string ReplaceInReplaceSuffix = ">\\\\}";
         private static readonly Regex ReplaceRegex = new Regex(ReplacePrefix + "([\\s\\S]+?)" + ReplaceSuffix);
+        private static readonly Regex ReplaceInReplaceRegex = new Regex(ReplaceInReplacePrefix + "([\\s\\S]+?)" + ReplaceInReplaceSuffix);
         private static readonly char SplitChar = ':';
 
-        private static readonly Dictionary<string, Func<string[], object, string>> ProcessDic = new Dictionary<string, Func<string[], object, string>>()
+        private static readonly Dictionary<string, Func<string[], object, Dictionary<string, object>, string>> ProcessDic = new Dictionary<string, Func<string[], object, Dictionary<string, object>, string>>()
         {
             {"Repeat", RepeatToProcess},
         };
@@ -22,9 +25,14 @@ namespace TemplateEditor
         /// <summary>
         /// 置き換え文字置き換え ※{<Word>} 等
         /// </summary>
-        public static string ReplaceProcess(string text, Dictionary<string, object> replace)
+        public static string ReplaceProcess(string text, Dictionary<string, object> replace, Regex regex = null)
         {
-            return ReplaceRegex.Replace(text, new MatchEvaluator((match) =>
+            if (regex == null)
+            {
+                regex = ReplaceRegex;
+            }
+
+            return regex.Replace(text, new MatchEvaluator((match) =>
                 {
                     var orderText = match.Groups[1].Value;
                     var orders = orderText.Split(SplitChar);
@@ -43,7 +51,7 @@ namespace TemplateEditor
                     }
 
                     // 置き換え処理
-                    return ProcessDic[orders[0]].Invoke(orders, replace[replaceWord]);
+                    return ProcessDic[orders[0]].Invoke(orders, replace[replaceWord], replace);
                 }
             ));
         }
@@ -55,7 +63,16 @@ namespace TemplateEditor
             {
                 foreach (Match match in ReplaceRegex.Matches(text))
                 {
-                    words.Add(match.Groups[1].Value.Split(SplitChar).Last());
+                    var orderText = match.Groups[1].Value;
+                    var orders = orderText.Split(SplitChar);
+                    words.Add(orders.Last());
+
+                    // 置き換え文字中の置き換え文字チェック
+                    var writeText = GetWriteTextFromReplaceOrders(orders);
+                    foreach (Match inMatch in ReplaceInReplaceRegex.Matches(writeText))
+                    {
+                        words.Add(inMatch.Groups[1].Value.Split(SplitChar).Last());
+                    }
                 }
             }
 
@@ -82,7 +99,7 @@ namespace TemplateEditor
 
         #region Process
 
-        private static string RepeatToProcess(string[] orders, object replace)
+        private static string RepeatToProcess(string[] orders, object replace, Dictionary<string, object> replaceDic)
         {
             var objects = replace as System.Collections.IList;
             if (objects == null)
@@ -92,18 +109,12 @@ namespace TemplateEditor
             }
 
             // 最初と最後のSplitChar以外を一つに
+            var writeText = GetWriteTextFromReplaceOrders(orders);
+
+            // 置き換え文字中の置き換え文字に対応
+            writeText = ReplaceProcess(writeText, replaceDic, ReplaceInReplaceRegex);
+
             var builder = new StringBuilder();
-            for (var i = 1; i < orders.Length - 1; ++i)
-            {
-                if (builder.Length != 0)
-                {
-                    builder.Append(SplitChar);
-                }
-
-                builder.Append(orders[i]);
-            }
-
-            var writeText = builder.ToString();
             builder.Clear();
             foreach (var obj in objects)
             {
@@ -126,5 +137,22 @@ namespace TemplateEditor
         }
 
         #endregion
+
+        private static string GetWriteTextFromReplaceOrders(string[] orders)
+        {
+            // 最初と最後のSplitChar以外を一つに
+            var builder = new StringBuilder();
+            for (var i = 1; i < orders.Length - 1; ++i)
+            {
+                if (builder.Length != 0)
+                {
+                    builder.Append(SplitChar);
+                }
+
+                builder.Append(orders[i]);
+            }
+
+            return builder.ToString();
+        }
     }
 }

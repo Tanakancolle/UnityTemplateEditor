@@ -12,17 +12,11 @@ namespace TemplateEditor
             "UnityTemplateName",
         };
 
-        public void Process(ProcessMetadata metadata, Dictionary<string, object> result)
+        public void Process(ProcessMetadata metadata, ProcessDictionary result)
         {
-            result.Add(
-                this.ConvertReplaceWord(ReplaceWords[0], result),
-                Path.Combine(EditorApplication.applicationContentsPath, "Resources/ScriptTemplates")
-            );
+            result.Add(ReplaceWords[0], Path.Combine(EditorApplication.applicationContentsPath, "Resources/ScriptTemplates"));
 
-            result.Add(
-                this.ConvertReplaceWord(ReplaceWords[1], result),
-                "81-C# Script-NewBehaviourScript.cs.txt"
-            );
+            result.Add(ReplaceWords[1], "81-C# Script-NewBehaviourScript.cs.txt");
         }
 
         public string[] GetReplaceWords()
@@ -33,11 +27,6 @@ namespace TemplateEditor
         public string GetDescription()
         {
             return "UnityのC#テンプレートパスを渡します";
-        }
-
-        public ProcessFileType GetFileType()
-        {
-            return ProcessFileType.Class;
         }
     }
 }

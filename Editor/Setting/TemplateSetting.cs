@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#pragma warning disable CS0649
+
+using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor;
-using System;
-using UnityEngine.Serialization;
 
 namespace TemplateEditor
 {
@@ -11,10 +10,10 @@ namespace TemplateEditor
         public static readonly string ResultKey = "TemplateSetting";
         private static readonly string[] ReplaceWords = {ResultKey};
 
-        public void Process(ProcessMetadata metadata, Dictionary<string, object> result)
+        public void Process(ProcessMetadata metadata, ProcessDictionary result)
         {
             result.Add(
-                this.ConvertReplaceWord(ReplaceWords[0], result),
+                ReplaceWords[0],
                 this
             );
         }
@@ -29,11 +28,6 @@ namespace TemplateEditor
             return "自身のインスタンスを渡します";
         }
 
-        public ProcessFileType GetFileType()
-        {
-            return ProcessFileType.ScriptableObject;
-        }
-
         [SerializeField]
         public string Path;
 
@@ -44,10 +38,10 @@ namespace TemplateEditor
         public string Code;
 
         [SerializeField]
-        public float CodeAreaMinHeight;
+        public float CodeAreaMinHeight = 100f;
 
         [SerializeField]
-        public float CodeAreaMaxHeight;
+        public float CodeAreaMaxHeight = 100f;
 
         [SerializeField]
         public TemplateUtility.OverwriteType Overwrite;
