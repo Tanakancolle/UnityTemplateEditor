@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#pragma warning disable CS0618
+
+using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System;

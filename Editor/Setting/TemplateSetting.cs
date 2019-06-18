@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿#pragma warning disable CS0649
+
+using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor;
-using System;
-using UnityEngine.Serialization;
 
 namespace TemplateEditor
 {
