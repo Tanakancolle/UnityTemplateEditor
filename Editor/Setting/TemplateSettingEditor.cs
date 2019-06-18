@@ -120,6 +120,7 @@ namespace TemplateEditor
             }
 
             _descriptionFoldout = new FoldoutInfo("Description", DrawDescription);
+            _descriptionFoldout.IsFoldout = string.IsNullOrEmpty(SettingStatus.GetProperty(TemplateSettingStatus.Property.Description).stringValue) == false;
 
             UpdateReplaceList(true);
         }
@@ -366,8 +367,8 @@ namespace TemplateEditor
 
                 EditorGUILayout.BeginHorizontal();
                 {
-                    EditorGUILayout.PropertyField(minHeight, new GUIContent("Area Min Height"));
-                    EditorGUILayout.PropertyField(maxHeight, new GUIContent("Area Max Height"));
+                    EditorGUILayout.PropertyField(minHeight, new GUIContent("Min Height"));
+                    EditorGUILayout.PropertyField(maxHeight, new GUIContent("Max Height"));
                 }
                 EditorGUILayout.EndHorizontal();
 
