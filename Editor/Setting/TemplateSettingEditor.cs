@@ -42,7 +42,7 @@ namespace TemplateEditor
         public readonly SerializedObject TargetSerializedObject;
         public readonly TemplateSetting TargetTemplateSetting;
         public bool IsUpdateText;
-        public ReorderableList ChainReorderablesList;
+        public ReorderableList ChainReorderableList;
 
         private readonly SerializedProperty[] _properties;
 
@@ -59,7 +59,7 @@ namespace TemplateEditor
                 _properties[i] = targetSerializedObject.FindProperty(names[i]);
             }
 
-            ChainReorderablesList = new ReorderableList(targetSerializedObject, GetProperty(Property.Chain))
+            ChainReorderableList = new ReorderableList(targetSerializedObject, GetProperty(Property.Chain))
             {
                 drawElementCallback = DrawChainListElement,
                 drawHeaderCallback = (rect) => { EditorGUI.LabelField(rect, "List"); },
@@ -210,12 +210,12 @@ namespace TemplateEditor
         {
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                status.ChainReorderablesList.DoLayoutList();
+                status.ChainReorderableList.DoLayoutList();
 
-                var selectIndex = status.ChainReorderablesList.index;
+                var selectIndex = status.ChainReorderableList.index;
                 if (selectIndex >= 0)
                 {
-                    var select = status.ChainReorderablesList.serializedProperty.GetArrayElementAtIndex(selectIndex);
+                    var select = status.ChainReorderableList.serializedProperty.GetArrayElementAtIndex(selectIndex);
                     var chain = TemplateUtility.ConvertProcessChianInstanceFromObject(select.objectReferenceValue);
                     if (chain != null)
                     {
