@@ -114,7 +114,11 @@ namespace TemplateEditor
             // 置き換え文字中の置き換え文字に対応
             writeText = ReplaceProcess(writeText, replaceDic, ReplaceInReplaceRegex);
 
+            // '{' or '}' をstring.Formatで使える形式に変換
+            writeText = ConvertBrace(writeText);
+
             var builder = new StringBuilder();
+
             builder.Clear();
             foreach (var obj in objects)
             {
@@ -150,6 +154,42 @@ namespace TemplateEditor
                 }
 
                 builder.Append(orders[i]);
+            }
+
+            return builder.ToString();
+        }
+
+        private static string ConvertBrace(string text)
+        {
+            var builder = new StringBuilder();
+            var braceType = 0;
+            foreach (var c in text)
+            {
+                if (braceType > 0)
+                {
+                    var brace = braceType == 1 ? '{' : '}';
+
+                    if (brace != c)
+                    {
+                        builder.Append(brace);
+                    }
+
+                    braceType = 0;
+                }
+                else if (c == '{')
+                {
+                    braceType = 1;
+                }
+                else if (c == '}')
+                {
+                    braceType = 2;
+                }
+                else
+                {
+                    braceType = 0;
+                }
+
+                builder.Append(c);
             }
 
             return builder.ToString();
