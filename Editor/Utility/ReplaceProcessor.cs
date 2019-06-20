@@ -118,8 +118,6 @@ namespace TemplateEditor
             writeText = ConvertBrace(writeText);
 
             var builder = new StringBuilder();
-
-            builder.Clear();
             foreach (var obj in objects)
             {
                 if (builder.Length != 0)
@@ -162,37 +160,54 @@ namespace TemplateEditor
         private static string ConvertBrace(string text)
         {
             var builder = new StringBuilder();
-            var braceType = 0;
-            foreach (var c in text)
+            var isSpecifier = false;
+            for (int i = 0; i < text.Length; ++i)
             {
-                if (braceType > 0)
+                if (text[i] == '}')
                 {
-                    var brace = braceType == 1 ? '{' : '}';
-
-                    if (brace != c)
+                    if (isSpecifier)
                     {
-                        builder.Append(brace);
+                        isSpecifier = false;
                     }
+                    else
+                    {
+                        builder.Append('}');
+                        if (CheckChar(text, i + 1, '}'))
+                        {
+                            ++i;
+                        }
+                    }
+                }
+                else if (text[i] == '{')
+                {
+                    if (char.IsDigit(text[i + 1]))
+                    {
+                        isSpecifier = true;
+                    }
+                    else
+                    {
+                        builder.Append('{');
+                        if (CheckChar(text, i + 1, '{'))
+                        {
+                            ++i;
+                        }
+                    }
+                }
 
-                    braceType = 0;
-                }
-                else if (c == '{')
-                {
-                    braceType = 1;
-                }
-                else if (c == '}')
-                {
-                    braceType = 2;
-                }
-                else
-                {
-                    braceType = 0;
-                }
-
-                builder.Append(c);
+                builder.Append(text[i]);
             }
 
             return builder.ToString();
+        }
+
+        private static bool CheckChar(string text, int index, char c)
+        {
+            if (text.Length <= index)
+            {
+                return false;
+            }
+
+            return text[index] == c;
         }
     }
 }
