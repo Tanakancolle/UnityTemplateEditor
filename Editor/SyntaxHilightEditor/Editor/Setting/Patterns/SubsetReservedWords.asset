@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 275fdc00e05454525a874cb22e40bfc4, type: 3}
+  m_Name: SubsetReservedWords
+  m_EditorClassIdentifier: 
+  Format: (?<{0}>(?<![0-9a-zA-Z_])({1})(?![0-9a-zA-Z_]))
+  FormatTypeText: Delimit
+  Color: 2FFFFFFF
+  Patterns:
+  - abstract
+  - as
+  - async
+  - await
+  - base
+  - bool
+  - break
+  - byte
+  - case
+  - char
+  - class
+  - const
+  - continue
+  - default
+  - double
+  - else
+  - enum
+  - false
+  - float
+  - for
+  - foreach
+  - if
+  - in
+  - int
+  - interface
+  - is
+  - long
+  - namespace
+  - new
+  - null
+  - object
+  - out
+  - override
+  - private
+  - protected
+  - public
+  - readonly
+  - ref
+  - return
+  - static
+  - string
+  - struct
+  - switch
+  - this
+  - true
+  - virtual
+  - using
+  - void
+  - while
+  - var
+  - yield

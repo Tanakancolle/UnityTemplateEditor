@@ -275,14 +275,6 @@ namespace TemplateEditor
 
             ExecuteChain(status, result);
 
-            Debug.Log("<color=#ffff30>Pre Process</color>");
-            foreach (var element in result)
-            {
-                Debug.LogFormat("Key : {0}\nValue\n{2}\n{1}\n{2}", element.Key, ObjectToLogString(element.Value), "---------------------");
-            }
-
-            Debug.Log("<color=#ffff30>Finished</color>");
-
             // 生成ディレクトリが指定されていなければアクティブなパスへ作成
             var createDirectory = status.GetProperty(TemplateSettingStatus.Property.Path).stringValue;
             var createPath = Path.Combine(

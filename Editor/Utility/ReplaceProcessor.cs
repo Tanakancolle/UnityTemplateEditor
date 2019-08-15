@@ -114,8 +114,10 @@ namespace TemplateEditor
             // 置き換え文字中の置き換え文字に対応
             writeText = ReplaceProcess(writeText, replaceDic, ReplaceInReplaceRegex);
 
+            // '{' or '}' をstring.Formatで使える形式に変換
+            writeText = ConvertBrace(writeText);
+
             var builder = new StringBuilder();
-            builder.Clear();
             foreach (var obj in objects)
             {
                 if (builder.Length != 0)
@@ -153,6 +155,59 @@ namespace TemplateEditor
             }
 
             return builder.ToString();
+        }
+
+        private static string ConvertBrace(string text)
+        {
+            var builder = new StringBuilder();
+            var isSpecifier = false;
+            for (int i = 0; i < text.Length; ++i)
+            {
+                if (text[i] == '}')
+                {
+                    if (isSpecifier)
+                    {
+                        isSpecifier = false;
+                    }
+                    else
+                    {
+                        builder.Append('}');
+                        if (CheckChar(text, i + 1, '}'))
+                        {
+                            ++i;
+                        }
+                    }
+                }
+                else if (text[i] == '{')
+                {
+                    if (char.IsDigit(text[i + 1]))
+                    {
+                        isSpecifier = true;
+                    }
+                    else
+                    {
+                        builder.Append('{');
+                        if (CheckChar(text, i + 1, '{'))
+                        {
+                            ++i;
+                        }
+                    }
+                }
+
+                builder.Append(text[i]);
+            }
+
+            return builder.ToString();
+        }
+
+        private static bool CheckChar(string text, int index, char c)
+        {
+            if (text.Length <= index)
+            {
+                return false;
+            }
+
+            return text[index] == c;
         }
     }
 }
