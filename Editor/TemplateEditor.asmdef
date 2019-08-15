@@ -1,8 +1,6 @@
 {
     "name": "TemplateEditor",
-    "references": [
-        "GUID:268efdd77ab3247b9bb7eb53e04a3cd2"
-    ],
+    "references": [],
     "optionalUnityReferences": [],
     "includePlatforms": [
         "Editor"
