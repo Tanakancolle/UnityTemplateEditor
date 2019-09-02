@@ -1,3 +1,8 @@
+### v1.2.1
+
+- Resources Support機能を更新
+    - VideoClipに対応
+
 ### v1.2.0
 
 - Template Tool を追加
