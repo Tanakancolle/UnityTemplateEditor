@@ -49,7 +49,7 @@ namespace TemplateEditor
 
         public static void Execute()
         {
-            TemplateUtility.OpenEditorWindow(ResourcesLoaderTemplateGuid);
+            TemplateUtility.ExecuteSetting(ResourcesLoaderTemplateGuid);
         }
 
         #region IProcessChain implementation

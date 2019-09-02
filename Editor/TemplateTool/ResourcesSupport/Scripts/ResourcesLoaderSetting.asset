@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -17,6 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 11f88f52f2d00442394580dff2c4bb08, type: 2}
   - {fileID: 11400000, guid: 5bcdcb123759c4c30bedf7592da26528, type: 2}
   - {fileID: 11400000, guid: d4466f578ceaf41dfb1f13d239e6894c, type: 2}
+  - {fileID: 11400000, guid: 6ddca123992c6427c970ec944fd13867, type: 2}
   _editUsings:
   - UnityEngine
   _ignoreFileNames: []
