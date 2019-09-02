@@ -12,6 +12,7 @@ namespace TemplateEditor
 {
     public class ResourcesLoaderSetting : ScriptableObject, IUsings, IProcessChain
     {
+        private static readonly string ResourcesLoaderTemplateGuid = "c02be74c37b2340189ea293c5e5aedd0";
         private static readonly string ScriptName = "ResourcesLoader";
 
         private enum ReplaceWordType
@@ -45,6 +46,11 @@ namespace TemplateEditor
             "EnumTab",
             "PathTab",
         };
+
+        public static void Execute()
+        {
+            TemplateUtility.OpenEditorWindow(ResourcesLoaderTemplateGuid);
+        }
 
         #region IProcessChain implementation
 

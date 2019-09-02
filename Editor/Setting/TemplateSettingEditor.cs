@@ -469,7 +469,7 @@ namespace TemplateEditor
 
                 if (cache != SettingStatus.TargetTemplateSetting.IsAssetsMenuItem)
                 {
-                    AssetsMenuItemProcessor.Create();
+                    AssetsMenuItemProcessor.Execute();
                 }
 
                 EditorGUILayout.HelpBox("Add a menu item to \"Assets/Create/Template/~\"", MessageType.Info);

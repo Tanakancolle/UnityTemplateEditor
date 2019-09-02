@@ -10,10 +10,13 @@ namespace TemplateEditor
         {
             CreateSetting,
             CreateGroupSetting,
+            ResourcesLoadSupport,
+            UnityTemplateChange,
         }
 
         private const string MenuItemPrefix = "Tools/Template Editor/";
         private const string ScriptableObjectPrefix = MenuItemPrefix + "Setting Object/";
+        private const string ToolsPrefix = MenuItemPrefix + "Tools/";
         private const int OriginalPriorityNumber = 1000;
 
         [MenuItem(ScriptableObjectPrefix + "Create Setting", false, OriginalPriorityNumber + (int)Priority.CreateSetting)]
@@ -26,6 +29,18 @@ namespace TemplateEditor
         public static void CreateGroupSetting()
         {
             CreateScriptableObject<TemplateGroupSetting>(TemplateUtility.GetActiveFolder());
+        }
+
+        [MenuItem(ToolsPrefix + "Create ResourcesLoader", false, OriginalPriorityNumber + (int)Priority.ResourcesLoadSupport)]
+        public static void ExecuteResourcesLoadSupport()
+        {
+            ResourcesLoaderSetting.Execute();
+        }
+
+        [MenuItem(ToolsPrefix + "Change Unity C# Template", false, OriginalPriorityNumber + (int)Priority.UnityTemplateChange)]
+        public static void ExecuteChangeUniteTemplate()
+        {
+            UnityCSharpTemplatePathProcessor.Execute();
         }
 
         private static void CreateScriptableObject<T>(string dir) where T : ScriptableObject

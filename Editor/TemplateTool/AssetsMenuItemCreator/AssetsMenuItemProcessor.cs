@@ -29,7 +29,7 @@ namespace TemplateEditor
         /// <summary>
         /// 生成を実行
         /// </summary>
-        public static void Create()
+        public static void Execute()
         {
             TemplateUtility.ExecuteSetting(AssetsMenuItemSettingGuid);
         }

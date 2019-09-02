@@ -5,6 +5,8 @@ namespace TemplateEditor
 {
     public class UnityCSharpTemplatePathProcessor : IProcessChain
     {
+        private static readonly string UnityCSharpTemplateGuid = "9b879173632fa44d7a04ccf182477c2e";
+
         private static readonly string[] ReplaceWords =
         {
             "UnityTemplatePath",
@@ -25,6 +27,11 @@ namespace TemplateEditor
         public string GetDescription()
         {
             return "UnityのC#テンプレートパスを渡します";
+        }
+
+        public static void Execute()
+        {
+            TemplateUtility.OpenEditorWindow(UnityCSharpTemplateGuid);
         }
     }
 }
