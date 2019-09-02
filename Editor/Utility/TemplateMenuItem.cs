@@ -44,12 +44,13 @@ namespace TemplateEditor
             UnityCSharpTemplatePathProcessor.Execute();
         }
 
+#if UNITY_2019_1_OR_NEWER
         [MenuItem(ToolsPrefix + "Create VisualTreeName Table", false, OriginalPriorityNumber + (int)Priority.VisualTreeNameTable)]
         public static void ExecuteVisualTreeNameTable()
         {
             VisualTreeNameGetProcessor.Execute();
         }
-
+#endif
 
         private static void CreateScriptableObject<T>(string dir) where T : ScriptableObject
         {

@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_2019_1_OR_NEWER
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-using UnityEngine;
-#if UNITY_2019_1_OR_NEWER
 using UnityEngine.UIElements;
-#else
-using UnityEngine.Experimental.UIElements;
-#endif
 
 namespace TemplateEditor
 {
@@ -70,3 +66,4 @@ namespace TemplateEditor
         }
     }
 }
+#endif
