@@ -6,13 +6,18 @@ using System.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
 using System;
+using System.Text;
 
 namespace TemplateEditor
 {
     public class ResourcesLoaderSetting : ScriptableObject, IUsings, IProcessChain
     {
+        private static readonly string ScriptName = "ResourcesLoader";
+
         private enum ReplaceWordType
         {
+            CreatePath,
+            ScriptName,
             Usings,
             Enums,
             Paths,
@@ -21,6 +26,8 @@ namespace TemplateEditor
 
         private static readonly string[] ReplaceWords =
         {
+            "CreatePath",
+            "ScriptName",
             "Usings",
             "Enums",
             "Paths",
@@ -101,6 +108,12 @@ namespace TemplateEditor
                 }
             }
 
+            // 生成パス設定
+            result.Add(ReplaceWords[(int)ReplaceWordType.CreatePath], TemplateUtility.GetFilePathFromFileName(ScriptName + ".cs") ?? "Assets");
+
+            // スクリプト名設定
+            result.Add(ReplaceWords[(int) ReplaceWordType.ScriptName], ScriptName);
+
             // Usings
             {
                 var usingsList = new List<IUsings>(_parameters.Length + 1);
@@ -154,7 +167,13 @@ namespace TemplateEditor
 
         public string GetDescription()
         {
-            return "設定に従い、Resourcesフォルダ内のアセット情報を受け渡します";
+            var builder = new StringBuilder();
+            foreach (var word in TabSpaceWords)
+            {
+                builder.Append(word + ", ");
+            }
+
+            return "設定に従い、Resourcesフォルダ内のアセット情報を受け渡します\n※次の置き換え文字を設定する必要があります : " + builder;
         }
 
         private string GetTabSpace(TabSpaceType type, ProcessDictionary result)

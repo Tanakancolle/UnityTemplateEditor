@@ -35,7 +35,7 @@ MonoBehaviour:
   AttachTarget: {fileID: 0}
   PrefabPath: 
   PrefabName: 
-  AssetsMenuItem: 1
+  AssetsMenuItem: 0
   Description: "Unity\u306EC# Script\u306E\u30C6\u30F3\u30D7\u30EC\u30FC\u30C8\u3092\u5909\u66F4\u3057\u307E\u3059"
   IsFoldouts: 010101
   ScrollPos: {x: 0, y: 0}

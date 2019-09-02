@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
   m_Name: ResourcesSupportSetting
   m_EditorClassIdentifier: 
-  Path: Assets
+  Path: '{<CreatePath>}'
   ScriptName: '{<ScriptName>}.cs'
   Code: "{<Repeat:using {0};:Usings>}\n\npublic class {<ScriptName>}\n{\n{<Repeat:\n
-    \   public enum {0}Name\n    {\n{\\<Tab>\\}{1},\n    }\n:Enums>}\n{<Repeat:\n
-    \   public static readonly string[] {0}Paths = new string[]\n    {\n{\\<Tab>\\}{1},\n
+    \   public enum {0}Name\n    {\n{\\<EnumTab>\\}{1},\n    }\n:Enums>}\n{<Repeat:\n
+    \   public static readonly string[] {0}Paths = new string[]\n    {\n{\\<PathTab>\\}{1},\n
     \   };\n:Paths>}\n{<Repeat:\n    public static {0} {1}({2}Name type)\n    {\n
     \       return Resources.{1}<{2}>({2}Paths[(int)type]);\n    }\n:Methods>}\n}"
-  CodeAreaMinHeight: 0
-  CodeAreaMaxHeight: 500
+  CodeAreaMinHeight: 350
+  CodeAreaMaxHeight: 350
   Overwrite: 1
   Chain:
   - {fileID: 11400000, guid: 2c9e7c9a1b39a426c8897063ec0a255c, type: 2}
