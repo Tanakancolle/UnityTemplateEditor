@@ -10,20 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
-  m_Name: UnityCSharpTemplateSettng
+  m_Name: UnityCSharpTemplateSetting
   m_EditorClassIdentifier: 
-  Path: 
-  ScriptName: 
-  Code: 
-  CodeAreaMinHeight: 100
-  CodeAreaMaxHeight: 100
-  Overwrite: 0
-  Chain: []
+  Path: '{<UnityTemplatePath>}'
+  ScriptName: '{<UnityTemplateName>}'
+  Code: 'using System.Collections;
+
+    using System.Collections.Generic;
+
+    using UnityEngine;
+
+
+    public class #SCRIPTNAME#
+
+    {
+
+    }'
+  CodeAreaMinHeight: 150
+  CodeAreaMaxHeight: 150
+  Overwrite: 1
+  Chain:
+  - {fileID: 11500000, guid: 6d2f3b48b75494689bdff97b35b535ed, type: 3}
   DuplicatePrefab: {fileID: 0}
   AttachTarget: {fileID: 0}
   PrefabPath: 
   PrefabName: 
-  AssetsMenuItem: 0
-  Description: 
+  AssetsMenuItem: 1
+  Description: "Unity\u306EC# Script\u306E\u30C6\u30F3\u30D7\u30EC\u30FC\u30C8\u3092\u5909\u66F4\u3057\u307E\u3059"
   IsFoldouts: 010101
   ScrollPos: {x: 0, y: 0}
