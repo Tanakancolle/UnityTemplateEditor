@@ -12,6 +12,7 @@ namespace TemplateEditor
             CreateGroupSetting,
             ResourcesLoadSupport,
             UnityTemplateChange,
+            VisualTreeNameTable,
         }
 
         private const string MenuItemPrefix = "Tools/Template Editor/";
@@ -42,6 +43,13 @@ namespace TemplateEditor
         {
             UnityCSharpTemplatePathProcessor.Execute();
         }
+
+        [MenuItem(ToolsPrefix + "Create VisualTreeName Table", false, OriginalPriorityNumber + (int)Priority.VisualTreeNameTable)]
+        public static void ExecuteVisualTreeNameTable()
+        {
+            VisualTreeNameGetProcessor.Execute();
+        }
+
 
         private static void CreateScriptableObject<T>(string dir) where T : ScriptableObject
         {
