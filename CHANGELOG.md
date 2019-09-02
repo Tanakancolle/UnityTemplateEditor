@@ -1,3 +1,7 @@
+### v1.2.2
+
+- VisualTreeName Table を作成する機能を追加
+
 ### v1.2.1
 
 - Resources Support機能を更新

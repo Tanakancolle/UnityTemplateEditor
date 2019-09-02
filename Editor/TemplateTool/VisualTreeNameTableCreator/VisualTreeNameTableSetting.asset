@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
+  m_Name: VisualTreeNameTableSetting
+  m_EditorClassIdentifier: 
+  Path: '{<CreatePath>}'
+  ScriptName: '{<ScriptName>}.cs'
+  Code: "public static class {<ScriptName>}\n{\n    public enum NameType\n    {\n{<Repeat:
+    \       {0},:Types>}\n    }\n\n    private static readonly string[] Names =\n
+    \   {\n{<Repeat:        \"{0}\",:Names>}\n    };\n\n    public static string GetName(NameType
+    type)\n    {\n        return Names[(int) type];\n    }\n}"
+  CodeAreaMinHeight: 300
+  CodeAreaMaxHeight: 300
+  Overwrite: 1
+  Chain:
+  - {fileID: 11500000, guid: cda52c4d71f8e48328ecf4ba2fa2e7e2, type: 3}
+  DuplicatePrefab: {fileID: 0}
+  AttachTarget: {fileID: 0}
+  PrefabPath: 
+  PrefabName: 
+  AssetsMenuItem: 0
+  Description: 
+  IsFoldouts: 010101
+  ScrollPos: {x: 0, y: 0}
