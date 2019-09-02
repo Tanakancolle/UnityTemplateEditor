@@ -1,3 +1,9 @@
+### v1.2.0
+
+- Template Tool を追加
+    - Resources Support機能を本機能に統合
+    - Unity C# Script のTemplateを変更する機能を追加
+
 ### v1.1.0
 
 - 置き換え文字中の置き換え文字に対応
