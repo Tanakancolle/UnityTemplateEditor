@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
+  m_Name: UnityCSharpTemplateSetting
+  m_EditorClassIdentifier: 
+  Path: '{<UnityTemplatePath>}'
+  ScriptName: '{<UnityTemplateName>}'
+  Code: 'using System.Collections;
+
+    using System.Collections.Generic;
+
+    using UnityEngine;
+
+
+    public class #SCRIPTNAME#
+
+    {
+
+    }'
+  CodeAreaMinHeight: 150
+  CodeAreaMaxHeight: 150
+  Overwrite: 1
+  Chain:
+  - {fileID: 11500000, guid: 6d2f3b48b75494689bdff97b35b535ed, type: 3}
+  DuplicatePrefab: {fileID: 0}
+  AttachTarget: {fileID: 0}
+  PrefabPath: 
+  PrefabName: 
+  AssetsMenuItem: 0
+  Description: "Unity\u306EC# Script\u306E\u30C6\u30F3\u30D7\u30EC\u30FC\u30C8\u3092\u5909\u66F4\u3057\u307E\u3059"
+  IsFoldouts: 010101
+  ScrollPos: {x: 0, y: 0}

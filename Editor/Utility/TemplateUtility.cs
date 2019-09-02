@@ -141,6 +141,12 @@ namespace TemplateEditor
             return Directory.Exists(path) ? path : Path.GetDirectoryName(path);
         }
 
+        public static string GetFilePathFromFileName(string fileName)
+        {
+            var files = Directory.GetFiles("Assets", fileName, SearchOption.AllDirectories);
+            return files.Length > 0 ? Path.GetDirectoryName(files[0]) : null;
+        }
+
         #region Config Value
 
         public static void SetConfigValue(string name, string value)

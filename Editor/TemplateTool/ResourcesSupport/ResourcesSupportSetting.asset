@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
+  m_Name: ResourcesSupportSetting
+  m_EditorClassIdentifier: 
+  Path: '{<CreatePath>}'
+  ScriptName: '{<ScriptName>}.cs'
+  Code: "{<Repeat:using {0};:Usings>}\n\npublic class {<ScriptName>}\n{\n{<Repeat:\n
+    \   public enum {0}Name\n    {\n{\\<EnumTab>\\}{1},\n    }\n:Enums>}\n{<Repeat:\n
+    \   public static readonly string[] {0}Paths = new string[]\n    {\n{\\<PathTab>\\}{1},\n
+    \   };\n:Paths>}\n{<Repeat:\n    public static {0} {1}({2}Name type)\n    {\n
+    \       return Resources.{1}<{2}>({2}Paths[(int)type]);\n    }\n:Methods>}\n}"
+  CodeAreaMinHeight: 350
+  CodeAreaMaxHeight: 350
+  Overwrite: 1
+  Chain:
+  - {fileID: 11400000, guid: 2c9e7c9a1b39a426c8897063ec0a255c, type: 2}
+  DuplicatePrefab: {fileID: 0}
+  AttachTarget: {fileID: 0}
+  PrefabPath: 
+  PrefabName: 
+  AssetsMenuItem: 0
+  Description: 
+  IsFoldouts: 010101
+  ScrollPos: {x: 0, y: 0}

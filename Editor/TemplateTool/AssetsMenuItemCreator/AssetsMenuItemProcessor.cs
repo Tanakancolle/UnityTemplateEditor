@@ -29,7 +29,7 @@ namespace TemplateEditor
         /// <summary>
         /// 生成を実行
         /// </summary>
-        public static void Create()
+        public static void Execute()
         {
             TemplateUtility.ExecuteSetting(AssetsMenuItemSettingGuid);
         }
@@ -58,9 +58,7 @@ namespace TemplateEditor
 
         public void Process(ProcessMetadata metadata, ProcessDictionary result)
         {
-            var files = Directory.GetFiles("Assets", AssetsMenuItemScriptName + ".cs", SearchOption.AllDirectories);
-            var createPath = files.Length > 0 ? Path.GetDirectoryName(files[0]) : "Assets/TemplateEditorTool/Editor";
-
+            var createPath = TemplateUtility.GetFilePathFromFileName(AssetsMenuItemScriptName + ".cs") ?? "Assets/TemplateEditorTool/Editor";
             result.Add(ReplaceWords[(int) ReplaceWordType.Settings], BuildMenuItemList<TemplateSetting>());
             result.Add(ReplaceWords[(int) ReplaceWordType.GroupSettings], BuildMenuItemList<TemplateGroupSetting>());
             result.Add(ReplaceWords[(int) ReplaceWordType.CreatePath], createPath);

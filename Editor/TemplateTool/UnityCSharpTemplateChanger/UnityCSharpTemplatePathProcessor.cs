@@ -1,11 +1,12 @@
 ﻿using UnityEditor;
 using System.IO;
-using System.Collections.Generic;
 
 namespace TemplateEditor
 {
     public class UnityCSharpTemplatePathProcessor : IProcessChain
     {
+        private static readonly string UnityCSharpTemplateGuid = "9b879173632fa44d7a04ccf182477c2e";
+
         private static readonly string[] ReplaceWords =
         {
             "UnityTemplatePath",
@@ -15,7 +16,6 @@ namespace TemplateEditor
         public void Process(ProcessMetadata metadata, ProcessDictionary result)
         {
             result.Add(ReplaceWords[0], Path.Combine(EditorApplication.applicationContentsPath, "Resources/ScriptTemplates"));
-
             result.Add(ReplaceWords[1], "81-C# Script-NewBehaviourScript.cs.txt");
         }
 
@@ -27,6 +27,11 @@ namespace TemplateEditor
         public string GetDescription()
         {
             return "UnityのC#テンプレートパスを渡します";
+        }
+
+        public static void Execute()
+        {
+            TemplateUtility.OpenEditorWindow(UnityCSharpTemplateGuid);
         }
     }
 }
