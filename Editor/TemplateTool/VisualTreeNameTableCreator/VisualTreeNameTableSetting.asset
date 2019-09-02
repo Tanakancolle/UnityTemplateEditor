@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
-  m_Name: UxmlNameTableSetting
+  m_Name: VisualTreeNameTableSetting
   m_EditorClassIdentifier: 
-  Path: 
+  Path: '{<CreatePath>}'
   ScriptName: '{<ScriptName>}.cs'
   Code: "public static class {<ScriptName>}\n{\n    public enum NameType\n    {\n{<Repeat:
     \       {0},:Types>}\n    }\n\n    private static readonly string[] Names =\n
