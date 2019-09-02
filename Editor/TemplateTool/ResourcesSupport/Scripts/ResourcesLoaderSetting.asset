@@ -21,5 +21,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6ddca123992c6427c970ec944fd13867, type: 2}
   _editUsings:
   - UnityEngine
+  - UnityEngine.Video
   _ignoreFileNames: []
   _ignorePathPatterns: []
