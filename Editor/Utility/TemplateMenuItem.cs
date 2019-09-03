@@ -11,6 +11,7 @@ namespace TemplateEditor
             CreateSetting,
             CreateGroupSetting,
             ResourcesLoadSupport,
+            CustomEditorCreator,
             UnityTemplateChange,
             VisualTreeNameTable,
         }
@@ -36,6 +37,12 @@ namespace TemplateEditor
         public static void ExecuteResourcesLoadSupport()
         {
             ResourcesLoaderSetting.Execute();
+        }
+
+        [MenuItem(ToolsPrefix + "Open CustomEditor Creator", false, OriginalPriorityNumber + (int)Priority.CustomEditorCreator)]
+        public static void OpenCustomEditorCreator()
+        {
+            CustomEditorCreateWindow.Open();
         }
 
         [MenuItem(ToolsPrefix + "Change Unity C# Template", false, OriginalPriorityNumber + (int)Priority.UnityTemplateChange)]
