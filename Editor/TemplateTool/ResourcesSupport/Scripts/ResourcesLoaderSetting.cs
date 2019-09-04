@@ -35,18 +35,6 @@ namespace TemplateEditor
             "Methods",
         };
 
-        private enum TabSpaceType
-        {
-            Enum,
-            Path,
-        }
-
-        private static readonly string[] TabSpaceWords = new[]
-        {
-            "EnumTab",
-            "PathTab",
-        };
-
         public static void Execute()
         {
             TemplateUtility.ExecuteSetting(ResourcesLoaderTemplateGuid);
@@ -90,12 +78,14 @@ namespace TemplateEditor
                     continue;
                 }
 
-                filePathsList.Add(new string[] {parameter.TypeName, string.Join(",\n" + GetTabSpace(TabSpaceType.Path, result), paths.Select(path => "\"" + path + "\"").ToArray())});
+                // スペースは8文字に
+                var tab = new string(' ', 8);
+                filePathsList.Add(new string[] {parameter.TypeName, string.Join(",\n" + tab, paths.Select(path => "\"" + path + "\"").ToArray())});
 
                 // ファイルパスからファイル名を取得
                 // TODO : StringBuilderExtension.ConvertEnumName
                 var fileNames = paths.Select(Path.GetFileNameWithoutExtension).Select(StringBuilderExtension.ConvertEnumName);
-                fileNamesList.Add(new string[] {parameter.TypeName, string.Join(",\n" + GetTabSpace(TabSpaceType.Enum, result), fileNames.ToArray())});
+                fileNamesList.Add(new string[] {parameter.TypeName, string.Join(",\n" + tab, fileNames.ToArray())});
 
                 var intValue = (int) parameter.EditLoadType;
                 for (int i = 0; i < enumValues.Length; ++i)
@@ -173,25 +163,7 @@ namespace TemplateEditor
 
         public string GetDescription()
         {
-            var builder = new StringBuilder();
-            foreach (var word in TabSpaceWords)
-            {
-                builder.Append(word + ", ");
-            }
-
-            return "設定に従い、Resourcesフォルダ内のアセット情報を受け渡します\n※次の置き換え文字を設定する必要があります : " + builder;
-        }
-
-        private string GetTabSpace(TabSpaceType type, ProcessDictionary result)
-        {
-            var tabSpace = string.Empty;
-            object tabSpaceObject;
-            if (result.TryGetValue(TabSpaceWords[(int)type], out tabSpaceObject))
-            {
-                tabSpace = tabSpaceObject.ToString();
-            }
-
-            return tabSpace;
+            return "設定に従い、Resourcesフォルダ内のアセット情報を受け渡します";
         }
 
         #endregion

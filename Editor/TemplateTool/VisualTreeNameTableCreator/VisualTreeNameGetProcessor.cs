@@ -20,18 +20,6 @@ namespace TemplateEditor
             "Methods"
         };
 
-        private enum TabSpaceType
-        {
-            Enum,
-            Name,
-        }
-
-        private static readonly string[] TabSpaceWords = new[]
-        {
-            "EnumTab",
-            "NameTab",
-        };
-
         [SerializeField]
         private VisualTreeAsset[] _targets = new VisualTreeAsset[1];
 
@@ -49,8 +37,9 @@ namespace TemplateEditor
                 }
 
                 GetNames(target.CloneTree().Children(), nameList);
-                typeNameList.Add(new[] {target.name, string.Join(",\n" + GetTabSpace(TabSpaceType.Enum, result), nameList.Select(StringBuilderExtension.ConvertEnumName).ToArray())});
-                elementNameList.Add(new[] {target.name, string.Join(",\n" + GetTabSpace(TabSpaceType.Name, result), nameList.Select(n => "\"" + n + "\"").ToArray())});
+                var tab = new string(' ', 8);
+                typeNameList.Add(new[] {target.name, string.Join(",\n" + tab, nameList.Select(StringBuilderExtension.ConvertEnumName).ToArray())});
+                elementNameList.Add(new[] {target.name, string.Join(",\n" + tab, nameList.Select(n => "\"" + n + "\"").ToArray())});
                 nameList.Clear();
 
                 targetNameList.Add(target.name);
@@ -61,18 +50,6 @@ namespace TemplateEditor
             result.Add(ReplaceWords[2], typeNameList);
             result.Add(ReplaceWords[3], elementNameList);
             result.Add(ReplaceWords[4], targetNameList);
-        }
-
-        private string GetTabSpace(TabSpaceType type, ProcessDictionary result)
-        {
-            var tabSpace = string.Empty;
-            object tabSpaceObject;
-            if (result.TryGetValue(TabSpaceWords[(int)type], out tabSpaceObject))
-            {
-                tabSpace = tabSpaceObject.ToString();
-            }
-
-            return tabSpace;
         }
 
         private void GetNames(IEnumerable<VisualElement> children, HashSet<string> nameList)
