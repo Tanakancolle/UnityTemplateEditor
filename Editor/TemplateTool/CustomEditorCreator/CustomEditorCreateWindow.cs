@@ -6,7 +6,6 @@ using UnityEditor;
 
 namespace TemplateEditor
 {
-    [CreateAssetMenu]
     public class CustomEditorCreateWindow : EditorWindow
     {
         private static readonly string EmptyScriptableObjectGuid = "7b47cc4df51e64f73aa22432250a8be5";

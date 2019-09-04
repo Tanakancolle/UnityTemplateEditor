@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace TemplateEditor
 {
-    public class VisualTreeNameGetProcessor : IProcessChain
+    public class VisualTreeNameGetProcessor : ScriptableObject, IProcessChain
     {
-        private static readonly string VisualTreeNameTableGuid = "92abed5f6c60344de969f42f7320a23b";
         private static readonly string ScriptName = "VisualTreeNameTable";
 
         private static readonly string[] ReplaceWords =
@@ -17,25 +17,62 @@ namespace TemplateEditor
             "ScriptName",
             "Types",
             "Names",
+            "Methods"
         };
+
+        private enum TabSpaceType
+        {
+            Enum,
+            Name,
+        }
+
+        private static readonly string[] TabSpaceWords = new[]
+        {
+            "EnumTab",
+            "NameTab",
+        };
+
+        [SerializeField]
+        private VisualTreeAsset[] _targets = new VisualTreeAsset[1];
 
         public void Process(ProcessMetadata metadata, ProcessDictionary result)
         {
+            var typeNameList = new List<string[]>();
+            var elementNameList = new List<string[]>();
             var nameList = new HashSet<string>();
-            foreach (var path in TemplateUtility.FindAssetPaths(typeof(VisualTreeAsset)))
+            var targetNameList = new List<string>();
+            foreach (var target in _targets)
             {
-                if (path.StartsWith("Assets/") == false)
+                if (target == null)
                 {
                     continue;
                 }
-                var treeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path);
-                GetNames(treeAsset.CloneTree().Children(), nameList);
+
+                GetNames(target.CloneTree().Children(), nameList);
+                typeNameList.Add(new[] {target.name, string.Join(",\n" + GetTabSpace(TabSpaceType.Enum, result), nameList.Select(StringBuilderExtension.ConvertEnumName).ToArray())});
+                elementNameList.Add(new[] {target.name, string.Join(",\n" + GetTabSpace(TabSpaceType.Name, result), nameList.Select(n => "\"" + n + "\"").ToArray())});
+                nameList.Clear();
+
+                targetNameList.Add(target.name);
             }
 
             result.Add(ReplaceWords[0], TemplateUtility.GetFilePathFromFileName(ScriptName + ".cs") ?? "Assets");
             result.Add(ReplaceWords[1], ScriptName);
-            result.Add(ReplaceWords[2], nameList.Select(StringBuilderExtension.ConvertEnumName).ToArray());
-            result.Add(ReplaceWords[3], nameList.ToArray());
+            result.Add(ReplaceWords[2], typeNameList);
+            result.Add(ReplaceWords[3], elementNameList);
+            result.Add(ReplaceWords[4], targetNameList);
+        }
+
+        private string GetTabSpace(TabSpaceType type, ProcessDictionary result)
+        {
+            var tabSpace = string.Empty;
+            object tabSpaceObject;
+            if (result.TryGetValue(TabSpaceWords[(int)type], out tabSpaceObject))
+            {
+                tabSpace = tabSpaceObject.ToString();
+            }
+
+            return tabSpace;
         }
 
         private void GetNames(IEnumerable<VisualElement> children, HashSet<string> nameList)
@@ -58,11 +95,6 @@ namespace TemplateEditor
         public string GetDescription()
         {
             return "Uxmlファイルから `name` 要素を取得します";
-        }
-
-        public static void Execute()
-        {
-            TemplateUtility.OpenEditorWindow(VisualTreeNameTableGuid);
         }
     }
 }
