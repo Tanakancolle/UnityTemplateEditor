@@ -263,14 +263,17 @@ namespace TemplateEditor
                 result = new ProcessDictionary();
             }
 
-            foreach (var replace in replaces)
+            if (replaces != null)
             {
-                if (string.IsNullOrEmpty(replace.ReplaceWord))
+                foreach (var replace in replaces)
                 {
-                    continue;
-                }
+                    if (string.IsNullOrEmpty(replace.ReplaceWord))
+                    {
+                        continue;
+                    }
 
-                result[replace.Key] = replace.ReplaceWord;
+                    result[replace.Key] = replace.ReplaceWord;
+                }
             }
 
             ExecuteChain(status, result);

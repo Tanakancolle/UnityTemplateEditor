@@ -11,8 +11,9 @@ namespace TemplateEditor
             CreateSetting,
             CreateGroupSetting,
             ResourcesLoadSupport,
+            CustomEditorCreator,
             UnityTemplateChange,
-            VisualTreeNameTable,
+            VisualTreeNameTableCreator,
         }
 
         private const string MenuItemPrefix = "Tools/Template Editor/";
@@ -38,6 +39,12 @@ namespace TemplateEditor
             ResourcesLoaderSetting.Execute();
         }
 
+        [MenuItem(ToolsPrefix + "Open CustomEditor Creator", false, OriginalPriorityNumber + (int)Priority.CustomEditorCreator)]
+        public static void OpenCustomEditorCreator()
+        {
+            CustomEditorCreateWindow.Open();
+        }
+
         [MenuItem(ToolsPrefix + "Change Unity C# Template", false, OriginalPriorityNumber + (int)Priority.UnityTemplateChange)]
         public static void ExecuteChangeUniteTemplate()
         {
@@ -45,10 +52,10 @@ namespace TemplateEditor
         }
 
 #if UNITY_2019_1_OR_NEWER
-        [MenuItem(ToolsPrefix + "Create VisualTreeName Table", false, OriginalPriorityNumber + (int)Priority.VisualTreeNameTable)]
+        [MenuItem(ToolsPrefix + "Open VisualTreeName Creator", false, OriginalPriorityNumber + (int)Priority.VisualTreeNameTableCreator)]
         public static void ExecuteVisualTreeNameTable()
         {
-            VisualTreeNameGetProcessor.Execute();
+            VisualTreeNameCreatorWindow.Open();
         }
 #endif
 

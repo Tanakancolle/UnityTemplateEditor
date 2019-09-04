@@ -136,6 +136,14 @@ namespace TemplateEditor
             editor.Create(result);
         }
 
+        public static void ExecuteGroupSetting(string guid, ProcessDictionary result = null)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            var asset = AssetDatabase.LoadAssetAtPath<TemplateGroupSetting>(path);
+            var editor = Editor.CreateEditor(asset) as TemplateGroupSettingEditor;
+            editor.CreateScript(null, true, result);
+        }
+
         public static string GetDirectoryPath(string path)
         {
             return Directory.Exists(path) ? path : Path.GetDirectoryName(path);

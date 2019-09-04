@@ -136,25 +136,25 @@ namespace TemplateEditor
             {
                 if (GUILayout.Button("Create"))
                 {
-                    CreateScript(true);
+                    CreateScript(_replaceList, true);
                     return;
                 }
 
                 if (GUILayout.Button("No Refresh Create"))
                 {
 
-                    CreateScript(false);
+                    CreateScript(_replaceList, false);
                     return;
                 }
             }
             EditorGUILayout.EndHorizontal();
         }
 
-        private void CreateScript(bool isRefresh)
+        public void CreateScript(List<ReplaceInfo> replaceList, bool isRefresh, ProcessDictionary result = null)
         {
             foreach (var status in _statusList)
             {
-                TemplateSettingEditor.CreateScript(status, _replaceList, null, isRefresh);
+                TemplateSettingEditor.CreateScript(status, replaceList, result, isRefresh);
             }
         }
 
