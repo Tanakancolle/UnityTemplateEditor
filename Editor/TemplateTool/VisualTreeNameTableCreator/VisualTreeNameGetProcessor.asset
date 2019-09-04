@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cda52c4d71f8e48328ecf4ba2fa2e7e2, type: 3}
-  m_Name: New Visual Tree Name Get Processor
+  m_Name: VisualTreeNameGetProcessor
   m_EditorClassIdentifier: 
-  targets: []
+  _targets: []

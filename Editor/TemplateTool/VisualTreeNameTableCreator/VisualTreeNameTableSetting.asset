@@ -14,15 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: '{<CreatePath>}'
   ScriptName: '{<ScriptName>}.cs'
-  Code: "public static class {<ScriptName>}\n{\n    public enum NameType\n    {\n{<Repeat:
-    \       {0},:Types>}\n    }\n\n    private static readonly string[] Names =\n
-    \   {\n{<Repeat:        \"{0}\",:Names>}\n    };\n\n    public static string GetName(NameType
-    type)\n    {\n        return Names[(int) type];\n    }\n}"
+  Code: "public static class {<ScriptName>}\n{\n{<Repeat:\n    public enum {0}Element\n
+    \   {\n{\\<EnumTab>\\}{1},\n    }\n:Types>}\n{<Repeat:\n    public static readonly
+    string[] {0}Names =\n    {\n{\\<NameTab>\\}{1},\n    };\n:Names>}\n{<Repeat:\n
+    \   public static string GetName({0}Element type)\n    {\n        return {0}Names[(int)
+    type];\n    }\n:Methods>}\n}"
   CodeAreaMinHeight: 300
   CodeAreaMaxHeight: 300
   Overwrite: 1
   Chain:
-  - {fileID: 11500000, guid: cda52c4d71f8e48328ecf4ba2fa2e7e2, type: 3}
+  - {fileID: 11400000, guid: 84611633f6726434f8d0065957b8d1ea, type: 2}
   DuplicatePrefab: {fileID: 0}
   AttachTarget: {fileID: 0}
   PrefabPath: 
@@ -30,4 +31,4 @@ MonoBehaviour:
   AssetsMenuItem: 0
   Description: 
   IsFoldouts: 010101
-  ScrollPos: {x: 0, y: 0}
+  ScrollPos: {x: 0, y: 7}
