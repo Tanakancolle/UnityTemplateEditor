@@ -15,10 +15,10 @@ MonoBehaviour:
   Path: '{<CreatePath>}'
   ScriptName: '{<ScriptName>}.cs'
   Code: "public static class {<ScriptName>}\n{\n{<Repeat:\n    public enum {0}Element\n
-    \   {\n{\\<EnumTab>\\}{1},\n    }\n:Types>}\n{<Repeat:\n    public static readonly
-    string[] {0}Names =\n    {\n{\\<NameTab>\\}{1},\n    };\n:Names>}\n{<Repeat:\n
-    \   public static string GetName({0}Element type)\n    {\n        return {0}Names[(int)
-    type];\n    }\n:Methods>}\n}"
+    \   {\n        {1},\n    }:Types>}\n{<Repeat:\n    public static readonly string[]
+    {0}Names =\n    {\n        {1},\n    };:Names>}\n{<Repeat:\n    public static
+    string GetName({0}Element type)\n    {\n        return {0}Names[(int) type];\n
+    \   }:Methods>}\n}"
   CodeAreaMinHeight: 300
   CodeAreaMaxHeight: 300
   Overwrite: 1
@@ -31,4 +31,4 @@ MonoBehaviour:
   AssetsMenuItem: 0
   Description: 
   IsFoldouts: 010101
-  ScrollPos: {x: 0, y: 7}
+  ScrollPos: {x: 0, y: 0}

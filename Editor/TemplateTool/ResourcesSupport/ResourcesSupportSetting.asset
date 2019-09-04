@@ -15,10 +15,10 @@ MonoBehaviour:
   Path: '{<CreatePath>}'
   ScriptName: '{<ScriptName>}.cs'
   Code: "{<Repeat:using {0};:Usings>}\n\npublic class {<ScriptName>}\n{\n{<Repeat:\n
-    \   public enum {0}Name\n    {\n{\\<EnumTab>\\}{1},\n    }\n:Enums>}\n{<Repeat:\n
-    \   public static readonly string[] {0}Paths = new string[]\n    {\n{\\<PathTab>\\}{1},\n
-    \   };\n:Paths>}\n{<Repeat:\n    public static {0} {1}({2}Name type)\n    {\n
-    \       return Resources.{1}<{2}>({2}Paths[(int)type]);\n    }\n:Methods>}\n}"
+    \   public enum {0}Name\n    {\n        {1},\n    }:Enums>}\n{<Repeat:\n    public
+    static readonly string[] {0}Paths = new string[]\n    {\n        {1},\n    };:Paths>}\n{<Repeat:\n
+    \   public static {0} {1}({2}Name type)\n    {\n        return Resources.{1}<{2}>({2}Paths[(int)type]);\n
+    \   }:Methods>}\n}"
   CodeAreaMinHeight: 350
   CodeAreaMaxHeight: 350
   Overwrite: 1
