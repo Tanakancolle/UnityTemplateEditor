@@ -8,7 +8,6 @@ namespace TemplateEditor
 {
     public class CustomEditorCreateWindow : EditorWindow
     {
-        private static readonly string EmptyScriptableObjectGuid = "7b47cc4df51e64f73aa22432250a8be5";
         private static readonly string CustomEditorCreateGroupSettingGuid = "39929be43dcc041049feecc87d7f23d3";
 
         public static void Open()
@@ -32,10 +31,7 @@ namespace TemplateEditor
                 return;
             }
 
-            var empty = AssetDatabase.LoadAssetAtPath<ScriptableObject>(AssetDatabase.GUIDToAssetPath(EmptyScriptableObjectGuid));
-            var emptySerializeNames = GetSerializeNames(empty);
-            var targetSerializeNames = GetSerializeNames(_targetScriptableObject);
-            var targetUseSerializeNames = targetSerializeNames.Where(n => emptySerializeNames.Contains(n) == false).ToArray();
+            var targetUseSerializeNames = ScriptableObjectUtility.GetSerializeNamesWithoutDefault(_targetScriptableObject);
 
             var type = _targetScriptableObject.GetType();
             var targetName = type.Name;
@@ -54,21 +50,6 @@ namespace TemplateEditor
             result.Add("PropertyNames", targetUseSerializeNames);
 
             TemplateUtility.ExecuteGroupSetting(CustomEditorCreateGroupSettingGuid, result);
-        }
-
-        private List<string> GetSerializeNames(ScriptableObject target)
-        {
-            var list = new List<string>();
-            var serializedObject = new SerializedObject(target);
-            var property = serializedObject.GetIterator();
-            property.Next(true);
-            list.Add(property.name);
-            while (property.Next(false))
-            {
-                list.Add(property.name);
-            }
-
-            return list;
         }
     }
 }
