@@ -8,8 +8,6 @@ namespace TemplateEditor
 {
     public class CustomEditorCreateWindow : EditorWindow
     {
-        private static readonly string CustomEditorCreateGroupSettingGuid = "39929be43dcc041049feecc87d7f23d3";
-
         public static void Open()
         {
             GetWindow<CustomEditorCreateWindow>(true);
@@ -49,7 +47,8 @@ namespace TemplateEditor
             result.Add("TypeNames", targetUseSerializeNames.Select(StringBuilderExtension.ConvertEnumName).ToArray());
             result.Add("PropertyNames", targetUseSerializeNames);
 
-            TemplateUtility.ExecuteGroupSetting(CustomEditorCreateGroupSettingGuid, result);
+            var setting = ToolExecutor.GetUseUserSetting().GetSetting(UserSettingBase.GroupSettingType.CustomEditorCreator);
+            TemplateUtility.ExecuteGroupSetting(setting, result);
         }
     }
 }

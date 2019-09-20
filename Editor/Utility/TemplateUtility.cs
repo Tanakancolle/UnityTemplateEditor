@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace TemplateEditor
 {
@@ -123,8 +124,12 @@ namespace TemplateEditor
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);
-            var editor = Editor.CreateEditor(asset);
+            OpenEditorWindow(asset);
+        }
 
+        public static void OpenEditorWindow(Object asset)
+        {
+            var editor = Editor.CreateEditor(asset);
             EditorPreviewWindow.Open(editor);
         }
 
@@ -132,7 +137,12 @@ namespace TemplateEditor
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var asset = AssetDatabase.LoadAssetAtPath<TemplateSetting>(path);
-            var editor = Editor.CreateEditor(asset) as TemplateSettingEditor;
+            ExecuteSetting(asset);
+        }
+
+        public static void ExecuteSetting(TemplateSetting setting, ProcessDictionary result = null)
+        {
+            var editor = Editor.CreateEditor(setting) as TemplateSettingEditor;
             editor.Create(result);
         }
 
@@ -140,7 +150,12 @@ namespace TemplateEditor
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var asset = AssetDatabase.LoadAssetAtPath<TemplateGroupSetting>(path);
-            var editor = Editor.CreateEditor(asset) as TemplateGroupSettingEditor;
+            ExecuteGroupSetting(asset);
+        }
+
+        public static void ExecuteGroupSetting(TemplateGroupSetting setting, ProcessDictionary result = null)
+        {
+            var editor = Editor.CreateEditor(setting) as TemplateGroupSettingEditor;
             editor.CreateScript(null, true, result);
         }
 

@@ -6,10 +6,14 @@ namespace TemplateEditor
 {
     public class TemplateMenuItem
     {
-        private enum Priority
+        private enum ScriptableObjectPriority
         {
             CreateSetting,
             CreateGroupSetting,
+        }
+
+        public enum ToolPriority
+        {
             ResourcesLoadSupport,
             CustomEditorCreator,
             UnityTemplateChange,
@@ -21,41 +25,41 @@ namespace TemplateEditor
         private const string ToolsPrefix = MenuItemPrefix + "Tools/";
         private const int OriginalPriorityNumber = 1000;
 
-        [MenuItem(ScriptableObjectPrefix + "Create Setting", false, OriginalPriorityNumber + (int)Priority.CreateSetting)]
+        [MenuItem(ScriptableObjectPrefix + "Create Setting", false, OriginalPriorityNumber + (int)ScriptableObjectPriority.CreateSetting)]
         public static void CreateSetting()
         {
             CreateScriptableObject<TemplateSetting>(TemplateUtility.GetActiveFolder());
         }
 
-        [MenuItem(ScriptableObjectPrefix + "Create Group Setting", false, OriginalPriorityNumber + (int)Priority.CreateGroupSetting)]
+        [MenuItem(ScriptableObjectPrefix + "Create Group Setting", false, OriginalPriorityNumber + (int)ScriptableObjectPriority.CreateGroupSetting)]
         public static void CreateGroupSetting()
         {
             CreateScriptableObject<TemplateGroupSetting>(TemplateUtility.GetActiveFolder());
         }
 
-        [MenuItem(ToolsPrefix + "Create ResourcesLoader", false, OriginalPriorityNumber + (int)Priority.ResourcesLoadSupport)]
+        [MenuItem(ToolsPrefix + "Create ResourcesLoader", false, OriginalPriorityNumber + (int)ToolPriority.ResourcesLoadSupport)]
         public static void ExecuteResourcesLoadSupport()
         {
-            ResourcesLoaderSetting.Execute();
+            ToolExecutor.Execute(ToolPriority.ResourcesLoadSupport);
         }
 
-        [MenuItem(ToolsPrefix + "Open CustomEditor Creator", false, OriginalPriorityNumber + (int)Priority.CustomEditorCreator)]
+        [MenuItem(ToolsPrefix + "Open CustomEditor Creator", false, OriginalPriorityNumber + (int)ToolPriority.CustomEditorCreator)]
         public static void OpenCustomEditorCreator()
         {
-            CustomEditorCreateWindow.Open();
+            ToolExecutor.Execute(ToolPriority.CustomEditorCreator);
         }
 
-        [MenuItem(ToolsPrefix + "Change Unity C# Template", false, OriginalPriorityNumber + (int)Priority.UnityTemplateChange)]
+        [MenuItem(ToolsPrefix + "Change Unity C# Template", false, OriginalPriorityNumber + (int)ToolPriority.UnityTemplateChange)]
         public static void ExecuteChangeUniteTemplate()
         {
-            UnityCSharpTemplatePathProcessor.Execute();
+            ToolExecutor.Execute(ToolPriority.UnityTemplateChange);
         }
 
 #if UNITY_2019_1_OR_NEWER
-        [MenuItem(ToolsPrefix + "Open VisualTreeName Creator", false, OriginalPriorityNumber + (int)Priority.VisualTreeNameTableCreator)]
+        [MenuItem(ToolsPrefix + "Open VisualTreeName Creator", false, OriginalPriorityNumber + (int)ToolPriority.VisualTreeNameTableCreator)]
         public static void ExecuteVisualTreeNameTable()
         {
-            VisualTreeNameCreatorWindow.Open();
+            ToolExecutor.Execute(ToolPriority.VisualTreeNameTableCreator);
         }
 #endif
 
@@ -72,5 +76,7 @@ namespace TemplateEditor
             var path = string.Format("{0}.asset", pathWithoutExtension);
             return AssetDatabase.GenerateUniqueAssetPath (path);
         }
+
+
     }
 }
