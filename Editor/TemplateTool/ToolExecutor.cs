@@ -5,6 +5,8 @@ namespace TemplateEditor
 {
     public static class ToolExecutor
     {
+        private static readonly string DefaultSettingGuid = "18ecd24fd3c0a472096ada88c3a417ad";
+
         public static UserSettingBase GetUseUserSetting()
         {
             var paths = TemplateUtility.FindAssetPaths(typeof(UserSetting));
@@ -20,11 +22,7 @@ namespace TemplateEditor
 
             if (string.IsNullOrEmpty(targetPath))
             {
-                foreach (var path in  TemplateUtility.FindAssetPaths(typeof(DefaultUserSetting)))
-                {
-                    targetPath = path;
-                    break;
-                }
+                targetPath = AssetDatabase.GUIDToAssetPath(DefaultSettingGuid);
             }
 
             return AssetDatabase.LoadAssetAtPath<UserSettingBase>(targetPath);
