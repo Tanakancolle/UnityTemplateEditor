@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
+using Object = UnityEngine.Object;
 
 namespace TemplateEditor
 {
@@ -14,12 +16,15 @@ namespace TemplateEditor
         }
 
         private ScriptableObject _targetScriptableObject;
+        private MonoScript _targetScriptableClass;
 
         private void OnGUI()
         {
             _targetScriptableObject = EditorGUILayout.ObjectField(_targetScriptableObject, typeof(ScriptableObject), false) as ScriptableObject;
+            EditorGUILayout.LabelField("  or");
+            _targetScriptableClass = EditorGUILayout.ObjectField(_targetScriptableClass, typeof(MonoScript), false) as MonoScript;
 
-            if (_targetScriptableObject == null)
+            if (_targetScriptableObject == null && _targetScriptableClass == null)
             {
                 return;
             }
@@ -29,11 +34,12 @@ namespace TemplateEditor
                 return;
             }
 
-            var targetUseSerializeNames = ScriptableObjectUtility.GetSerializeNamesWithoutDefault(_targetScriptableObject);
+            var type = _targetScriptableObject?.GetType() ?? _targetScriptableClass.GetClass();
+            var path = Path.GetDirectoryName(AssetDatabase.GetAssetPath((Object)_targetScriptableObject ?? _targetScriptableClass));
+            var targetScriptableObject = ScriptableObject.CreateInstance(type);
 
-            var type = _targetScriptableObject.GetType();
             var targetName = type.Name;
-            var path = Path.GetDirectoryName(AssetDatabase.GetAssetPath(_targetScriptableObject));
+            var targetUseSerializeNames = ScriptableObjectUtility.GetSerializeNamesWithoutDefault(targetScriptableObject);
 
             var customEditorName = targetName + "Editor";
             var propertyGetterName = targetName + "PropertyGetter";
@@ -49,6 +55,8 @@ namespace TemplateEditor
 
             var setting = ToolExecutor.GetUseUserSetting().GetSetting(UserSettingBase.GroupSettingType.CustomEditorCreator);
             TemplateUtility.ExecuteGroupSetting(setting, result);
+
+            DestroyImmediate(targetScriptableObject);
         }
     }
 }

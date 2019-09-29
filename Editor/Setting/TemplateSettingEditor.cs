@@ -16,50 +16,20 @@ namespace TemplateEditor
 {
     public class TemplateSettingStatus
     {
-        /// <summary>
-        /// Property.
-        /// TemplateSetting のメンバ名と同じにする
-        /// </summary>
-        public enum Property
-        {
-            Path,
-            ScriptName,
-            Code,
-            CodeAreaMinHeight,
-            CodeAreaMaxHeight,
-            Overwrite,
-            Chain,
-            DuplicatePrefab,
-            AttachTarget,
-            PrefabPath,
-            PrefabName,
-            AssetsMenuItem,
-            Description,
-            IsFoldouts,
-            ScrollPos,
-        }
-
         public readonly SerializedObject TargetSerializedObject;
         public readonly TemplateSetting TargetTemplateSetting;
+        public readonly ReorderableList ChainReorderableList;
         public bool IsUpdateText;
-        public ReorderableList ChainReorderableList;
 
-        private readonly SerializedProperty[] _properties;
-
+        private readonly TemplateSettingPropertyGetter _propertyGetter;
 
         public TemplateSettingStatus(SerializedObject targetSerializedObject)
         {
             TargetSerializedObject = targetSerializedObject;
             TargetTemplateSetting = targetSerializedObject.targetObject as TemplateSetting;
+            _propertyGetter = new TemplateSettingPropertyGetter(targetSerializedObject);
 
-            var names = Enum.GetNames(typeof(Property));
-            _properties = new SerializedProperty[names.Length];
-            for (int i = 0; i < _properties.Length; ++i)
-            {
-                _properties[i] = targetSerializedObject.FindProperty(names[i]);
-            }
-
-            ChainReorderableList = new ReorderableList(targetSerializedObject, GetProperty(Property.Chain))
+            ChainReorderableList = new ReorderableList(targetSerializedObject, GetProperty(TemplateSettingPropertyGetter.Property.Chain))
             {
                 drawElementCallback = DrawChainListElement,
                 drawHeaderCallback = (rect) => { EditorGUI.LabelField(rect, "List"); },
@@ -68,16 +38,16 @@ namespace TemplateEditor
 
         private void DrawChainListElement(Rect rect, int index, bool isActive, bool isFocuse)
         {
-            var element = GetProperty(Property.Chain).GetArrayElementAtIndex (index);
+            var element = GetProperty(TemplateSettingPropertyGetter.Property.Chain).GetArrayElementAtIndex (index);
             rect.height -= 4f;
             rect.y += 2f;
             rect.xMin += 20f;
             EditorGUI.PropertyField(rect, element, GUIContent.none);
         }
 
-        public SerializedProperty GetProperty(Property type)
+        public SerializedProperty GetProperty(TemplateSettingPropertyGetter.Property type)
         {
-            return _properties[(int) type];
+            return _propertyGetter.GetProperty(type);
         }
     }
 
@@ -110,7 +80,7 @@ namespace TemplateEditor
                 new FoldoutInfo("Pre Process", () => DrawChain(SettingStatus)),
             };
 
-            var property = SettingStatus.GetProperty(TemplateSettingStatus.Property.IsFoldouts);
+            var property = SettingStatus.GetProperty(TemplateSettingPropertyGetter.Property.IsFoldouts);
             for (int i = 0; i < _foldouts.Length; ++i)
             {
                 if (property.arraySize <= i)
@@ -122,7 +92,7 @@ namespace TemplateEditor
             }
 
             _descriptionFoldout = new FoldoutInfo("Description", DrawDescription);
-            _descriptionFoldout.IsFoldout = string.IsNullOrEmpty(SettingStatus.GetProperty(TemplateSettingStatus.Property.Description).stringValue) == false;
+            _descriptionFoldout.IsFoldout = string.IsNullOrEmpty(SettingStatus.GetProperty(TemplateSettingPropertyGetter.Property.Description).stringValue) == false;
 
             UpdateReplaceList(true);
         }
@@ -156,7 +126,7 @@ namespace TemplateEditor
                 // setting create path
                 EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
                 {
-                    var property = status.GetProperty(TemplateSettingStatus.Property.Path);
+                    var property = status.GetProperty(TemplateSettingPropertyGetter.Property.Path);
                     EditorGUILayout.PropertyField(property, new GUIContent("Create Path"));
 
                     var paths = EditorGUIHelper.DrawDragAndDropArea();
@@ -178,7 +148,7 @@ namespace TemplateEditor
 
                 EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
                 {
-                    EditorGUILayout.PropertyField(status.GetProperty(TemplateSettingStatus.Property.ScriptName), new GUIContent("Script Name"));
+                    EditorGUILayout.PropertyField(status.GetProperty(TemplateSettingPropertyGetter.Property.ScriptName), new GUIContent("Script Name"));
                     if (string.IsNullOrEmpty(status.TargetTemplateSetting.ScriptName))
                     {
                         EditorGUILayout.HelpBox("Example: Example.cs", MessageType.Info);
@@ -250,7 +220,7 @@ namespace TemplateEditor
         {
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                var property = status.GetProperty(TemplateSettingStatus.Property.Overwrite);
+                var property = status.GetProperty(TemplateSettingPropertyGetter.Property.Overwrite);
                 EditorGUILayout.PropertyField(property, new GUIContent("Overwrite Type"));
             }
             EditorGUILayout.EndVertical();
@@ -279,18 +249,18 @@ namespace TemplateEditor
             ExecuteChain(status, result);
 
             // 生成ディレクトリが指定されていなければアクティブなパスへ作成
-            var createDirectory = status.GetProperty(TemplateSettingStatus.Property.Path).stringValue;
+            var createDirectory = status.GetProperty(TemplateSettingPropertyGetter.Property.Path).stringValue;
             var createPath = Path.Combine(
                 string.IsNullOrEmpty(createDirectory) == false ? createDirectory : TemplateUtility.GetActiveFolder(),
-                status.GetProperty(TemplateSettingStatus.Property.ScriptName).stringValue
+                status.GetProperty(TemplateSettingPropertyGetter.Property.ScriptName).stringValue
             );
-            var code = status.GetProperty(TemplateSettingStatus.Property.Code).stringValue;
+            var code = status.GetProperty(TemplateSettingPropertyGetter.Property.Code).stringValue;
 
             var path = Replace(createPath, result);
             TemplateUtility.CreateScript(
                 path,
                 Replace(code, result),
-                (TemplateUtility.OverwriteType) status.GetProperty(TemplateSettingStatus.Property.Overwrite).enumValueIndex
+                (TemplateUtility.OverwriteType) status.GetProperty(TemplateSettingPropertyGetter.Property.Overwrite).enumValueIndex
             );
 
             if (isRefresh)
@@ -300,8 +270,8 @@ namespace TemplateEditor
             }
 
             // プレハブ生成登録
-            var prefabObject = status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab).objectReferenceValue as GameObject;
-            var targetObject = status.GetProperty(TemplateSettingStatus.Property.AttachTarget).objectReferenceValue as GameObject;
+            var prefabObject = status.GetProperty(TemplateSettingPropertyGetter.Property.DuplicatePrefab).objectReferenceValue as GameObject;
+            var targetObject = status.GetProperty(TemplateSettingPropertyGetter.Property.AttachTarget).objectReferenceValue as GameObject;
             if (prefabObject != null && targetObject != null)
             {
                 TemplatePrefabCreator.AddTempCreatePrefabSetting(status.TargetTemplateSetting, path);
@@ -319,7 +289,7 @@ namespace TemplateEditor
         public static void ExecuteChain(TemplateSettingStatus status, ProcessDictionary result)
         {
             var metadata = new ProcessMetadata(status.TargetTemplateSetting);
-            var property = status.GetProperty(TemplateSettingStatus.Property.Chain);
+            var property = status.GetProperty(TemplateSettingPropertyGetter.Property.Chain);
             for (int i = 0; i < property.arraySize; ++i)
             {
                 TemplateUtility.ExecuteProcessChain(property.GetArrayElementAtIndex(i).objectReferenceValue, metadata, result);
@@ -353,8 +323,8 @@ namespace TemplateEditor
 
         public static void DrawCode(TemplateSettingStatus status)
         {
-            var minHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMinHeight);
-            var maxHeight = status.GetProperty(TemplateSettingStatus.Property.CodeAreaMaxHeight);
+            var minHeight = status.GetProperty(TemplateSettingPropertyGetter.Property.CodeAreaMinHeight);
+            var maxHeight = status.GetProperty(TemplateSettingPropertyGetter.Property.CodeAreaMaxHeight);
             if (maxHeight.floatValue > 0f && maxHeight.floatValue < minHeight.floatValue)
             {
                 maxHeight.floatValue = minHeight.floatValue;
@@ -369,14 +339,14 @@ namespace TemplateEditor
 
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                var code = status.GetProperty(TemplateSettingStatus.Property.Code).stringValue;
-                var scrollPos = status.GetProperty(TemplateSettingStatus.Property.ScrollPos);
+                var code = status.GetProperty(TemplateSettingPropertyGetter.Property.Code).stringValue;
+                var scrollPos = status.GetProperty(TemplateSettingPropertyGetter.Property.ScrollPos);
                 var scroll = scrollPos.vector2Value;
                 var editedCode = SyntaxHighlightUtility.DrawCSharpCode(ref scroll, code, 12, minHeight.floatValue, maxHeight.floatValue);
                 scrollPos.vector2Value = scroll;
                 if (editedCode != code)
                 {
-                    status.GetProperty(TemplateSettingStatus.Property.Code).stringValue = editedCode;
+                    status.GetProperty(TemplateSettingPropertyGetter.Property.Code).stringValue = editedCode;
                     status.IsUpdateText = true;
                     Undo.IncrementCurrentGroup();
                 }
@@ -388,8 +358,8 @@ namespace TemplateEditor
         {
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                var prefabProperty = status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab);
-                var targetProperty = status.GetProperty(TemplateSettingStatus.Property.AttachTarget);
+                var prefabProperty = status.GetProperty(TemplateSettingPropertyGetter.Property.DuplicatePrefab);
+                var targetProperty = status.GetProperty(TemplateSettingPropertyGetter.Property.AttachTarget);
 
                 var oldObj = prefabProperty.objectReferenceValue as GameObject;
                 EditorGUILayout.PropertyField(prefabProperty, new GUIContent("Attach Prefab"), true);
@@ -415,7 +385,7 @@ namespace TemplateEditor
                         PrefabTreeViewWindow.Open(obj, targetProperty.objectReferenceValue as GameObject, (targetObj) =>
                         {
                             status.TargetSerializedObject.Update();
-                            status.GetProperty(TemplateSettingStatus.Property.AttachTarget).objectReferenceValue = targetObj;
+                            status.GetProperty(TemplateSettingPropertyGetter.Property.AttachTarget).objectReferenceValue = targetObj;
                             status.TargetSerializedObject.ApplyModifiedProperties();
                         });
                     }
@@ -426,7 +396,7 @@ namespace TemplateEditor
 
                 EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
                 {
-                    var pathProperty = status.GetProperty(TemplateSettingStatus.Property.PrefabPath);
+                    var pathProperty = status.GetProperty(TemplateSettingPropertyGetter.Property.PrefabPath);
                     EditorGUILayout.PropertyField(pathProperty, new GUIContent("Create Prefab Path"), true);
 
                     var paths = EditorGUIHelper.DrawDragAndDropArea();
@@ -446,7 +416,7 @@ namespace TemplateEditor
 
                 EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
                 {
-                    var nameProperty = status.GetProperty(TemplateSettingStatus.Property.PrefabName);
+                    var nameProperty = status.GetProperty(TemplateSettingPropertyGetter.Property.PrefabName);
                     EditorGUILayout.PropertyField(nameProperty, new GUIContent("Prefab Name"), true);
 
                     if (string.IsNullOrEmpty(nameProperty.stringValue))
@@ -464,7 +434,7 @@ namespace TemplateEditor
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
                 var cache = SettingStatus.TargetTemplateSetting.IsAssetsMenuItem;
-                var isAssetMenuProperty = SettingStatus.GetProperty(TemplateSettingStatus.Property.AssetsMenuItem);
+                var isAssetMenuProperty = SettingStatus.GetProperty(TemplateSettingPropertyGetter.Property.AssetsMenuItem);
                 EditorGUILayout.PropertyField(isAssetMenuProperty, new GUIContent("Add Asset Menu"));
 
                 // 生成時に設定反映が間に合わないため
@@ -509,7 +479,7 @@ namespace TemplateEditor
         {
             EditorGUILayout.BeginVertical(EditorGUIHelper.GetScopeStyle());
             {
-                var property = SettingStatus.GetProperty(TemplateSettingStatus.Property.Description);
+                var property = SettingStatus.GetProperty(TemplateSettingPropertyGetter.Property.Description);
                 // TODO : Cache
                 var style = new GUIStyle(GUI.skin.textArea)
                 {
@@ -522,7 +492,7 @@ namespace TemplateEditor
 
         private void UpdateFoldout()
         {
-            var property = SettingStatus.GetProperty(TemplateSettingStatus.Property.IsFoldouts);
+            var property = SettingStatus.GetProperty(TemplateSettingPropertyGetter.Property.IsFoldouts);
             for (int i = 0; i < _foldouts.Length; ++i)
             {
                 if (property.arraySize <= i)
@@ -545,9 +515,9 @@ namespace TemplateEditor
 
             SettingStatus.IsUpdateText = false;
             var words = ReplaceProcessor.GetReplaceWords(
-                SettingStatus.GetProperty(TemplateSettingStatus.Property.Path).stringValue,
-                SettingStatus.GetProperty(TemplateSettingStatus.Property.ScriptName).stringValue,
-                SettingStatus.GetProperty(TemplateSettingStatus.Property.Code).stringValue
+                SettingStatus.GetProperty(TemplateSettingPropertyGetter.Property.Path).stringValue,
+                SettingStatus.GetProperty(TemplateSettingPropertyGetter.Property.ScriptName).stringValue,
+                SettingStatus.GetProperty(TemplateSettingPropertyGetter.Property.Code).stringValue
             );
 
             RemoveChainWords(words, SettingStatus.TargetTemplateSetting.Chain);
@@ -603,27 +573,6 @@ namespace TemplateEditor
             }
 
             return replaces;
-        }
-
-        private static string ObjectToLogString(object obj)
-        {
-            if (obj == null)
-            {
-                return null;
-            }
-
-            if (obj is ICollection == false)
-            {
-                return obj.ToString();
-            }
-
-            var sb = new StringBuilder();
-            foreach (var element in (ICollection) obj)
-            {
-                sb.AppendLine(ObjectToLogString(element));
-            }
-
-            return sb.ToString();
         }
     }
 }

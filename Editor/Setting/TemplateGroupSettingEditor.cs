@@ -9,11 +9,11 @@ namespace TemplateEditor
     [CustomEditor(typeof(TemplateGroupSetting))]
     public class TemplateGroupSettingEditor : Editor
     {
-        private static readonly TemplateSettingStatus.Property[] ReplaceProperty = new TemplateSettingStatus.Property[]
+        private static readonly TemplateSettingPropertyGetter.Property[] ReplaceProperty = new TemplateSettingPropertyGetter.Property[]
         {
-            TemplateSettingStatus.Property.Path,
-            TemplateSettingStatus.Property.ScriptName,
-            TemplateSettingStatus.Property.Code,
+            TemplateSettingPropertyGetter.Property.Path,
+            TemplateSettingPropertyGetter.Property.ScriptName,
+            TemplateSettingPropertyGetter.Property.Code,
         };
 
         private TemplateGroupSetting _groupSetting;
