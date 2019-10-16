@@ -4,7 +4,7 @@ using System.IO;
 
 namespace TemplateEditor
 {
-    public class TemplateMenuItem
+    public static class TemplateMenuItem
     {
         private enum ScriptableObjectPriority
         {
@@ -20,10 +20,22 @@ namespace TemplateEditor
             VisualTreeNameTableCreator,
         }
 
+        public enum SimpleTemplatePriority
+        {
+            Class,
+            MonoClass,
+            EditorWindow,
+            ScriptableObject,
+        }
+
         private const string MenuItemPrefix = "Tools/Template Editor/";
         private const string ScriptableObjectPrefix = MenuItemPrefix + "Setting Object/";
         private const string ToolsPrefix = MenuItemPrefix + "Tools/";
+        private const string SimpleToolsPrefix = MenuItemPrefix + "Simple Template/";
         private const int OriginalPriorityNumber = 1000;
+        private const int CreateCustomTemplateNumber = OriginalPriorityNumber + 100;
+
+        #region Create Setting
 
         [MenuItem(ScriptableObjectPrefix + "Create Setting", false, OriginalPriorityNumber + (int)ScriptableObjectPriority.CreateSetting)]
         public static void CreateSetting()
@@ -36,6 +48,24 @@ namespace TemplateEditor
         {
             CreateScriptableObject<TemplateGroupSetting>(TemplateUtility.GetActiveFolder());
         }
+
+        private static void CreateScriptableObject<T>(string dir) where T : ScriptableObject
+        {
+            var obj = ScriptableObject.CreateInstance<T>();
+            ProjectWindowUtil.CreateAsset(obj, GetCreateScriptableObjectPath<T>(dir));
+            AssetDatabase.Refresh();
+        }
+
+        private static string GetCreateScriptableObjectPath<T>(string dir)
+        {
+            var pathWithoutExtension = Path.Combine(dir, typeof(T).Name);
+            var path = string.Format("{0}.asset", pathWithoutExtension);
+            return AssetDatabase.GenerateUniqueAssetPath (path);
+        }
+
+        #endregion
+
+        #region Tool
 
         [MenuItem(ToolsPrefix + "Create ResourcesLoader", false, OriginalPriorityNumber + (int)ToolPriority.ResourcesLoadSupport)]
         public static void ExecuteResourcesLoadSupport()
@@ -63,20 +93,40 @@ namespace TemplateEditor
         }
 #endif
 
-        private static void CreateScriptableObject<T>(string dir) where T : ScriptableObject
+        #endregion
+
+        #region Simple Tool
+
+        [MenuItem(SimpleToolsPrefix + "Class", false, OriginalPriorityNumber + (int)SimpleTemplatePriority.Class)]
+        public static void ExecuteCreateClass()
         {
-            var obj = ScriptableObject.CreateInstance<T>();
-            ProjectWindowUtil.CreateAsset(obj, GetCreateScriptableObjectPath<T>(dir));
-            AssetDatabase.Refresh();
+            ToolExecutor.ExecuteSimple(SimpleTemplatePriority.Class);
         }
 
-        private static string GetCreateScriptableObjectPath<T>(string dir)
+        [MenuItem(SimpleToolsPrefix + "Mono Class", false, OriginalPriorityNumber + (int)SimpleTemplatePriority.MonoClass)]
+        public static void ExecuteCreateMonoClass()
         {
-            var pathWithoutExtension = Path.Combine(dir, typeof(T).Name);
-            var path = string.Format("{0}.asset", pathWithoutExtension);
-            return AssetDatabase.GenerateUniqueAssetPath (path);
+            ToolExecutor.ExecuteSimple(SimpleTemplatePriority.MonoClass);
         }
 
+        [MenuItem(SimpleToolsPrefix + "ScriptableObject", false, OriginalPriorityNumber + (int)SimpleTemplatePriority.ScriptableObject)]
+        public static void ExecuteCreateScriptableObject()
+        {
+            ToolExecutor.ExecuteSimple(SimpleTemplatePriority.ScriptableObject);
+        }
 
+        [MenuItem(SimpleToolsPrefix + "Editor Window", false, OriginalPriorityNumber + (int)SimpleTemplatePriority.EditorWindow)]
+        public static void ExecuteCreate()
+        {
+            ToolExecutor.ExecuteSimple(SimpleTemplatePriority.EditorWindow);
+        }
+
+        #endregion
+
+        [MenuItem(MenuItemPrefix + "Create Custom Template", false, CreateCustomTemplateNumber)]
+        public static void ExecuteCustomCreate()
+        {
+            UserSettingCopyWindow.Open();
+        }
     }
 }

@@ -1,12 +1,10 @@
 ﻿#pragma warning disable CS0618
 
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 using System.IO;
 using System.Text;
-using System.Collections;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SyntaxHighlightEditor;
@@ -323,17 +321,11 @@ namespace TemplateEditor
 
         public static void DrawCode(TemplateSettingStatus status)
         {
-            var minHeight = status.GetProperty(TemplateSettingPropertyGetter.Property.CodeAreaMinHeight);
-            var maxHeight = status.GetProperty(TemplateSettingPropertyGetter.Property.CodeAreaMaxHeight);
-            if (maxHeight.floatValue > 0f && maxHeight.floatValue < minHeight.floatValue)
-            {
-                maxHeight.floatValue = minHeight.floatValue;
-            }
+            var height = status.GetProperty(TemplateSettingPropertyGetter.Property.CodeAreaHeight);
 
             EditorGUILayout.BeginHorizontal(EditorGUIHelper.GetScopeStyle());
             {
-                EditorGUILayout.PropertyField(minHeight, new GUIContent("Min Height"));
-                EditorGUILayout.PropertyField(maxHeight, new GUIContent("Max Height"));
+                EditorGUILayout.PropertyField(height, new GUIContent("Min Height"));
             }
             EditorGUILayout.EndHorizontal();
 
@@ -342,7 +334,7 @@ namespace TemplateEditor
                 var code = status.GetProperty(TemplateSettingPropertyGetter.Property.Code).stringValue;
                 var scrollPos = status.GetProperty(TemplateSettingPropertyGetter.Property.ScrollPos);
                 var scroll = scrollPos.vector2Value;
-                var editedCode = SyntaxHighlightUtility.DrawCSharpCode(ref scroll, code, 12, minHeight.floatValue, maxHeight.floatValue);
+                var editedCode = SyntaxHighlightUtility.DrawCSharpCode(ref scroll, code, 12, height.floatValue, height.floatValue);
                 scrollPos.vector2Value = scroll;
                 if (editedCode != code)
                 {

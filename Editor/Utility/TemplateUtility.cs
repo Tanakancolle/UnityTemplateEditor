@@ -170,6 +170,58 @@ namespace TemplateEditor
             return files.Length > 0 ? Path.GetDirectoryName(files[0]) : null;
         }
 
+        public static string InsertNamespace(string code, string namespaceName)
+        {
+            // TODO : incomplete
+
+            var lines = code.Split('\n');
+
+            var startIndex = Int32.MinValue;
+            for (var i = 0; i < lines.Length; ++i)
+            {
+                var line = lines[i];
+                if (line.Contains("{") && line.Contains("{<") == false)
+                {
+                    startIndex = i - 2;
+                    break;
+                }
+            }
+
+            var sb = new StringBuilder();
+
+            if (startIndex == Int32.MinValue)
+            {
+                // 開始位置が見つからないので、何もしない
+                return code;
+            }
+
+            var isIn = false;
+            if (startIndex < 0)
+            {
+                sb.AppendLine("namespace " + namespaceName);
+                sb.AppendLine("{");
+
+                isIn = true;
+            }
+
+            for (var i = 0; i < lines.Length; ++i)
+            {
+                sb.AppendLine((isIn ? "    " : string.Empty) + lines[i]);
+
+                if (i == startIndex)
+                {
+                    sb.AppendLine("namespace " + namespaceName);
+                    sb.AppendLine("{");
+
+                    isIn = true;
+                }
+            }
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
         #region Config Value
 
         public static void SetConfigValue(string name, string value)

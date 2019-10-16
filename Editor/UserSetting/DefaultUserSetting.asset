@@ -18,3 +18,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92abed5f6c60344de969f42f7320a23b, type: 2}
   _groupSettings:
   - {fileID: 11400000, guid: 39929be43dcc041049feecc87d7f23d3, type: 2}
+  _simpleSettings:
+  - {fileID: 11400000, guid: 97b4a1e1e5de54dd2b95554ff3aaaf69, type: 2}
+  - {fileID: 11400000, guid: 8bc6cbcc4a40f4052b7e86a88892abec, type: 2}
+  - {fileID: 11400000, guid: 078b8aa44d22a45ae80dee4d3c52cbbb, type: 2}
+  - {fileID: 11400000, guid: 9027646eff5be417982da6abdd36a3ce, type: 2}

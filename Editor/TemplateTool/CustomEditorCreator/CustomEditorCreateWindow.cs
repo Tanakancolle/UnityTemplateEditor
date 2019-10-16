@@ -53,7 +53,7 @@ namespace TemplateEditor
             result.Add("TypeNames", targetUseSerializeNames.Select(StringBuilderExtension.ConvertEnumName).ToArray());
             result.Add("PropertyNames", targetUseSerializeNames);
 
-            var setting = ToolExecutor.GetUseUserSetting().GetSetting(UserSettingBase.GroupSettingType.CustomEditorCreator);
+            var setting = ToolExecutor.GetUseUserSetting().GetSetting(UserSetting.GroupSettingType.CustomEditorCreator);
             TemplateUtility.ExecuteGroupSetting(setting, result);
 
             DestroyImmediate(targetScriptableObject);

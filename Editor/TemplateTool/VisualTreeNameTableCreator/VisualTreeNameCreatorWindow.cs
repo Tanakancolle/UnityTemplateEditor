@@ -16,7 +16,7 @@ namespace TemplateEditor
         private SerializedProperty _targetListProperty;
         private SerializedObject _serializedObject;
         private Vector2 _scrollPos;
-        private UserSettingBase _userSetting;
+        private UserSetting _userSetting;
 
         private void OnEnable()
         {
@@ -44,7 +44,7 @@ namespace TemplateEditor
 
             if (GUILayout.Button("Create"))
             {
-                TemplateUtility.ExecuteSetting(_userSetting.GetSetting(UserSettingBase.SettingType.VisualTreeName));
+                TemplateUtility.ExecuteSetting(_userSetting.GetSetting(UserSetting.SettingType.VisualTreeName));
             }
         }
     }
