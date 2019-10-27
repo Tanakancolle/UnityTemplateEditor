@@ -31,7 +31,7 @@ namespace TemplateEditor
         private const string MenuItemPrefix = "Tools/Template Editor/";
         private const string ScriptableObjectPrefix = MenuItemPrefix + "Setting Object/";
         private const string ToolsPrefix = MenuItemPrefix + "Tools/";
-        private const string SimpleToolsPrefix = MenuItemPrefix + "Simple Template/";
+        private const string SimpleToolsPrefix = "Assets/Create/Template/Default/";
         private const int OriginalPriorityNumber = 1000;
         private const int CreateCustomTemplateNumber = OriginalPriorityNumber + 100;
 
