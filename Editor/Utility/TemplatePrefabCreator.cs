@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 
 namespace TemplateEditor
 {
@@ -85,7 +86,9 @@ namespace TemplateEditor
                 return;
             }
 
-            var components = new List<Component>(settings.Length);
+            // コピーパスは同じなはずのため、最初のを使用する
+            var prefabPath = AssetDatabase.GetAssetPath(settings[0].DuplicatePrefab);
+            var createPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
 
             foreach (var setting in settings)
             {
@@ -98,7 +101,7 @@ namespace TemplateEditor
                 if (mono == null)
                 {
                     Debug.LogErrorFormat("{0} : スクリプトファイルがありませんでした", scriptPath);
-                    return;
+                    continue;
                 }
 
                 var scriptType = mono.GetClass();
@@ -106,14 +109,19 @@ namespace TemplateEditor
                 if (scriptType == null)
                 {
                     Debug.LogErrorFormat("{0} : クラスを取得できませんでした。ファイル名とクラス名が違う可能性があります", mono.name);
-                    return;
+                    continue;
                 }
 
-                components.Add(setting.AttachTarget.AddComponent(scriptType));
-            }
+                var targetObject = createPrefab;
+                if (setting.AttachTarget != null && setting.AttachTarget.transform.parent != null)
+                {
+                    var attachPath = GetHierarchyPath(setting.AttachTarget.transform);
+                    targetObject = createPrefab.transform.Find(attachPath).gameObject;
+                }
 
-            // コピーパスは同じなはずのため、最初のを使用する
-            var prefabPath = AssetDatabase.GetAssetPath(settings[0].DuplicatePrefab);
+                targetObject.AddComponent(scriptType);
+            }
+            
             var createPath = settings[0].PrefabPath;
             var prefabName = settings[0].PrefabName;
             if (string.IsNullOrEmpty(createPath))
@@ -130,12 +138,27 @@ namespace TemplateEditor
 
             prefabName += Path.GetExtension(prefabName) == string.Empty ? ".prefab" : string.Empty;
             var createFullPath = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(createPath, prefabName));
-            AssetDatabase.CopyAsset(prefabPath, createFullPath);
-
-            foreach (var component in components)
+            PrefabUtility.SaveAsPrefabAsset(createPrefab, createFullPath);
+            PrefabUtility.UnloadPrefabContents(createPrefab);
+        }
+        
+        private static string GetHierarchyPath(Transform self)
+        {
+            var builder = new StringBuilder();
+            builder.Append(self.gameObject.name);
+            var parent = self.parent;
+            while (parent != null)
             {
-                UnityEngine.Object.DestroyImmediate(component, true);
+                if (parent.parent == null)
+                {
+                    break;
+                }
+                
+                builder.Insert(0, parent.name + "/");
+                parent = parent.parent;
             }
+            
+            return builder.ToString();
         }
     }
 }

@@ -298,8 +298,7 @@ namespace TemplateEditor
 
             // プレハブ生成登録
             var prefabObject = status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab).objectReferenceValue as GameObject;
-            var targetObject = status.GetProperty(TemplateSettingStatus.Property.AttachTarget).objectReferenceValue as GameObject;
-            if (prefabObject != null && targetObject != null)
+            if (prefabObject != null)
             {
                 TemplatePrefabCreator.AddTempCreatePrefabSetting(status.TargetTemplateSetting, path);
             }
@@ -402,7 +401,8 @@ namespace TemplateEditor
 
                 if (oldObj != obj)
                 {
-                    targetProperty.objectReferenceValue = prefabProperty.objectReferenceValue = PrefabUtility.FindRootGameObjectWithSameParentPrefab(obj);
+                    prefabProperty.objectReferenceValue = PrefabUtility.FindRootGameObjectWithSameParentPrefab(obj);
+                    targetProperty.objectReferenceValue = null;
                 }
 
                 EditorGUILayout.BeginHorizontal(EditorGUIHelper.GetScopeStyle());
