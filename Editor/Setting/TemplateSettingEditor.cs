@@ -268,7 +268,7 @@ namespace TemplateEditor
             }
 
             // プレハブ生成登録
-            var prefabObject = status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab).objectReferenceValue as GameObject;
+            var prefabObject = status.GetProperty(TemplateSettingPropertyGetter.Property.DuplicatePrefab).objectReferenceValue as GameObject;
             if (prefabObject != null)
             {
                 TemplatePrefabCreator.AddTempCreatePrefabSetting(status.TargetTemplateSetting, path);
