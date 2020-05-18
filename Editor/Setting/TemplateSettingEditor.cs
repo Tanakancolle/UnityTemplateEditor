@@ -1,6 +1,6 @@
-﻿#pragma warning disable CS0618
+#pragma warning disable CS0618
 
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
@@ -268,9 +268,8 @@ namespace TemplateEditor
             }
 
             // プレハブ生成登録
-            var prefabObject = status.GetProperty(TemplateSettingPropertyGetter.Property.DuplicatePrefab).objectReferenceValue as GameObject;
-            var targetObject = status.GetProperty(TemplateSettingPropertyGetter.Property.AttachTarget).objectReferenceValue as GameObject;
-            if (prefabObject != null && targetObject != null)
+            var prefabObject = status.GetProperty(TemplateSettingStatus.Property.DuplicatePrefab).objectReferenceValue as GameObject;
+            if (prefabObject != null)
             {
                 TemplatePrefabCreator.AddTempCreatePrefabSetting(status.TargetTemplateSetting, path);
             }
@@ -367,7 +366,8 @@ namespace TemplateEditor
 
                 if (oldObj != obj)
                 {
-                    targetProperty.objectReferenceValue = prefabProperty.objectReferenceValue = PrefabUtility.FindRootGameObjectWithSameParentPrefab(obj);
+                    prefabProperty.objectReferenceValue = PrefabUtility.FindRootGameObjectWithSameParentPrefab(obj);
+                    targetProperty.objectReferenceValue = null;
                 }
 
                 EditorGUILayout.BeginHorizontal(EditorGUIHelper.GetScopeStyle());
