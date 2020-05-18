@@ -1,3 +1,16 @@
+### v1.2.4
+
+- CustomEditorのテンプレートを生成する機能を追加
+- VisualTreeName Table を作成する機能の仕様を変更
+
+### v1.2.3
+
+- Unity 2019より前でも動作するように
+
+### v1.2.2
+
+- VisualTreeName Table を作成する機能を追加
+
 ### v1.2.1
 
 - Resources Support機能を更新

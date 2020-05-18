@@ -1,8 +1,8 @@
 {
   "name": "template-editor",
-  "version": "1.0.0",
+  "version": "v1.2.4",
   "displayName": "TemplateEditor",
-  "unity": "2017.1",
+  "unity": "2018.1",
   "description": "Template Editor",
   "dependencies": {
   }

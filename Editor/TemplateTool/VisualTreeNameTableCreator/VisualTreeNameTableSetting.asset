@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56a3a9f3b9043415681fb03d3faa50c2, type: 3}
-  m_Name: ResourcesSupportSetting
+  m_Name: VisualTreeNameTableSetting
   m_EditorClassIdentifier: 
   Path: '{<CreatePath>}'
   ScriptName: '{<ScriptName>}.cs'
-  Code: "{<Repeat:using {0};:Usings>}\n\npublic class {<ScriptName>}\n{\n{<Repeat:\n
-    \   public enum {0}Name\n    {\n        {1},\n    }:Enums>}\n{<Repeat:\n    public
-    static readonly string[] {0}Paths = new string[]\n    {\n        {1},\n    };:Paths>}\n{<Repeat:\n
-    \   public static {0} {1}({2}Name type)\n    {\n        return Resources.{1}<{2}>({2}Paths[(int)type]);\n
+  Code: "public static class {<ScriptName>}\n{\n{<Repeat:\n    public enum {0}Element\n
+    \   {\n        {1},\n    }:Types>}\n{<Repeat:\n    public static readonly string[]
+    {0}Names =\n    {\n        {1},\n    };:Names>}\n{<Repeat:\n    public static
+    string GetName({0}Element type)\n    {\n        return {0}Names[(int) type];\n
     \   }:Methods>}\n}"
-  CodeAreaMinHeight: 350
-  CodeAreaMaxHeight: 350
+  CodeAreaMinHeight: 300
+  CodeAreaMaxHeight: 300
   Overwrite: 1
   Chain:
-  - {fileID: 11400000, guid: 2c9e7c9a1b39a426c8897063ec0a255c, type: 2}
+  - {fileID: 11400000, guid: 84611633f6726434f8d0065957b8d1ea, type: 2}
   DuplicatePrefab: {fileID: 0}
   AttachTarget: {fileID: 0}
   PrefabPath: 
