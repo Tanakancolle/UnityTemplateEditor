@@ -77,8 +77,9 @@ namespace TemplateEditor
                     var childTargetPath = AssetDatabase.GetAssetPath(property.objectReferenceValue);
                     var childTargetDirectory = Path.GetDirectoryName(childTargetPath);
                     var childCopyPath = Path.Combine(
-                        copyDirectory,
-                        childTargetDirectory.Substring(childTargetDirectory.IndexOf(DefaultTemplateDirectory) + DefaultTemplateDirectory.Length),
+                        Path.Combine(
+                            copyDirectory,
+                            childTargetDirectory.Substring(childTargetDirectory.IndexOf(DefaultTemplateDirectory) + DefaultTemplateDirectory.Length)),
                         Path.GetFileName(childTargetPath));
 
                     Directory.CreateDirectory(Path.GetDirectoryName(childCopyPath));

@@ -21,24 +21,6 @@ public partial class TemplateSettingPropertyGetter
         @ScrollPos,
     }
 
-    private static readonly string[] PropertyNames =
-    {
-        "Path",
-        "ScriptName",
-        "Code",
-        "CodeAreaHeight",
-        "Overwrite",
-        "Chain",
-        "DuplicatePrefab",
-        "AttachTarget",
-        "PrefabPath",
-        "PrefabName",
-        "AssetsMenuItem",
-        "Description",
-        "IsFoldouts",
-        "ScrollPos",
-    };
-
     private readonly SerializedProperty[] _properties;
 
     public TemplateSettingPropertyGetter(SerializedObject targetSerializedObject)

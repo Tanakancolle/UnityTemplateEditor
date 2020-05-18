@@ -88,7 +88,29 @@ namespace TemplateEditor
 
             // コピーパスは同じなはずのため、最初のを使用する
             var prefabPath = AssetDatabase.GetAssetPath(settings[0].DuplicatePrefab);
+            
+            var createPath = settings[0].PrefabPath;
+            var prefabName = settings[0].PrefabName;
+            if (string.IsNullOrEmpty(createPath))
+            {
+                // 空白の場合はアクティブなパスへ生成
+                createPath = TemplateUtility.GetActiveFolder();
+            }
+
+            if (string.IsNullOrEmpty(prefabName))
+            {
+                // 空白の場合はコピー元のプレハブ名
+                prefabName = Path.GetFileName(prefabPath);
+            }
+
+            prefabName += Path.GetExtension(prefabName) == string.Empty ? ".prefab" : string.Empty;
+            var createFullPath = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(createPath, prefabName));
+            
+#if UNITY_2019_1_OR_NEWER
             var createPrefab = PrefabUtility.LoadPrefabContents(prefabPath);
+#else
+            var createPrefab = PrefabUtility.CreatePrefab(createFullPath, settings[0].DuplicatePrefab);
+#endif
 
             foreach (var setting in settings)
             {
@@ -122,24 +144,10 @@ namespace TemplateEditor
                 targetObject.AddComponent(scriptType);
             }
             
-            var createPath = settings[0].PrefabPath;
-            var prefabName = settings[0].PrefabName;
-            if (string.IsNullOrEmpty(createPath))
-            {
-                // 空白の場合はアクティブなパスへ生成
-                createPath = TemplateUtility.GetActiveFolder();
-            }
-
-            if (string.IsNullOrEmpty(prefabName))
-            {
-                // 空白の場合はコピー元のプレハブ名
-                prefabName = Path.GetFileName(prefabPath);
-            }
-
-            prefabName += Path.GetExtension(prefabName) == string.Empty ? ".prefab" : string.Empty;
-            var createFullPath = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(createPath, prefabName));
+#if UNITY_2019_1_OR_NEWER
             PrefabUtility.SaveAsPrefabAsset(createPrefab, createFullPath);
             PrefabUtility.UnloadPrefabContents(createPrefab);
+#endif
         }
         
         private static string GetHierarchyPath(Transform self)

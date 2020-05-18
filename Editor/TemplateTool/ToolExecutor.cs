@@ -53,11 +53,11 @@ namespace TemplateEditor
                 case TemplateMenuItem.ToolPriority.UnityTemplateChange:
                     TemplateUtility.OpenEditorWindow(userSetting.GetSetting(UserSetting.SettingType.UnityCSharpTemplate));
                     break;
+#if UNITY_2019_1_OR_NEWER
                 case TemplateMenuItem.ToolPriority.VisualTreeNameTableCreator:
                     VisualTreeNameCreatorWindow.Open();
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+#endif
             }
         }
 

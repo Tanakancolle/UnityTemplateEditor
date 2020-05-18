@@ -34,7 +34,12 @@ namespace TemplateEditor
                 return;
             }
 
-            var type = _targetScriptableObject?.GetType() ?? _targetScriptableClass.GetClass();
+            var type = _targetScriptableClass.GetClass();
+            if (_targetScriptableObject != null)
+            {
+                type = _targetScriptableObject.GetType();
+            }
+            
             var path = Path.GetDirectoryName(AssetDatabase.GetAssetPath((Object)_targetScriptableObject ?? _targetScriptableClass));
             var targetScriptableObject = ScriptableObject.CreateInstance(type);
 

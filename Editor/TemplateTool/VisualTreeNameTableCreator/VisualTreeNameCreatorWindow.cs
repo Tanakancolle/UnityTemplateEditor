@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_2019_1_OR_NEWER
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -49,3 +50,4 @@ namespace TemplateEditor
         }
     }
 }
+#endif
