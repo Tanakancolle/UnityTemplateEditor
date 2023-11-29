@@ -11,6 +11,7 @@ namespace TemplateEditor
             ResourcesLoader,
             UnityCSharpTemplate,
             VisualTreeName,
+            AssetsMenuItemCreator,
         }
 
         public enum GroupSettingType

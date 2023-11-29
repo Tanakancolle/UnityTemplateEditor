@@ -7,7 +7,6 @@ namespace TemplateEditor
 {
     public class AssetsMenuItemProcessor : IProcessChain
     {
-        private static readonly string AssetsMenuItemSettingGuid = "1c95e1425131048ba82aeb753fe906b4";
         private static readonly string AssetsMenuItemScriptName = "TemplateEditorAssetsMenuItem";
 
         private enum ReplaceWordType
@@ -31,7 +30,8 @@ namespace TemplateEditor
         /// </summary>
         public static void Execute()
         {
-            TemplateUtility.ExecuteSetting(AssetsMenuItemSettingGuid);
+            var setting = ToolExecutor.GetUseUserSetting().GetSetting(UserSetting.SettingType.AssetsMenuItemCreator);
+            TemplateUtility.ExecuteSetting(setting);
         }
 
         private List<string[]> BuildMenuItemList<T>() where T : UnityEngine.Object
