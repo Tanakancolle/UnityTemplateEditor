@@ -43,9 +43,9 @@ namespace TemplateEditor
 
             TemplateSettingEditor.ExecuteChain(status, result);
             var words = ReplaceProcessor.GetReplaceWords(
-                status.GetProperty(TemplateSettingStatus.Property.Path).stringValue,
-                status.GetProperty(TemplateSettingStatus.Property.ScriptName).stringValue,
-                status.GetProperty(TemplateSettingStatus.Property.Code).stringValue
+                status.GetProperty(TemplateSettingPropertyGetter.Property.Path).stringValue,
+                status.GetProperty(TemplateSettingPropertyGetter.Property.ScriptName).stringValue,
+                status.GetProperty(TemplateSettingPropertyGetter.Property.Code).stringValue
             );
             var replaces = TemplateSettingEditor.CreateReplaceList(new List<ReplaceInfo>(0), words.ToArray());
             foreach (var replace in replaces)
@@ -54,7 +54,7 @@ namespace TemplateEditor
             }
 
             return TemplateSettingEditor.Replace(
-                status.GetProperty(TemplateSettingStatus.Property.Code).stringValue,
+                status.GetProperty(TemplateSettingPropertyGetter.Property.Code).stringValue,
                 result
             );
         }

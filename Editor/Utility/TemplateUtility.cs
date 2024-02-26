@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace TemplateEditor
 {
@@ -123,8 +124,12 @@ namespace TemplateEditor
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var asset = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);
-            var editor = Editor.CreateEditor(asset);
+            OpenEditorWindow(asset);
+        }
 
+        public static void OpenEditorWindow(Object asset)
+        {
+            var editor = Editor.CreateEditor(asset);
             EditorPreviewWindow.Open(editor);
         }
 
@@ -132,7 +137,12 @@ namespace TemplateEditor
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var asset = AssetDatabase.LoadAssetAtPath<TemplateSetting>(path);
-            var editor = Editor.CreateEditor(asset) as TemplateSettingEditor;
+            ExecuteSetting(asset);
+        }
+
+        public static void ExecuteSetting(TemplateSetting setting, ProcessDictionary result = null)
+        {
+            var editor = Editor.CreateEditor(setting) as TemplateSettingEditor;
             editor.Create(result);
         }
 
@@ -140,7 +150,12 @@ namespace TemplateEditor
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var asset = AssetDatabase.LoadAssetAtPath<TemplateGroupSetting>(path);
-            var editor = Editor.CreateEditor(asset) as TemplateGroupSettingEditor;
+            ExecuteGroupSetting(asset);
+        }
+
+        public static void ExecuteGroupSetting(TemplateGroupSetting setting, ProcessDictionary result = null)
+        {
+            var editor = Editor.CreateEditor(setting) as TemplateGroupSettingEditor;
             editor.CreateScript(null, true, result);
         }
 
@@ -153,6 +168,58 @@ namespace TemplateEditor
         {
             var files = Directory.GetFiles("Assets", fileName, SearchOption.AllDirectories);
             return files.Length > 0 ? Path.GetDirectoryName(files[0]) : null;
+        }
+
+        public static string InsertNamespace(string code, string namespaceName)
+        {
+            // TODO : incomplete
+
+            var lines = code.Split('\n');
+
+            var startIndex = Int32.MinValue;
+            for (var i = 0; i < lines.Length; ++i)
+            {
+                var line = lines[i];
+                if (line.Contains("{") && line.Contains("{<") == false)
+                {
+                    startIndex = i - 2;
+                    break;
+                }
+            }
+
+            var sb = new StringBuilder();
+
+            if (startIndex == Int32.MinValue)
+            {
+                // 開始位置が見つからないので、何もしない
+                return code;
+            }
+
+            var isIn = false;
+            if (startIndex < 0)
+            {
+                sb.AppendLine("namespace " + namespaceName);
+                sb.AppendLine("{");
+
+                isIn = true;
+            }
+
+            for (var i = 0; i < lines.Length; ++i)
+            {
+                sb.AppendLine((isIn ? "    " : string.Empty) + lines[i]);
+
+                if (i == startIndex)
+                {
+                    sb.AppendLine("namespace " + namespaceName);
+                    sb.AppendLine("{");
+
+                    isIn = true;
+                }
+            }
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
         }
 
         #region Config Value

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_2019_1_OR_NEWER
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -7,7 +8,6 @@ namespace TemplateEditor
     public class VisualTreeNameCreatorWindow : EditorWindow
     {
         private static readonly string VisualTreeNameGetProcessorGuid = "84611633f6726434f8d0065957b8d1ea";
-        private static readonly string VisualTreeNameTableGuid = "92abed5f6c60344de969f42f7320a23b";
 
         public static void Open()
         {
@@ -17,12 +17,15 @@ namespace TemplateEditor
         private SerializedProperty _targetListProperty;
         private SerializedObject _serializedObject;
         private Vector2 _scrollPos;
+        private UserSetting _userSetting;
 
         private void OnEnable()
         {
             var targetGetProcessor = AssetDatabase.LoadAssetAtPath<VisualTreeNameGetProcessor>(AssetDatabase.GUIDToAssetPath(VisualTreeNameGetProcessorGuid));
             _serializedObject = new SerializedObject(targetGetProcessor);
             _targetListProperty = _serializedObject.FindProperty("_targets");
+
+            _userSetting = ToolExecutor.GetUseUserSetting();
         }
 
         private void OnGUI()
@@ -42,8 +45,9 @@ namespace TemplateEditor
 
             if (GUILayout.Button("Create"))
             {
-                TemplateUtility.ExecuteSetting(VisualTreeNameTableGuid);
+                TemplateUtility.ExecuteSetting(_userSetting.GetSetting(UserSetting.SettingType.VisualTreeName));
             }
         }
     }
 }
+#endif
